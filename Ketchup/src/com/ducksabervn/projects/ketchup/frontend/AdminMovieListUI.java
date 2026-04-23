@@ -1,8 +1,14 @@
 package com.ducksabervn.projects.ketchup.frontend;
 
+import com.ducksabervn.projects.ketchup.backend.admin.Movie;
+import com.ducksabervn.projects.ketchup.backend.admin.Movies;
+
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
+import java.util.Collection;
+import java.util.Map;
+import java.util.TreeMap;
 
 public class AdminMovieListUI {
 
@@ -40,7 +46,6 @@ public class AdminMovieListUI {
     private JButton addMovieButton;
     private JButton editMovieButton;
     private JButton deleteMovieButton;
-    private JButton viewShowtimesButton;
 
     private AdminMovieListUI() {
         this.mainFrame = new JFrame("Ketchup - Admin");
@@ -55,7 +60,14 @@ public class AdminMovieListUI {
         this.sortLabel = new JLabel("Sort by:");
         this.sortComboBox = new JComboBox<>(new String[]{"Title", "Genre", "Duration", "Rating"});
         this.sortButton = new JButton("Sort");
-        this.tableColumns = new String[]{"ID", "Title", "Genre", "Duration (min)", "Rating"};
+        this.tableColumns = new String[]{"ID",
+                "Title",
+                "Genre",
+                "Duration (min)",
+                "Rating",
+                "Showtime",
+                "Selected seats",
+                "Price/Seat"};
         this.tableModel = new DefaultTableModel(tableColumns, 0) {
             @Override
             public boolean isCellEditable(int row, int column) {
@@ -68,7 +80,6 @@ public class AdminMovieListUI {
         this.addMovieButton = new JButton("Add Movie");
         this.editMovieButton = new JButton("Edit Movie");
         this.deleteMovieButton = new JButton("Delete Movie");
-        this.viewShowtimesButton = new JButton("View Showtimes");
     }
 
     /**
@@ -127,11 +138,9 @@ public class AdminMovieListUI {
         addMovieButton.setPreferredSize(new Dimension(120, 30));
         editMovieButton.setPreferredSize(new Dimension(120, 30));
         deleteMovieButton.setPreferredSize(new Dimension(120, 30));
-        viewShowtimesButton.setPreferredSize(new Dimension(140, 30));
         buttonPanel.add(addMovieButton);
         buttonPanel.add(editMovieButton);
         buttonPanel.add(deleteMovieButton);
-        buttonPanel.add(viewShowtimesButton);
         mainPanel.add(buttonPanel, BorderLayout.SOUTH);
 
         //load movie list into table on startup
@@ -181,24 +190,13 @@ public class AdminMovieListUI {
             }
         });
 
-        ////SUBSECTION - ADDING LISTENER TO THE VIEW SHOWTIMES BUTTON
-        this.viewShowtimesButton.addActionListener(e -> {
-            int selectedRow = movieTable.getSelectedRow();
-            if (selectedRow == -1) {
-                JOptionPane.showMessageDialog(mainFrame, "Please select a movie to view showtimes.", "No Selection", JOptionPane.WARNING_MESSAGE);
-                return;
-            }
-            // TODO: Get movie ID from tableModel.getValueAt(selectedRow, 0)
-            // TODO: Open AdminShowtimeListUI with the selected movie ID
-        });
-
         ////SUBSECTION - ADDING LISTENER TO THE LOGOUT BUTTON
         this.logoutButton.addActionListener(e -> {
             int confirm = JOptionPane.showConfirmDialog(mainFrame, "Are you sure you want to logout?", "Confirm Logout", JOptionPane.YES_NO_OPTION);
             if (confirm == JOptionPane.YES_OPTION) {
                 mainFrame.dispose();
                 adminMovieListUI = null;
-                LoginUI.initalize();
+                LoginUI.initialize();
             }
         });
     }
@@ -206,15 +204,22 @@ public class AdminMovieListUI {
     //clear table and reload all movies from service
     private void loadMovies() {
         tableModel.setRowCount(0);
-        // TODO: Replace sample rows below with real data from MovieService.getAllMovies()
-        // TODO: Loop through the movie list and call addMovieRow() for each movie
-        addMovieRow("M001", "Inception", "Sci-Fi", 148, "PG-13");
-        addMovieRow("M002", "The Dark Knight", "Action", 152, "PG-13");
-        addMovieRow("M003", "Interstellar", "Sci-Fi", 169, "PG");
+        TreeMap<String, Movie> map = Movies.getMovies();
+        for(Movie m: map.values()){
+            addMovieRow(m);
+        }
     }
 
     //add a single movie row into the table
-    private void addMovieRow(String id, String title, String genre, int duration, String rating) {
-        tableModel.addRow(new Object[]{id, title, genre, duration, rating});
+    public static void addMovieRow(Movie m) {
+        AdminMovieListUI.adminMovieListUI.tableModel.addRow(new Object[]{
+                m.getMovieId(),
+                m.getTitle(),
+                m.getGenre(),
+                m.getDuration(),
+                m.getRating(),
+                m.getShowTime(),
+                m.getOccupiedSeat().toString(),
+                m.getSeatPrice()});
     }
 }
