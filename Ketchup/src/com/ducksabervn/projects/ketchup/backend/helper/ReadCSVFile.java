@@ -1,0 +1,81 @@
+package com.ducksabervn.projects.ketchup.backend.helper;
+
+import com.ducksabervn.projects.ketchup.backend.credientials.Credential;
+import com.ducksabervn.projects.ketchup.backend.admin.Movie;
+
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.List;
+import java.util.TreeMap;
+
+
+public final class ReadCSVFile{
+
+    private static final Path APP_DIRECTORY = Path.of(System.getProperty("user.home"), "Ketchup");
+    private static final Path USER_CREDENTIALS = Path.of(System.getProperty("user.home"), "Ketchup",
+                                    "USER_CREDENTIALS.csv");
+    private static final Path MOVIES = Path.of(System.getProperty("user.home"), "Ketchup",
+                                        "MOVIES.csv");
+    public static void initalize(){
+        try{
+            if(!Files.exists(APP_DIRECTORY)) {
+                Files.createDirectory(APP_DIRECTORY);
+            }
+            if(!Files.exists(USER_CREDENTIALS)){
+                Files.createFile(USER_CREDENTIALS);
+                Files.writeString(USER_CREDENTIALS, "EMAIL;PASSWORD");
+            }
+
+            if(!Files.exists(MOVIES)){
+                Files.createFile(MOVIES);
+                Files.writeString(MOVIES, "MOVIEID;TITLE;GENRE;DURATION;RATING;SHOWTIME;SEAT;SPRICE");
+            }
+        }catch (IOException e){
+            e.printStackTrace();
+        }
+    }
+
+    public static TreeMap<String, Credential> readUserCredentialsCsv(){
+        try{
+            List<String> allCreds = Files.readAllLines(USER_CREDENTIALS);
+            allCreds.remove(0);
+            TreeMap<String, Credential> credMap = new TreeMap<>();
+            for(String str: allCreds){
+                String[] split = str.split(";");
+                credMap.put(split[0], new Credential(split[0], split[1], Boolean.valueOf(split[2])));
+            }
+            return credMap;
+        }catch(IOException e){
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    public static TreeMap<String, Movie> readMoviesCsv(){
+        try{
+            List<String> allMovies = Files.readAllLines(MOVIES);
+            allMovies.remove(0);
+            TreeMap<String, Movie> movies = new TreeMap<>();
+            for(String str: allMovies){
+                String[] split = str.split(";");
+                movies.put(split[0],
+                        new Movie(split[0], split[1],
+                                split[2],
+                                Integer.parseInt(split[3]),
+                                split[4],
+                                split[5],
+                                split[6],
+                                Integer.parseInt(split[7])));
+            }
+            return movies;
+        }catch(IOException e){
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    public static void writeMovie(Movie m){
+        
+    }
+}
