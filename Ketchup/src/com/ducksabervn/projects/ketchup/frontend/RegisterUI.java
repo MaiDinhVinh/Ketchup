@@ -140,7 +140,7 @@ public class RegisterUI {
         this.backButton.addActionListener(e -> {
             //shutdown the current window to move to a new one
             mainFrame.dispose();
-            LoginUI.initalize();
+            LoginUI.initialize();
         });
     }
 }
