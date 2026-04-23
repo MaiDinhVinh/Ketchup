@@ -1,7 +1,7 @@
 package com.ducksabervn.projects.ketchup.frontend;
 
 import com.ducksabervn.projects.ketchup.backend.admin.Movie;
-import com.ducksabervn.projects.ketchup.backend.admin.Movies;
+import com.ducksabervn.projects.ketchup.backend.admin.MovieRepository;
 
 import javax.swing.*;
 import java.awt.*;
@@ -173,13 +173,13 @@ public class AdminMovieFormUI {
 
         //if EDIT mode, pre-fill the form with existing movie data
         if (mode.equals("EDIT")) {
-            // TODO: Call MovieService.getMovieById(currentMovieId) to fetch movie data
-            // TODO: movieTitleField.setText(movie.getTitle())
-            // TODO: genreField.setText(movie.getGenre())
-            // TODO: durationField.setText(String.valueOf(movie.getDuration()))
-            // TODO: ratingComboBox.setSelectedItem(movie.getRating())
-            // TODO: showtimeField.setText(movie.getShowtime())
-            // TODO: seatPriceField.setText(String.valueOf(movie.getSeatPrice()))
+            Movie m = MovieRepository.getMovies().get(this.currentMovieId);
+            this.movieTitleField.setText(m.getTitle());
+            this.genreField.setText(m.getGenre());
+            this.durationField.setText(Integer.toString(m.getDuration()));
+            this.ratingComboBox.setSelectedItem(m.getRating());
+            this.showtimeField.setText(m.getShowTime());
+            this.seatPriceField.setText(Integer.toString(m.getSeatPrice()));
         }
 
         ////SUBSECTION - ADDING LISTENER TO THE SAVE BUTTON
@@ -192,12 +192,13 @@ public class AdminMovieFormUI {
             String seatPriceStr = seatPriceField.getText().trim();
 
             if (mode.equals("ADD")) {
-                Movie m = Movies.addMovies(title, genre, Integer.parseInt(durationStr), rating, showtime, "",
+                Movie m = MovieRepository.addMovies(title, genre, Integer.parseInt(durationStr), rating, showtime, "",
                         Integer.parseInt(seatPriceStr));
                 AdminMovieListUI.addMovieRow(m);
             } else {
-                // TODO: Call MovieService.updateMovie(currentMovieId, title, genre, duration, rating, showtime, seatPrice)
-                // TODO: If success -> show success message, close this frame, refresh AdminMovieListUI table
+                Movie m = MovieRepository.addMovies(title, genre, Integer.parseInt(durationStr), rating, showtime, "",
+                        Integer.parseInt(seatPriceStr));
+                
             }
             mainFrame.dispose();
         });
