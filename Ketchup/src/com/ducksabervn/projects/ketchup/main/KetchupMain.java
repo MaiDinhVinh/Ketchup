@@ -1,9 +1,11 @@
 package com.ducksabervn.projects.ketchup.main;
 
-import com.ducksabervn.projects.ketchup.frontend.*;
+import com.ducksabervn.projects.ketchup.backend.admin.Movies;
+import com.ducksabervn.projects.ketchup.backend.credientials.Credential;
+import com.ducksabervn.projects.ketchup.backend.helper.ReadCSVFile;
+import com.ducksabervn.projects.ketchup.frontend.LoginUI;
 
 import javax.swing.*;
-import java.util.ArrayList;
 
 public class KetchupMain {
     public static void main(String[] args) {
@@ -12,8 +14,9 @@ public class KetchupMain {
         }catch(ClassNotFoundException | InstantiationException | IllegalAccessException | UnsupportedLookAndFeelException e){
             e.printStackTrace();
         }
-        SwingUtilities.invokeLater(() -> {
-            CustomerSeatSelectionUI.initialize("Test");
-        });
+        ReadCSVFile.initalize();
+        Movies.setMovies(ReadCSVFile.readMoviesCsv());
+        Credential.setCredentials(ReadCSVFile.readUserCredentialsCsv());
+        SwingUtilities.invokeLater(LoginUI::initialize);
     }
 }
