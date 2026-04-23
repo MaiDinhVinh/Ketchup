@@ -1,5 +1,8 @@
 package com.ducksabervn.projects.ketchup.frontend;
 
+import com.ducksabervn.projects.ketchup.backend.admin.Movie;
+import com.ducksabervn.projects.ketchup.backend.admin.Movies;
+
 import javax.swing.*;
 import java.awt.*;
 
@@ -44,11 +47,15 @@ public class AdminMovieFormUI {
     private JLabel ratingLabel;
     private JComboBox<String> ratingComboBox;
 
-    //description row
-    private JPanel descriptionRow;
-    private JLabel descriptionLabel;
-    private JScrollPane descriptionScrollPane;
-    private JTextArea descriptionArea;
+    //showtime row (format: yyyy-MM-dd HH:mm)
+    private JPanel showtimeRow;
+    private JLabel showtimeLabel;
+    private JTextField showtimeField;
+
+    //seat price row
+    private JPanel seatPriceRow;
+    private JLabel seatPriceLabel;
+    private JTextField seatPriceField;
 
     //error/success message label
     private JLabel messageLabel;
@@ -62,7 +69,7 @@ public class AdminMovieFormUI {
         this.mainFrame = new JFrame();
         this.mainPanel = new JPanel();
         this.titleLabel = new JLabel("", SwingConstants.CENTER);
-        this.formPanel = new JPanel(new GridLayout(6, 1, 8, 8));
+        this.formPanel = new JPanel(new GridLayout(8, 1, 8, 8));
         this.currentMovieId = null;
         this.movieTitleRow = new JPanel(new BorderLayout(8, 0));
         this.movieTitleLabel = new JLabel("Title:");
@@ -76,10 +83,12 @@ public class AdminMovieFormUI {
         this.ratingRow = new JPanel(new BorderLayout(8, 0));
         this.ratingLabel = new JLabel("Rating:");
         this.ratingComboBox = new JComboBox<>(new String[]{"G", "PG", "PG-13", "R", "NC-17"});
-        this.descriptionRow = new JPanel(new BorderLayout(8, 0));
-        this.descriptionLabel = new JLabel("Description:");
-        this.descriptionArea = new JTextArea(3, 20);
-        this.descriptionScrollPane = new JScrollPane(descriptionArea);
+        this.showtimeRow = new JPanel(new BorderLayout(8, 0));
+        this.showtimeLabel = new JLabel("Showtime:");
+        this.showtimeField = new JTextField();
+        this.seatPriceRow = new JPanel(new BorderLayout(8, 0));
+        this.seatPriceLabel = new JLabel("Seat Price ($):");
+        this.seatPriceField = new JTextField();
         this.messageLabel = new JLabel("", SwingConstants.CENTER);
         this.buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 0));
         this.saveButton = new JButton("Save");
@@ -106,7 +115,7 @@ public class AdminMovieFormUI {
         //initialize the main frame
         mainFrame.setTitle("Movie Booking System - " + (mode.equals("ADD") ? "Add Movie" : "Edit Movie"));
         mainFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        mainFrame.setSize(450, 430);
+        mainFrame.setSize(450, 480);
         mainFrame.setLocationRelativeTo(null);
         mainFrame.setResizable(false);
 
@@ -136,11 +145,13 @@ public class AdminMovieFormUI {
         ratingRow.add(ratingLabel, BorderLayout.WEST);
         ratingRow.add(ratingComboBox, BorderLayout.CENTER);
 
-        descriptionLabel.setPreferredSize(new Dimension(110, 25));
-        descriptionArea.setLineWrap(true);
-        descriptionArea.setWrapStyleWord(true);
-        descriptionRow.add(descriptionLabel, BorderLayout.WEST);
-        descriptionRow.add(descriptionScrollPane, BorderLayout.CENTER);
+        showtimeLabel.setPreferredSize(new Dimension(110, 25));
+        showtimeRow.add(showtimeLabel, BorderLayout.WEST);
+        showtimeRow.add(showtimeField, BorderLayout.CENTER);
+
+        seatPriceLabel.setPreferredSize(new Dimension(110, 25));
+        seatPriceRow.add(seatPriceLabel, BorderLayout.WEST);
+        seatPriceRow.add(seatPriceField, BorderLayout.CENTER);
 
         messageLabel.setFont(new Font("Arial", Font.PLAIN, 12));
 
@@ -148,7 +159,8 @@ public class AdminMovieFormUI {
         formPanel.add(genreRow);
         formPanel.add(durationRow);
         formPanel.add(ratingRow);
-        formPanel.add(descriptionRow);
+        formPanel.add(showtimeRow);
+        formPanel.add(seatPriceRow);
         formPanel.add(messageLabel);
         mainPanel.add(formPanel, BorderLayout.CENTER);
 
@@ -166,45 +178,33 @@ public class AdminMovieFormUI {
             // TODO: genreField.setText(movie.getGenre())
             // TODO: durationField.setText(String.valueOf(movie.getDuration()))
             // TODO: ratingComboBox.setSelectedItem(movie.getRating())
-            // TODO: descriptionArea.setText(movie.getDescription())
+            // TODO: showtimeField.setText(movie.getShowtime())
+            // TODO: seatPriceField.setText(String.valueOf(movie.getSeatPrice()))
         }
 
         ////SUBSECTION - ADDING LISTENER TO THE SAVE BUTTON
         this.saveButton.addActionListener(e -> {
-            String title       = movieTitleField.getText().trim();
-            String genre       = genreField.getText().trim();
-            String durationStr = durationField.getText().trim();
-            String rating      = (String) ratingComboBox.getSelectedItem();
-            String description = descriptionArea.getText().trim();
-
-            if (title.isEmpty() || genre.isEmpty() || durationStr.isEmpty() || description.isEmpty()) {
-                messageLabel.setForeground(Color.RED);
-                messageLabel.setText("Please fill in all fields.");
-                return;
-            }
-
-            if (!durationStr.matches("\\d+")) {
-                messageLabel.setForeground(Color.RED);
-                messageLabel.setText("Duration must be a number.");
-                return;
-            }
-
-            messageLabel.setText("");
-            int duration = Integer.parseInt(durationStr);
+            String title        = movieTitleField.getText().trim();
+            String genre        = genreField.getText().trim();
+            String durationStr  = durationField.getText().trim();
+            String rating       = (String) ratingComboBox.getSelectedItem();
+            String showtime     = showtimeField.getText().trim();
+            String seatPriceStr = seatPriceField.getText().trim();
 
             if (mode.equals("ADD")) {
-                // TODO: Call MovieService.addMovie(title, genre, duration, rating, description)
-                // TODO: If success -> show success message, close this frame, refresh AdminMovieListUI table
+                Movie m = Movies.addMovies(title, genre, Integer.parseInt(durationStr), rating, showtime, "",
+                        Integer.parseInt(seatPriceStr));
+                AdminMovieListUI.addMovieRow(m);
             } else {
-                // TODO: Call MovieService.updateMovie(currentMovieId, title, genre, duration, rating, description)
+                // TODO: Call MovieService.updateMovie(currentMovieId, title, genre, duration, rating, showtime, seatPrice)
                 // TODO: If success -> show success message, close this frame, refresh AdminMovieListUI table
             }
+            mainFrame.dispose();
         });
 
         ////SUBSECTION - ADDING LISTENER TO THE CANCEL BUTTON
         this.cancelButton.addActionListener(e -> {
             mainFrame.dispose();
-            adminMovieFormUI = null;
         });
     }
 }
