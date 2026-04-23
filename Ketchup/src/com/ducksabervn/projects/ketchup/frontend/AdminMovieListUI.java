@@ -1,14 +1,13 @@
 package com.ducksabervn.projects.ketchup.frontend;
 
 import com.ducksabervn.projects.ketchup.backend.admin.Movie;
-import com.ducksabervn.projects.ketchup.backend.admin.Movies;
+import com.ducksabervn.projects.ketchup.backend.admin.MovieRepository;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
-import java.util.Collection;
-import java.util.Map;
 import java.util.TreeMap;
+import java.util.stream.Collectors;
 
 public class AdminMovieListUI {
 
@@ -170,7 +169,6 @@ public class AdminMovieListUI {
                 JOptionPane.showMessageDialog(mainFrame, "Please select a movie to edit.", "No Selection", JOptionPane.WARNING_MESSAGE);
                 return;
             }
-            // TODO: Get movie ID from tableModel.getValueAt(selectedRow, 0)
             AdminMovieFormUI.initialize("EDIT", (String)
                     this.tableModel.getValueAt(this.movieTable.getSelectedRow(), 0));
         });
@@ -204,7 +202,7 @@ public class AdminMovieListUI {
     //clear table and reload all movies from service
     private void loadMovies() {
         tableModel.setRowCount(0);
-        TreeMap<String, Movie> map = Movies.getMovies();
+        TreeMap<String, Movie> map = MovieRepository.getMovies();
         for(Movie m: map.values()){
             addMovieRow(m);
         }
@@ -212,6 +210,8 @@ public class AdminMovieListUI {
 
     //add a single movie row into the table
     public static void addMovieRow(Movie m) {
+        String occupiedSeats = m.getOccupiedSeat().stream().
+                collect(Collectors.joining(","));
         AdminMovieListUI.adminMovieListUI.tableModel.addRow(new Object[]{
                 m.getMovieId(),
                 m.getTitle(),
@@ -219,7 +219,7 @@ public class AdminMovieListUI {
                 m.getDuration(),
                 m.getRating(),
                 m.getShowTime(),
-                m.getOccupiedSeat().toString(),
+                occupiedSeats,
                 m.getSeatPrice()});
     }
 }
