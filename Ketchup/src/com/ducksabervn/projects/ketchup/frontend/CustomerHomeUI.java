@@ -138,7 +138,7 @@ public class CustomerHomeUI {
             if (confirm == JOptionPane.YES_OPTION) {
                 mainFrame.dispose();
                 customerHomeUI = null;
-                LoginUI.initalize();
+                LoginUI.initialize();
             }
         });
 
