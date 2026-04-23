@@ -1,6 +1,6 @@
 package com.ducksabervn.projects.ketchup.main;
 
-import com.ducksabervn.projects.ketchup.backend.admin.Movies;
+import com.ducksabervn.projects.ketchup.backend.admin.MovieRepository;
 import com.ducksabervn.projects.ketchup.backend.credientials.Credential;
 import com.ducksabervn.projects.ketchup.backend.helper.ReadCSVFile;
 import com.ducksabervn.projects.ketchup.frontend.LoginUI;
@@ -15,7 +15,7 @@ public class KetchupMain {
             e.printStackTrace();
         }
         ReadCSVFile.initalize();
-        Movies.setMovies(ReadCSVFile.readMoviesCsv());
+        MovieRepository.setMovies(ReadCSVFile.readMoviesCsv());
         Credential.setCredentials(ReadCSVFile.readUserCredentialsCsv());
         SwingUtilities.invokeLater(LoginUI::initialize);
     }
