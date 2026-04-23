@@ -1,5 +1,8 @@
 package com.ducksabervn.projects.ketchup.frontend;
 
+import com.ducksabervn.projects.ketchup.backend.helper.DisplayMessage;
+import com.ducksabervn.projects.ketchup.backend.credientials.Credential;
+
 import javax.swing.*;
 import java.awt.*;
 
@@ -21,9 +24,9 @@ public class LoginUI {
     private JPanel formPanel;
 
     //user's login credential form
-    private JPanel usernameRow;
-    private JLabel usernameLabel;
-    private JTextField usernameField;
+    private JPanel emailRow;
+    private JLabel emailLabel;
+    private JTextField emailField;
     private JPanel passwordRow;
     private JLabel passwordLabel;
     private JPasswordField passwordField;
@@ -47,9 +50,9 @@ public class LoginUI {
         this.mainPanel = new JPanel();
         this.titleLabel = new JLabel("Ketchup Login", SwingConstants.CENTER);
         this.formPanel = new JPanel(new GridLayout(4, 1, 8, 8));
-        this.usernameRow = new JPanel(new BorderLayout(8, 0));
-        this.usernameLabel = new JLabel("Username:");
-        this.usernameField = new JTextField();
+        this.emailRow = new JPanel(new BorderLayout(8, 0));
+        this.emailLabel = new JLabel("Email:");
+        this.emailField = new JTextField();
         this.passwordRow = new JPanel(new BorderLayout(8, 0));
         this.passwordLabel = new JLabel("Password:");
         this.passwordField = new JPasswordField();
@@ -65,7 +68,7 @@ public class LoginUI {
     /**
      * Since we are using singleton design pattern, this UI will only be initialized once
      * */
-    public static void initalize(){
+    public static void initialize(){
         if(LoginUI.loginUI == null){
             LoginUI.loginUI = new LoginUI();
         }
@@ -90,9 +93,9 @@ public class LoginUI {
         mainPanel.add(titleLabel, BorderLayout.NORTH);
 
         //initalize the login form panel
-        usernameLabel.setPreferredSize(new Dimension(80, 25));
-        usernameRow.add(usernameLabel, BorderLayout.WEST);
-        usernameRow.add(usernameField, BorderLayout.CENTER);
+        emailLabel.setPreferredSize(new Dimension(80, 25));
+        emailRow.add(emailLabel, BorderLayout.WEST);
+        emailRow.add(emailField, BorderLayout.CENTER);
         passwordLabel.setPreferredSize(new Dimension(80, 25));
         passwordRow.add(passwordLabel, BorderLayout.WEST);
         passwordRow.add(passwordField, BorderLayout.CENTER);
@@ -101,7 +104,7 @@ public class LoginUI {
         roleRow.add(roleComboBox, BorderLayout.CENTER);
         errorLabel.setForeground(Color.RED);
         errorLabel.setFont(new Font("Arial", Font.PLAIN, 12));
-        formPanel.add(usernameRow);
+        formPanel.add(emailRow);
         formPanel.add(passwordRow);
         formPanel.add(roleRow);
         formPanel.add(errorLabel);
@@ -116,11 +119,25 @@ public class LoginUI {
 
         ////SUBSECTION - ADDING LISTENER TO THE LOGIN BUTTON
         this.loginButton.addActionListener(e -> {
-            // TODO: Login input verification
-            // TODO: Call AuthService.login(username, password, role)
-            // TODO: If login success and role == "Admin"  -> open AdminDashboardUI
-            // TODO: If login success and role == "Customer" -> open MovieListUI
-            // TODO: If login failed -> errorLabel.setText("Invalid username or password.")
+            if(emailField.getText().isEmpty() || passwordField.getText().isEmpty()){
+                DisplayMessage.displayError(this.mainFrame, "Required field must not be empty");
+            }else{
+                if(Credential.verifyCredential(emailField.getText())){
+                    String role = (String) roleComboBox.getSelectedItem();
+                    Credential c = Credential.getUser(emailField.getText());
+                    if(!c.isAdmin() && role.equals("Admin")){
+                        DisplayMessage.displayError(this.mainFrame, "Authentication failed");
+                    }else{
+                        if(role.equals("Admin")){
+                            AdminMovieListUI.initialize();
+                        }else{
+                            CustomerHomeUI.initialize(c.getEmail());
+                        }
+                    }
+                }else{
+                    DisplayMessage.displayError(this.mainFrame, "Authentication failed");
+                }
+            }
         });
 
         ////SUBSECTION - ADDING LISTENER TO THE REGISTER BUTTON
