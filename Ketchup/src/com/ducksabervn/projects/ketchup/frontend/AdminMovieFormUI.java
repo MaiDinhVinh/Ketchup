@@ -192,13 +192,13 @@ public class AdminMovieFormUI {
             String seatPriceStr = seatPriceField.getText().trim();
 
             if (mode.equals("ADD")) {
-                Movie m = MovieRepository.addMovies(title, genre, Integer.parseInt(durationStr), rating, showtime, "",
+                Movie m = MovieRepository.addMovie(title, genre, Integer.parseInt(durationStr), rating, showtime, "",
                         Integer.parseInt(seatPriceStr));
-                AdminMovieListUI.addMovieRow(m);
+                AdminMovieListUI.updateTable(m);
             } else {
-                Movie m = MovieRepository.addMovies(title, genre, Integer.parseInt(durationStr), rating, showtime, "",
+                Movie edited = MovieRepository.addMovie(title, genre, Integer.parseInt(durationStr), rating, showtime, "",
                         Integer.parseInt(seatPriceStr));
-                
+                MovieRepository.editMovie(this.currentMovieId, edited);
             }
             mainFrame.dispose();
         });
