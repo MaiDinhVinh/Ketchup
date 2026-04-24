@@ -2,10 +2,13 @@ package com.ducksabervn.projects.ketchup.frontend;
 
 import com.ducksabervn.projects.ketchup.backend.admin.Movie;
 import com.ducksabervn.projects.ketchup.backend.admin.MovieRepository;
+import com.ducksabervn.projects.ketchup.backend.helper.ReadCSVFile;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.util.TreeMap;
 import java.util.stream.Collectors;
 
@@ -95,7 +98,6 @@ public class AdminMovieListUI {
 
     private void initializeAllElements() {
         //initialize the main frame
-        mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         mainFrame.setSize(800, 550);
         mainFrame.setLocationRelativeTo(null);
         mainFrame.setResizable(true);
@@ -169,12 +171,23 @@ public class AdminMovieListUI {
                 JOptionPane.showMessageDialog(mainFrame, "Please select a movie to edit.", "No Selection", JOptionPane.WARNING_MESSAGE);
                 return;
             }
-            AdminMovieFormUI.initialize("EDIT", (String)
-                    this.tableModel.getValueAt(this.movieTable.getSelectedRow(), 0));
+            String selectedMovieId = (String)this.tableModel.getValueAt(this.movieTable.getSelectedRow(), 0);
+            AdminMovieFormUI.initialize("EDIT", selectedMovieId);
+            //after editing the movie data, update the row's data
+            Movie m = MovieRepository.getMovies().get(selectedMovieId);
+            this.tableModel.setValueAt(m.getTitle(), this.movieTable.getSelectedRow(), 1);
+            this.tableModel.setValueAt(m.getGenre(), this.movieTable.getSelectedRow(), 2);
+            this.tableModel.setValueAt(m.getDuration(), this.movieTable.getSelectedRow(), 3);
+            this.tableModel.setValueAt(m.getRating(), this.movieTable.getSelectedRow(), 4);
+            this.tableModel.setValueAt(m.getShowTime(), this.movieTable.getSelectedRow(), 5);
+            String occupiedSeats = m.getOccupiedSeat().stream().collect(Collectors.joining(","));
+            this.tableModel.setValueAt(occupiedSeats, this.movieTable.getSelectedRow(), 6);
+            this.tableModel.setValueAt(m.getSeatPrice(), this.movieTable.getSelectedRow(), 6);
         });
 
         ////SUBSECTION - ADDING LISTENER TO THE DELETE MOVIE BUTTON
         this.deleteMovieButton.addActionListener(e -> {
+            //TODO: Add helper method to display message to reduce boilerplate code
             int selectedRow = movieTable.getSelectedRow();
             if (selectedRow == -1) {
                 JOptionPane.showMessageDialog(mainFrame, "Please select a movie to delete.", "No Selection", JOptionPane.WARNING_MESSAGE);
@@ -182,22 +195,36 @@ public class AdminMovieListUI {
             }
             int confirm = JOptionPane.showConfirmDialog(mainFrame, "Are you sure you want to delete this movie?", "Confirm Delete", JOptionPane.YES_NO_OPTION);
             if (confirm == JOptionPane.YES_OPTION) {
-                // TODO: Get movie ID from tableModel.getValueAt(selectedRow, 0)
-                // TODO: Call MovieService.deleteMovie(movieId)
-                // TODO: If success -> tableModel.removeRow(selectedRow)
+                String selectedMovieId = (String)this.tableModel.getValueAt(this.movieTable.getSelectedRow(), 0);
+                MovieRepository.deleteMovie(selectedMovieId);
+                this.tableModel.removeRow(this.movieTable.getSelectedRow());
             }
         });
 
         ////SUBSECTION - ADDING LISTENER TO THE LOGOUT BUTTON
         this.logoutButton.addActionListener(e -> {
+            //TODO: Add helper method to display message to reduce boilerplate code
             int confirm = JOptionPane.showConfirmDialog(mainFrame, "Are you sure you want to logout?", "Confirm Logout", JOptionPane.YES_NO_OPTION);
             if (confirm == JOptionPane.YES_OPTION) {
                 mainFrame.dispose();
                 adminMovieListUI = null;
                 LoginUI.initialize();
             }
+            ReadCSVFile.updateDataBackground();
+        });
+
+        ////SUBSECTION - ADDING LISTENER TO THE "X" - EXIT BUTTON
+        this.mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        this.mainFrame.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e){
+                ReadCSVFile.updateDataBackground();
+                mainFrame.dispose();
+            }
         });
     }
+
+
 
     //clear table and reload all movies from service
     private void loadMovies() {
@@ -209,7 +236,7 @@ public class AdminMovieListUI {
     }
 
     //add a single movie row into the table
-    public static void addMovieRow(Movie m) {
+    private void addMovieRow(Movie m) {
         String occupiedSeats = m.getOccupiedSeat().stream().
                 collect(Collectors.joining(","));
         AdminMovieListUI.adminMovieListUI.tableModel.addRow(new Object[]{
@@ -221,5 +248,9 @@ public class AdminMovieListUI {
                 m.getShowTime(),
                 occupiedSeats,
                 m.getSeatPrice()});
+    }
+
+    public static void updateTable(Movie m){
+        AdminMovieListUI.adminMovieListUI.addMovieRow(m);
     }
 }
