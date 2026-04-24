@@ -138,6 +138,7 @@ public class LoginUI {
                     DisplayMessage.displayError(this.mainFrame, "Authentication failed");
                 }
             }
+            this.mainFrame.dispose();
         });
 
         ////SUBSECTION - ADDING LISTENER TO THE REGISTER BUTTON
