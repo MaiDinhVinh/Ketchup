@@ -17,7 +17,7 @@ public class MovieRepository {
         MovieRepository.movies = movies;
     }
 
-    public static Movie addMovies(String title,
+    public static Movie addMovie(String title,
                                  String genre,
                                  int duration,
                                  String rating,
@@ -34,6 +34,19 @@ public class MovieRepository {
                 occupiedSeat,
                 seatPrice);
         MovieRepository.movies.put(movieId, m);
+        ReadCSVFile.writeMovieData(generateMovieDataAsString(m));
+        return m;
+    }
+
+    public static void editMovie(String id, Movie edited){
+        MovieRepository.movies.put(id, edited);
+    }
+
+    public static void deleteMovie(String id){
+        MovieRepository.movies.remove(id);
+    }
+
+    public static String generateMovieDataAsString(Movie m){
         String occupiedSeats = m.getOccupiedSeat().stream().
                 collect(Collectors.joining(","));
         String data = "%s;%s;%s;%d;%s;%s;%s;%d".formatted(m.getMovieId(),
@@ -44,9 +57,6 @@ public class MovieRepository {
                 m.getShowTime(),
                 occupiedSeats,
                 m.getSeatPrice());
-        ReadCSVFile.writeMovieData(data);
-        return m;
+        return data;
     }
-
-    public static void
 }
