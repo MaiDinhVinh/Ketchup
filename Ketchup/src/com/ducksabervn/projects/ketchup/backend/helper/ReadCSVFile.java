@@ -1,5 +1,6 @@
 package com.ducksabervn.projects.ketchup.backend.helper;
 
+import com.ducksabervn.projects.ketchup.backend.admin.MovieRepository;
 import com.ducksabervn.projects.ketchup.backend.credientials.Credential;
 import com.ducksabervn.projects.ketchup.backend.admin.Movie;
 
@@ -10,7 +11,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
 import java.util.TreeMap;
-import java.util.stream.Collectors;
 
 
 public final class ReadCSVFile{
@@ -89,7 +89,16 @@ public final class ReadCSVFile{
         }
     }
 
-    public static void updateMovieData(String id, String... changedInformation) {
-
+    public static void updateDataBackground() {
+        TreeMap<String, Movie> updatedMovies = MovieRepository.getMovies();
+        try(BufferedWriter bw = new BufferedWriter(new FileWriter(MOVIES.toFile()))){
+            Files.writeString(MOVIES, "MOVIEID;TITLE;GENRE;DURATION;RATING;SHOWTIME;SEAT;SPRICE");
+            for(Movie m: updatedMovies.values()){
+                bw.newLine();
+                bw.write(MovieRepository.generateMovieDataAsString(m));
+            }
+        }catch(IOException e){
+            e.printStackTrace();
+        }
     }
 }
