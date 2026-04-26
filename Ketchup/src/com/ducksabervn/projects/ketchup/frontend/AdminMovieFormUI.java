@@ -103,11 +103,11 @@ public class AdminMovieFormUI {
     public static void initialize(String mode, String movieId) {
         if (AdminMovieFormUI.adminMovieFormUI == null) {
             AdminMovieFormUI.adminMovieFormUI = new AdminMovieFormUI();
+            AdminMovieFormUI.adminMovieFormUI.initializeAllElements();
+            AdminMovieFormUI.adminMovieFormUI.mainFrame.add(AdminMovieFormUI.adminMovieFormUI.mainPanel);
         }
         AdminMovieFormUI.adminMovieFormUI.mode = mode;
         AdminMovieFormUI.adminMovieFormUI.currentMovieId = movieId;
-        AdminMovieFormUI.adminMovieFormUI.initializeAllElements();
-        AdminMovieFormUI.adminMovieFormUI.mainFrame.add(AdminMovieFormUI.adminMovieFormUI.mainPanel);
         AdminMovieFormUI.adminMovieFormUI.mainFrame.setModalityType(Dialog.ModalityType.APPLICATION_MODAL);
         AdminMovieFormUI.adminMovieFormUI.mainFrame.setVisible(true);
     }
