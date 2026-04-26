@@ -2,6 +2,7 @@ package com.ducksabervn.projects.ketchup.frontend;
 
 import com.ducksabervn.projects.ketchup.backend.admin.Movie;
 import com.ducksabervn.projects.ketchup.backend.admin.MovieRepository;
+import com.ducksabervn.projects.ketchup.backend.helper.DisplayMessage;
 import com.ducksabervn.projects.ketchup.backend.helper.ReadCSVFile;
 
 import javax.swing.*;
@@ -9,13 +10,18 @@ import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.util.TreeMap;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.LinkedHashMap;
 import java.util.stream.Collectors;
 
 public class AdminMovieListUI {
 
     //SINGLETON DESIGN PATTERN => 1 UI INSTANCE AT A TIME
     private static AdminMovieListUI adminMovieListUI;
+
+    //Data loaded for UI only
+    private ArrayList<Movie> currentData;
 
     //the admin main frame
     private JFrame mainFrame;
@@ -31,6 +37,7 @@ public class AdminMovieListUI {
     private JLabel searchLabel;
     private JTextField searchField;
     private JButton searchButton;
+    private JLabel searchNoteLabel;
 
     //sort bar
     private JLabel sortLabel;
@@ -48,6 +55,19 @@ public class AdminMovieListUI {
     private JButton addMovieButton;
     private JButton editMovieButton;
     private JButton deleteMovieButton;
+    private JButton refreshButton;
+
+    //SORTING CRITERIONS
+    private static final Comparator<Movie> SORT_BY_ID = Comparator.comparing(Movie::getMovieId);
+    private static final Comparator<Movie> SORT_BY_TITLE = Comparator.comparing(Movie::getTitle);
+    private static final Comparator<Movie> SORT_BY_GENRE = Comparator.comparing(Movie::getGenre);
+    private static final Comparator<Movie> SORT_BY_DURATION = Comparator.comparing(Movie::getDuration);
+    private static final Comparator<Movie> SORT_BY_RATING = Comparator.comparing(Movie::getRating);
+    private static final Comparator<Movie> SORT_BY_SHOWTIME = Comparator.comparing(Movie::getShowTime);
+    private static final Comparator<Movie> SORT_BY_NUMBER_OF_OCCUPIED_SEATS =
+            Comparator.comparingInt((Movie m) -> m.getOccupiedSeat().size());
+    private static final Comparator<Movie> SORT_BY_SEAT_PRICE =
+            Comparator.comparing(Movie::getSeatPrice);
 
     private AdminMovieListUI() {
         this.mainFrame = new JFrame("Ketchup - Admin");
@@ -59,8 +79,18 @@ public class AdminMovieListUI {
         this.searchLabel = new JLabel("Search:");
         this.searchField = new JTextField(20);
         this.searchButton = new JButton("Search");
+        this.searchNoteLabel = new JLabel("* Only support searching for ID, TITLE, GENRE, DURATION, RATING");
         this.sortLabel = new JLabel("Sort by:");
-        this.sortComboBox = new JComboBox<>(new String[]{"Title", "Genre", "Duration", "Rating"});
+        this.sortComboBox = new JComboBox<>(
+                new String[]{"ID",
+                        "Title",
+                        "Genre",
+                        "Duration (min)",
+                        "Rating",
+                        "Showtime",
+                        "Number of selected seats",
+                        "Price/Seat"}
+        );
         this.sortButton = new JButton("Sort");
         this.tableColumns = new String[]{"ID",
                 "Title",
@@ -78,10 +108,11 @@ public class AdminMovieListUI {
         };
         this.movieTable = new JTable(tableModel);
         this.tableScrollPane = new JScrollPane(movieTable);
-        this.buttonPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 10));
+        this.buttonPanel = new JPanel(new BorderLayout());
         this.addMovieButton = new JButton("Add Movie");
         this.editMovieButton = new JButton("Edit Movie");
         this.deleteMovieButton = new JButton("Delete Movie");
+        this.refreshButton = new JButton("⟳");
     }
 
     /**
@@ -122,10 +153,15 @@ public class AdminMovieListUI {
         searchPanel.add(sortComboBox);
         searchPanel.add(sortButton);
 
+        //initialize the search note label
+        searchNoteLabel.setForeground(Color.RED);
+        searchNoteLabel.setFont(new Font("Arial", Font.ITALIC, 11));
+
         //group top bar + search into the NORTH section
         JPanel northPanel = new JPanel(new BorderLayout());
         northPanel.add(topPanel, BorderLayout.NORTH);
-        northPanel.add(searchPanel, BorderLayout.SOUTH);
+        northPanel.add(searchPanel, BorderLayout.CENTER);
+        northPanel.add(searchNoteLabel, BorderLayout.SOUTH);
         mainPanel.add(northPanel, BorderLayout.NORTH);
 
         //initialize the movie table
@@ -136,27 +172,67 @@ public class AdminMovieListUI {
         mainPanel.add(tableScrollPane, BorderLayout.CENTER);
 
         //initialize the action buttons
+        JPanel leftButtons = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 10));
         addMovieButton.setPreferredSize(new Dimension(120, 30));
         editMovieButton.setPreferredSize(new Dimension(120, 30));
         deleteMovieButton.setPreferredSize(new Dimension(120, 30));
-        buttonPanel.add(addMovieButton);
-        buttonPanel.add(editMovieButton);
-        buttonPanel.add(deleteMovieButton);
+        leftButtons.add(addMovieButton);
+        leftButtons.add(editMovieButton);
+        leftButtons.add(deleteMovieButton);
+
+        JPanel rightButtons = new JPanel(new FlowLayout(FlowLayout.RIGHT, 10, 10));
+        refreshButton.setPreferredSize(new Dimension(50, 30));
+        rightButtons.add(refreshButton);
+
+        buttonPanel.add(leftButtons, BorderLayout.WEST);
+        buttonPanel.add(rightButtons, BorderLayout.EAST);
         mainPanel.add(buttonPanel, BorderLayout.SOUTH);
 
         //load movie list into table on startup
-        loadMovies();
+        initalizeData();
+
+        ////SUBSECTION - ADDING LISTENER TO THE REFRESH BUTTON
+        this.refreshButton.addActionListener(e -> {
+            initalizeData();
+        });
 
         ////SUBSECTION - ADDING LISTENER TO THE SEARCH BUTTON
         this.searchButton.addActionListener(e -> {
             String keyword = searchField.getText().trim();
-            // TODO: Call MovieService.searchMovies(keyword) and pass results to loadMovies(results)
+            tableModel.setRowCount(0);
+            AdminMovieListUI.adminMovieListUI.currentData = MovieRepository.searchMovie(keyword);
+            AdminMovieListUI.adminMovieListUI.updateRows(AdminMovieListUI.adminMovieListUI.currentData);
         });
 
         ////SUBSECTION - ADDING LISTENER TO THE SORT BUTTON
         this.sortButton.addActionListener(e -> {
             String selectedColumn = (String) sortComboBox.getSelectedItem();
-            // TODO: Call MovieService.getSortedMovies(selectedColumn) and pass results to loadMovies(results)
+            switch (selectedColumn) {
+                case "ID":
+                    this.sortMovieByCriterion(0);
+                    break;
+                case "Title":
+                    this.sortMovieByCriterion(1);
+                    break;
+                case "Genre":
+                    this.sortMovieByCriterion(2);
+                    break;
+                case "Duration (min)":
+                    this.sortMovieByCriterion(3);
+                    break;
+                case "Rating":
+                    this.sortMovieByCriterion(4);
+                    break;
+                case "Showtime":
+                    this.sortMovieByCriterion(5);
+                    break;
+                case "Number of selected seats":
+                    this.sortMovieByCriterion(6);
+                    break;
+                case "Price/Seat":
+                    this.sortMovieByCriterion(7);
+                    break;
+            }
         });
 
         ////SUBSECTION - ADDING LISTENER TO THE ADD MOVIE BUTTON
@@ -168,11 +244,12 @@ public class AdminMovieListUI {
         this.editMovieButton.addActionListener(e -> {
             int selectedRow = movieTable.getSelectedRow();
             if (selectedRow == -1) {
-                JOptionPane.showMessageDialog(mainFrame, "Please select a movie to edit.", "No Selection", JOptionPane.WARNING_MESSAGE);
+                DisplayMessage.displayWarning(mainFrame, "Please select a movie to edit.", "No Selection", JOptionPane.WARNING_MESSAGE);
                 return;
             }
             String selectedMovieId = (String)this.tableModel.getValueAt(this.movieTable.getSelectedRow(), 0);
             AdminMovieFormUI.initialize("EDIT", selectedMovieId);
+
             //after editing the movie data, update the row's data
             Movie m = MovieRepository.getMovies().get(selectedMovieId);
             this.tableModel.setValueAt(m.getTitle(), this.movieTable.getSelectedRow(), 1);
@@ -187,14 +264,15 @@ public class AdminMovieListUI {
 
         ////SUBSECTION - ADDING LISTENER TO THE DELETE MOVIE BUTTON
         this.deleteMovieButton.addActionListener(e -> {
-            //TODO: Add helper method to display message to reduce boilerplate code
             int selectedRow = movieTable.getSelectedRow();
             if (selectedRow == -1) {
-                JOptionPane.showMessageDialog(mainFrame, "Please select a movie to delete.", "No Selection", JOptionPane.WARNING_MESSAGE);
+                DisplayMessage.displayWarning(mainFrame, "Please select a movie to delete.", "No Selection", JOptionPane.WARNING_MESSAGE);
                 return;
             }
-            int confirm = JOptionPane.showConfirmDialog(mainFrame, "Are you sure you want to delete this movie?", "Confirm Delete", JOptionPane.YES_NO_OPTION);
-            if (confirm == JOptionPane.YES_OPTION) {
+            if (DisplayMessage.displayConfirmationDialog(mainFrame,
+                    "Are you sure you want to delete this movie?",
+                    "Ketchup",
+                    JOptionPane.YES_NO_OPTION)) {
                 String selectedMovieId = (String)this.tableModel.getValueAt(this.movieTable.getSelectedRow(), 0);
                 MovieRepository.deleteMovie(selectedMovieId);
                 this.tableModel.removeRow(this.movieTable.getSelectedRow());
@@ -203,14 +281,18 @@ public class AdminMovieListUI {
 
         ////SUBSECTION - ADDING LISTENER TO THE LOGOUT BUTTON
         this.logoutButton.addActionListener(e -> {
-            //TODO: Add helper method to display message to reduce boilerplate code
-            int confirm = JOptionPane.showConfirmDialog(mainFrame, "Are you sure you want to logout?", "Confirm Logout", JOptionPane.YES_NO_OPTION);
-            if (confirm == JOptionPane.YES_OPTION) {
+            if (DisplayMessage.displayConfirmationDialog(this.mainFrame,
+                    "Are you sure you want to logout?",
+                    "Ketchup",
+                    JOptionPane.YES_NO_OPTION)) {
                 mainFrame.dispose();
-                adminMovieListUI = null;
                 LoginUI.initialize();
             }
             ReadCSVFile.updateDataBackground();
+        });
+
+        this.refreshButton.addActionListener(e -> {
+            this.initalizeData();
         });
 
         ////SUBSECTION - ADDING LISTENER TO THE "X" - EXIT BUTTON
@@ -224,19 +306,17 @@ public class AdminMovieListUI {
         });
     }
 
-
-
     //clear table and reload all movies from service
-    private void loadMovies() {
+    private void initalizeData() {
         tableModel.setRowCount(0);
-        TreeMap<String, Movie> map = MovieRepository.getMovies();
-        for(Movie m: map.values()){
-            addMovieRow(m);
+        AdminMovieListUI.adminMovieListUI.currentData = new ArrayList<>(MovieRepository.getMovies().values());
+        for(Movie m: AdminMovieListUI.adminMovieListUI.currentData){
+            this.addMovie(m);
         }
     }
 
     //add a single movie row into the table
-    private void addMovieRow(Movie m) {
+    private void addMovie(Movie m) {
         String occupiedSeats = m.getOccupiedSeat().stream().
                 collect(Collectors.joining(","));
         AdminMovieListUI.adminMovieListUI.tableModel.addRow(new Object[]{
@@ -249,8 +329,45 @@ public class AdminMovieListUI {
                 occupiedSeats,
                 m.getSeatPrice()});
     }
+    private void sortMovieByCriterion(int criterion){
+        ArrayList<Movie> arr = AdminMovieListUI.adminMovieListUI.currentData;
+        switch (criterion) {
+            case 0:
+                arr.sort(SORT_BY_ID);
+                break;
+            case 1:
+                arr.sort(SORT_BY_TITLE);
+                break;
+            case 2:
+                arr.sort(SORT_BY_GENRE);
+                break;
+            case 3:
+                arr.sort(SORT_BY_DURATION);
+                break;
+            case 4:
+                arr.sort(SORT_BY_RATING);
+                break;
+            case 5:
+                arr.sort(SORT_BY_SHOWTIME);
+                break;
+            case 6:
+                arr.sort(SORT_BY_NUMBER_OF_OCCUPIED_SEATS);
+                break;
+            case 7:
+                arr.sort(SORT_BY_SEAT_PRICE);
+                break;
+        }
+        this.updateRows(arr);
+    }
 
-    public static void updateTable(Movie m){
-        AdminMovieListUI.adminMovieListUI.addMovieRow(m);
+    private void updateRows(ArrayList<Movie> arr){
+        tableModel.setRowCount(0);
+        for(Movie m: arr){
+            addMovie(m);
+        }
+    }
+
+    public static void addMovieRow(Movie m){
+        AdminMovieListUI.adminMovieListUI.addMovie(m);
     }
 }
