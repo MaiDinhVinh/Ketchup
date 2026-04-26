@@ -16,18 +16,20 @@ public final class DisplayMessage {
 
     public static boolean displayConfirmationDialog(JFrame mainFrame,
                                                  String message,
-                                                 String title,
-                                                 int optionPane){
+                                                 String title){
         return JOptionPane.showConfirmDialog(mainFrame,
                 message,
                 title,
-                optionPane) == JOptionPane.YES_OPTION;
+                JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION;
     }
 
     public static void displayWarning(JFrame mainFrame,
-                                      String message,
-                                      String title,
-                                      int optionPane){
-        JOptionPane.showMessageDialog(mainFrame, message, title, optionPane);
+                                      String message){
+        JOptionPane.showMessageDialog(mainFrame, message, "Ketchup", JOptionPane.WARNING_MESSAGE);
+    }
+
+    public static void displayInformation(JFrame mainFrame,
+                                          String message){
+        JOptionPane.showMessageDialog(mainFrame, message, "Ketchup", JOptionPane.INFORMATION_MESSAGE);
     }
 }
