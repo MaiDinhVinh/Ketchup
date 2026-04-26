@@ -1,19 +1,20 @@
 package com.ducksabervn.projects.ketchup.backend.admin;
 
 import com.ducksabervn.projects.ketchup.backend.helper.ReadCSVFile;
+import com.ducksabervn.projects.ketchup.frontend.AdminMovieFormUI;
 
-import java.util.TreeMap;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class MovieRepository {
-    private static TreeMap<String, Movie> movies;
+    //this motherfucker will maintain the insert input unlike HashMap, bro i want to kms
+    private static LinkedHashMap<String, Movie> movies;
 
-    public static TreeMap<String, Movie> getMovies() {
+    public static LinkedHashMap<String, Movie> getMovies() {
         return movies;
     }
 
-    public static void setMovies(TreeMap<String, Movie> movies) {
+    public static void setMovies(LinkedHashMap<String, Movie> movies) {
         MovieRepository.movies = movies;
     }
 
@@ -44,6 +45,23 @@ public class MovieRepository {
 
     public static void deleteMovie(String id){
         MovieRepository.movies.remove(id);
+    }
+
+    public static ArrayList<Movie> searchMovie(String information){
+        ArrayList<Movie> arr = new ArrayList<>();
+        if(MovieRepository.movies.containsKey(information)){
+            arr.add(MovieRepository.movies.get(information)); //searching by id
+        }else{
+            for(Movie m: MovieRepository.movies.values()){
+                if(m.getTitle().equals(information) ||
+                m.getGenre().equals(information) ||
+                 Integer.toString(m.getDuration()).equals(information) ||
+                m.getRating().equals(information)){
+                    arr.add(m);
+                }
+            }
+        }
+        return arr;
     }
 
     public static String generateMovieDataAsString(Movie m){
