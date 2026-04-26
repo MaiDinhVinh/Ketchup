@@ -130,7 +130,7 @@ public class RegisterUI {
         ////SUBSECTION - ADDING ACTION LISTENER TO THE REGISTER BUTTON
         this.registerButton.addActionListener(e -> {
             // TODO: Input verification
-            // TODO: Call AuthService.register(fullName, username, email, password)
+            // TODO: Call AuthService.register(username, email, password)
             // TODO: If username already exists -> messageLabel.setForeground(Color.RED) + messageLabel.setText("Username already taken.")
             // TODO: If register success -> messageLabel.setForeground(Color.GREEN) + messageLabel.setText("Registration successful!")
             // TODO: After success -> close this frame and open LoginUI
