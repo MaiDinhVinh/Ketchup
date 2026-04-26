@@ -1,5 +1,8 @@
 package com.ducksabervn.projects.ketchup.frontend;
 
+import com.ducksabervn.projects.ketchup.backend.credientials.CredentialRepository;
+import com.ducksabervn.projects.ketchup.backend.helper.DisplayMessage;
+
 import javax.swing.*;
 import java.awt.*;
 
@@ -15,9 +18,6 @@ public class RegisterUI {
     private JPanel formPanel;
 
     //login crediential fields input initalization
-    private JPanel fullNameRow;
-    private JLabel fullNameLabel;
-    private JTextField fullNameField;
     private JPanel usernameRow;
     private JLabel usernameLabel;
     private JTextField usernameField;
@@ -30,6 +30,11 @@ public class RegisterUI {
     private JPanel confirmPasswordRow;
     private JLabel confirmPasswordLabel;
     private JPasswordField confirmPasswordField;
+
+    //role selection row
+    private JPanel roleRow;
+    private JLabel roleLabel;
+    private JComboBox<String> roleComboBox;
 
     //all kind of message goes here
     private JLabel messageLabel;
@@ -44,10 +49,7 @@ public class RegisterUI {
         this.mainFrame = new JFrame("Ketchup");
         this.mainPanel = new JPanel();
         this.titleLabel = new JLabel("Ketchup - Register", SwingConstants.CENTER);
-        this.formPanel = new JPanel(new GridLayout(6, 1, 8, 8));
-        this.fullNameRow = new JPanel(new BorderLayout(8, 0));
-        this.fullNameLabel = new JLabel("Full Name:");
-        this.fullNameField = new JTextField();
+        this.formPanel = new JPanel(new GridLayout(7, 1, 8, 8));
         this.usernameRow = new JPanel(new BorderLayout(8, 0));
         this.usernameLabel = new JLabel("Username:");
         this.usernameField = new JTextField();
@@ -60,6 +62,9 @@ public class RegisterUI {
         this.confirmPasswordRow = new JPanel(new BorderLayout(8, 0));
         this.confirmPasswordLabel = new JLabel("Confirm Password:");
         this.confirmPasswordField = new JPasswordField();
+        this.roleRow = new JPanel(new BorderLayout(8, 0));
+        this.roleLabel = new JLabel("Register as:");
+        this.roleComboBox = new JComboBox<>(new String[]{"User", "Admin"});
         this.messageLabel = new JLabel("", SwingConstants.CENTER);
         this.buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
         this.registerButton = new JButton("Register");
@@ -69,9 +74,9 @@ public class RegisterUI {
     public static void initialize() {
         if (RegisterUI.registerUI == null) {
             RegisterUI.registerUI = new RegisterUI();
+            RegisterUI.registerUI.initializeAllElements();
+            RegisterUI.registerUI.mainFrame.add(RegisterUI.registerUI.mainPanel);
         }
-        RegisterUI.registerUI.initializeAllElements();
-        RegisterUI.registerUI.mainFrame.add(RegisterUI.registerUI.mainPanel);
         RegisterUI.registerUI.mainFrame.setVisible(true);
     }
 
@@ -79,7 +84,7 @@ public class RegisterUI {
 
         //set up the main register JFrame
         mainFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        mainFrame.setSize(420, 380);
+        mainFrame.setSize(420, 420);
         mainFrame.setLocationRelativeTo(null);
         mainFrame.setResizable(false);
 
@@ -92,9 +97,6 @@ public class RegisterUI {
         mainPanel.add(titleLabel, BorderLayout.NORTH);
 
         //setup the register credential form
-        fullNameLabel.setPreferredSize(new Dimension(120, 25));
-        fullNameRow.add(fullNameLabel, BorderLayout.WEST);
-        fullNameRow.add(fullNameField, BorderLayout.CENTER);
         usernameLabel.setPreferredSize(new Dimension(120, 25));
         usernameRow.add(usernameLabel, BorderLayout.WEST);
         usernameRow.add(usernameField, BorderLayout.CENTER);
@@ -107,20 +109,23 @@ public class RegisterUI {
         confirmPasswordLabel.setPreferredSize(new Dimension(120, 25));
         confirmPasswordRow.add(confirmPasswordLabel, BorderLayout.WEST);
         confirmPasswordRow.add(confirmPasswordField, BorderLayout.CENTER);
+        roleLabel.setPreferredSize(new Dimension(120, 25));
+        roleRow.add(roleLabel, BorderLayout.WEST);
+        roleRow.add(roleComboBox, BorderLayout.CENTER);
 
         //setup the all-kind-of-messages label
         messageLabel.setFont(new Font("Arial", Font.PLAIN, 12));
 
         //adding all customized element to the content pane of the registration
-        formPanel.add(fullNameRow);
         formPanel.add(usernameRow);
         formPanel.add(emailRow);
         formPanel.add(passwordRow);
         formPanel.add(confirmPasswordRow);
+        formPanel.add(roleRow);
         formPanel.add(messageLabel);
         mainPanel.add(formPanel, BorderLayout.CENTER);
 
-        //adding all of the customized buttom to the content panel or its own wrapping panel for better look
+        //adding all customized buttons to the content panel or its own wrapping panel for better look
         registerButton.setPreferredSize(new Dimension(100, 30));
         backButton.setPreferredSize(new Dimension(120, 30));
         buttonPanel.add(registerButton);
@@ -129,11 +134,17 @@ public class RegisterUI {
 
         ////SUBSECTION - ADDING ACTION LISTENER TO THE REGISTER BUTTON
         this.registerButton.addActionListener(e -> {
-            // TODO: Input verification
-            // TODO: Call AuthService.register(username, email, password)
-            // TODO: If username already exists -> messageLabel.setForeground(Color.RED) + messageLabel.setText("Username already taken.")
-            // TODO: If register success -> messageLabel.setForeground(Color.GREEN) + messageLabel.setText("Registration successful!")
-            // TODO: After success -> close this frame and open LoginUI
+            boolean isAdmin = roleComboBox.getSelectedItem().equals("Admin");
+            if(CredentialRepository.register(this.usernameField.getText().trim(),
+                    this.emailField.getText().trim(),
+                    new String(this.passwordField.getPassword()),
+                    isAdmin)){
+                DisplayMessage.displayInformation(this.mainFrame, "Account created successful");
+                mainFrame.dispose();
+                LoginUI.initialize();
+            }else{
+                DisplayMessage.displayError(this.mainFrame, "Failed to create account");
+            }
         });
 
         ////SUBSECTION - ADDING ACTION LISTENER TO THE LOGIN BUTTON
