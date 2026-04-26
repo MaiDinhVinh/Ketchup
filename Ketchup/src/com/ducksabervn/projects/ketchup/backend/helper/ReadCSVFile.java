@@ -10,7 +10,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
-import java.util.TreeMap;
+import java.util.LinkedHashMap;
 
 
 public final class ReadCSVFile{
@@ -39,11 +39,11 @@ public final class ReadCSVFile{
         }
     }
 
-    public static TreeMap<String, Credential> readUserCredentialsCsv(){
+    public static LinkedHashMap<String, Credential> readUserCredentialsCsv(){
         try{
             List<String> allCreds = Files.readAllLines(USER_CREDENTIALS);
             allCreds.remove(0);
-            TreeMap<String, Credential> credMap = new TreeMap<>();
+            LinkedHashMap<String, Credential> credMap = new LinkedHashMap<>();
             for(String str: allCreds){
                 String[] split = str.split(";");
                 credMap.put(split[0], new Credential(split[0], split[1], Boolean.valueOf(split[2])));
@@ -55,11 +55,11 @@ public final class ReadCSVFile{
         }
     }
 
-    public static TreeMap<String, Movie> readMoviesCsv(){
+    public static LinkedHashMap<String, Movie> readMoviesCsv(){
         try{
             List<String> allMovies = Files.readAllLines(MOVIES);
             allMovies.remove(0);
-            TreeMap<String, Movie> movies = new TreeMap<>();
+            LinkedHashMap<String, Movie> movies = new LinkedHashMap<>();
             for(String str: allMovies){
                 String[] split = str.split(";");
                 movies.put(split[0],
@@ -90,9 +90,9 @@ public final class ReadCSVFile{
     }
 
     public static void updateDataBackground() {
-        TreeMap<String, Movie> updatedMovies = MovieRepository.getMovies();
+        LinkedHashMap<String, Movie> updatedMovies = MovieRepository.getMovies();
         try(BufferedWriter bw = new BufferedWriter(new FileWriter(MOVIES.toFile()))){
-            Files.writeString(MOVIES, "MOVIEID;TITLE;GENRE;DURATION;RATING;SHOWTIME;SEAT;SPRICE");
+            bw.write("MOVIEID;TITLE;GENRE;DURATION;RATING;SHOWTIME;SEAT;SPRICE");
             for(Movie m: updatedMovies.values()){
                 bw.newLine();
                 bw.write(MovieRepository.generateMovieDataAsString(m));
