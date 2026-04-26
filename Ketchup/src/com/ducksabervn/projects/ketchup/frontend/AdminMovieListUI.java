@@ -27,9 +27,10 @@ public class AdminMovieListUI {
     private JFrame mainFrame;
     private JPanel mainPanel;
 
-    //top bar: title + logout button
+    //top bar: title + username label + logout button
     private JPanel topPanel;
     private JLabel titleLabel;
+    private JLabel usernameLabel;
     private JButton logoutButton;
 
     //search bar
@@ -74,6 +75,7 @@ public class AdminMovieListUI {
         this.mainPanel = new JPanel();
         this.topPanel = new JPanel(new BorderLayout());
         this.titleLabel = new JLabel("Movie Management", SwingConstants.LEFT);
+        this.usernameLabel = new JLabel("", SwingConstants.RIGHT);
         this.logoutButton = new JButton("Logout");
         this.searchPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         this.searchLabel = new JLabel("Search:");
@@ -117,17 +119,18 @@ public class AdminMovieListUI {
 
     /**
      * Since we are using singleton design pattern, this UI will only be initialized once
+     * username is the name of the logged-in admin to display in the top bar
      */
-    public static void initialize() {
+    public static void initialize(String username) {
         if (AdminMovieListUI.adminMovieListUI == null) {
             AdminMovieListUI.adminMovieListUI = new AdminMovieListUI();
+            AdminMovieListUI.adminMovieListUI.initializeAllElements(username);
+            AdminMovieListUI.adminMovieListUI.mainFrame.add(AdminMovieListUI.adminMovieListUI.mainPanel);
         }
-        AdminMovieListUI.adminMovieListUI.initializeAllElements();
-        AdminMovieListUI.adminMovieListUI.mainFrame.add(AdminMovieListUI.adminMovieListUI.mainPanel);
         AdminMovieListUI.adminMovieListUI.mainFrame.setVisible(true);
     }
 
-    private void initializeAllElements() {
+    private void initializeAllElements(String username) {
         //initialize the main frame
         mainFrame.setSize(800, 550);
         mainFrame.setLocationRelativeTo(null);
@@ -137,11 +140,16 @@ public class AdminMovieListUI {
         mainPanel.setLayout(new BorderLayout(10, 10));
         mainPanel.setBorder(BorderFactory.createEmptyBorder(15, 15, 15, 15));
 
-        //initialize the top bar (title + logout)
+        //initialize the top bar (title + username + logout)
         titleLabel.setFont(new Font("Arial", Font.BOLD, 22));
+        usernameLabel.setText("Welcome! " + username);
+        usernameLabel.setFont(new Font("Arial", Font.ITALIC, 12));
         logoutButton.setPreferredSize(new Dimension(90, 30));
+        JPanel topRightPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 8, 0));
+        topRightPanel.add(usernameLabel);
+        topRightPanel.add(logoutButton);
         topPanel.add(titleLabel, BorderLayout.WEST);
-        topPanel.add(logoutButton, BorderLayout.EAST);
+        topPanel.add(topRightPanel, BorderLayout.EAST);
         topPanel.setBorder(BorderFactory.createEmptyBorder(0, 0, 5, 0));
 
         //initialize the search bar and sort bar
@@ -193,46 +201,71 @@ public class AdminMovieListUI {
 
         ////SUBSECTION - ADDING LISTENER TO THE REFRESH BUTTON
         this.refreshButton.addActionListener(e -> {
-            initalizeData();
+//            this.initalizeData();
+
+            //threading problem => I have to use this shit
+            new SwingWorker<Void, Void>(){
+                @Override
+                protected Void doInBackground() throws Exception {
+                    AdminMovieListUI.adminMovieListUI.initalizeData();
+                    return null;
+                }
+            }.execute();
         });
 
         ////SUBSECTION - ADDING LISTENER TO THE SEARCH BUTTON
         this.searchButton.addActionListener(e -> {
             String keyword = searchField.getText().trim();
             tableModel.setRowCount(0);
-            AdminMovieListUI.adminMovieListUI.currentData = MovieRepository.searchMovie(keyword);
-            AdminMovieListUI.adminMovieListUI.updateRows(AdminMovieListUI.adminMovieListUI.currentData);
+
+            //threading problem => I have to use this shit
+            new SwingWorker<Void, Void>(){
+                @Override
+                protected Void doInBackground() throws Exception {
+                    AdminMovieListUI.adminMovieListUI.currentData = MovieRepository.searchMovie(keyword);
+                    AdminMovieListUI.adminMovieListUI.updateRows(AdminMovieListUI.adminMovieListUI.currentData);
+                    return null;
+                }
+            }.execute();
         });
 
         ////SUBSECTION - ADDING LISTENER TO THE SORT BUTTON
         this.sortButton.addActionListener(e -> {
             String selectedColumn = (String) sortComboBox.getSelectedItem();
-            switch (selectedColumn) {
-                case "ID":
-                    this.sortMovieByCriterion(0);
-                    break;
-                case "Title":
-                    this.sortMovieByCriterion(1);
-                    break;
-                case "Genre":
-                    this.sortMovieByCriterion(2);
-                    break;
-                case "Duration (min)":
-                    this.sortMovieByCriterion(3);
-                    break;
-                case "Rating":
-                    this.sortMovieByCriterion(4);
-                    break;
-                case "Showtime":
-                    this.sortMovieByCriterion(5);
-                    break;
-                case "Number of selected seats":
-                    this.sortMovieByCriterion(6);
-                    break;
-                case "Price/Seat":
-                    this.sortMovieByCriterion(7);
-                    break;
-            }
+
+            //threading problem => I have to use this shit
+            new SwingWorker<Void, Void>(){
+                @Override
+                protected Void doInBackground() throws Exception {
+                    switch (selectedColumn) {
+                        case "ID":
+                            AdminMovieListUI.adminMovieListUI.sortMovieByCriterion(0);
+                            break;
+                        case "Title":
+                            AdminMovieListUI.adminMovieListUI.sortMovieByCriterion(1);
+                            break;
+                        case "Genre":
+                            AdminMovieListUI.adminMovieListUI.sortMovieByCriterion(2);
+                            break;
+                        case "Duration (min)":
+                            AdminMovieListUI.adminMovieListUI.sortMovieByCriterion(3);
+                            break;
+                        case "Rating":
+                            AdminMovieListUI.adminMovieListUI.sortMovieByCriterion(4);
+                            break;
+                        case "Showtime":
+                            AdminMovieListUI.adminMovieListUI.sortMovieByCriterion(5);
+                            break;
+                        case "Number of selected seats":
+                            AdminMovieListUI.adminMovieListUI.sortMovieByCriterion(6);
+                            break;
+                        case "Price/Seat":
+                            AdminMovieListUI.adminMovieListUI.sortMovieByCriterion(7);
+                            break;
+                    }
+                    return null;
+                }
+            }.execute();
         });
 
         ////SUBSECTION - ADDING LISTENER TO THE ADD MOVIE BUTTON
@@ -244,7 +277,7 @@ public class AdminMovieListUI {
         this.editMovieButton.addActionListener(e -> {
             int selectedRow = movieTable.getSelectedRow();
             if (selectedRow == -1) {
-                DisplayMessage.displayWarning(mainFrame, "Please select a movie to edit.", "No Selection", JOptionPane.WARNING_MESSAGE);
+                DisplayMessage.displayWarning(mainFrame, "Please select a movie to edit.");
                 return;
             }
             String selectedMovieId = (String)this.tableModel.getValueAt(this.movieTable.getSelectedRow(), 0);
@@ -266,15 +299,23 @@ public class AdminMovieListUI {
         this.deleteMovieButton.addActionListener(e -> {
             int selectedRow = movieTable.getSelectedRow();
             if (selectedRow == -1) {
-                DisplayMessage.displayWarning(mainFrame, "Please select a movie to delete.", "No Selection", JOptionPane.WARNING_MESSAGE);
+                DisplayMessage.displayWarning(mainFrame, "Please select a movie to delete.");
                 return;
             }
             if (DisplayMessage.displayConfirmationDialog(mainFrame,
                     "Are you sure you want to delete this movie?",
-                    "Ketchup",
-                    JOptionPane.YES_NO_OPTION)) {
+                    "Ketchup")) {
                 String selectedMovieId = (String)this.tableModel.getValueAt(this.movieTable.getSelectedRow(), 0);
-                MovieRepository.deleteMovie(selectedMovieId);
+
+                //threading problem => I have to use this shit
+                new SwingWorker<Void, Void>(){
+                    @Override
+                    protected Void doInBackground() throws Exception {
+                        MovieRepository.deleteMovie(selectedMovieId);
+                        return null;
+                    }
+                }.execute();
+
                 this.tableModel.removeRow(this.movieTable.getSelectedRow());
             }
         });
@@ -283,16 +324,11 @@ public class AdminMovieListUI {
         this.logoutButton.addActionListener(e -> {
             if (DisplayMessage.displayConfirmationDialog(this.mainFrame,
                     "Are you sure you want to logout?",
-                    "Ketchup",
-                    JOptionPane.YES_NO_OPTION)) {
+                    "Ketchup")) {
                 mainFrame.dispose();
                 LoginUI.initialize();
             }
             ReadCSVFile.updateDataBackground();
-        });
-
-        this.refreshButton.addActionListener(e -> {
-            this.initalizeData();
         });
 
         ////SUBSECTION - ADDING LISTENER TO THE "X" - EXIT BUTTON
@@ -329,6 +365,7 @@ public class AdminMovieListUI {
                 occupiedSeats,
                 m.getSeatPrice()});
     }
+
     private void sortMovieByCriterion(int criterion){
         ArrayList<Movie> arr = AdminMovieListUI.adminMovieListUI.currentData;
         switch (criterion) {
@@ -369,5 +406,13 @@ public class AdminMovieListUI {
 
     public static void addMovieRow(Movie m){
         AdminMovieListUI.adminMovieListUI.addMovie(m);
+    }
+
+    public static AdminMovieListUI getAdminMovieListUI(){
+        return AdminMovieListUI.adminMovieListUI;
+    }
+
+    public JFrame getMainFrame(){
+        return this.mainFrame;
     }
 }
