@@ -20,4 +20,19 @@ public class CredentialRepository {
     public static Credential getUser(String email){
         return CredentialRepository.credentials.get(email);
     }
+
+    public static boolean register(String username, String email, String password, boolean isAdmin){
+        if(CredentialRepository.credentials.containsKey(email)){
+            return false;
+        }else{
+            CredentialRepository.credentials.put(email, new Credential(username, email, password, isAdmin));
+            return true;
+        }
+    }
+
+    public static String generateCredentialDataAsString(Credential c){
+        String data = "%s;%s;%s;%b".formatted(c.getUsername(),
+                c.getEmail(), c.getPassword(), c.isAdmin());
+        return data;
+    }
 }
