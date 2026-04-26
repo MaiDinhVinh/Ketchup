@@ -68,4 +68,18 @@ public class Movie {
     public String getTitle() {
         return title;
     }
+
+    @Override
+    public String toString() {
+        return "Movie{" +
+                "movieId='" + movieId + '\'' +
+                ", title='" + title + '\'' +
+                ", genre='" + genre + '\'' +
+                ", duration=" + duration +
+                ", rating='" + rating + '\'' +
+                ", showTime='" + showTime + '\'' +
+                ", occupiedSeat=" + occupiedSeat +
+                ", seatPrice=" + seatPrice +
+                '}';
+    }
 }
