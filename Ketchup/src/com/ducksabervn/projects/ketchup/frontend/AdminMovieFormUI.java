@@ -15,7 +15,7 @@ public class AdminMovieFormUI {
     private String mode;
 
     //the form main frame
-    private JFrame mainFrame;
+    private JDialog mainFrame;
     private JPanel mainPanel;
 
     //form window title label
@@ -66,7 +66,7 @@ public class AdminMovieFormUI {
     private JButton cancelButton;
 
     private AdminMovieFormUI() {
-        this.mainFrame = new JFrame();
+        this.mainFrame = new JDialog();
         this.mainPanel = new JPanel();
         this.titleLabel = new JLabel("", SwingConstants.CENTER);
         this.formPanel = new JPanel(new GridLayout(8, 1, 8, 8));
@@ -108,6 +108,7 @@ public class AdminMovieFormUI {
         AdminMovieFormUI.adminMovieFormUI.currentMovieId = movieId;
         AdminMovieFormUI.adminMovieFormUI.initializeAllElements();
         AdminMovieFormUI.adminMovieFormUI.mainFrame.add(AdminMovieFormUI.adminMovieFormUI.mainPanel);
+        AdminMovieFormUI.adminMovieFormUI.mainFrame.setModalityType(Dialog.ModalityType.APPLICATION_MODAL);
         AdminMovieFormUI.adminMovieFormUI.mainFrame.setVisible(true);
     }
 
@@ -194,9 +195,9 @@ public class AdminMovieFormUI {
             if (mode.equals("ADD")) {
                 Movie m = MovieRepository.addMovie(title, genre, Integer.parseInt(durationStr), rating, showtime, "",
                         Integer.parseInt(seatPriceStr));
-                AdminMovieListUI.updateTable(m);
+                AdminMovieListUI.addMovieRow(m);
             } else {
-                Movie edited = MovieRepository.addMovie(title, genre, Integer.parseInt(durationStr), rating, showtime, "",
+                Movie edited = new Movie(this.currentMovieId, title, genre, Integer.parseInt(durationStr), rating, showtime, "",
                         Integer.parseInt(seatPriceStr));
                 MovieRepository.editMovie(this.currentMovieId, edited);
             }
