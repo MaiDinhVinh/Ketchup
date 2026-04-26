@@ -1,5 +1,6 @@
 package com.ducksabervn.projects.ketchup.frontend;
 
+import com.ducksabervn.projects.ketchup.backend.credientials.CredentialRepository;
 import com.ducksabervn.projects.ketchup.backend.helper.DisplayMessage;
 import com.ducksabervn.projects.ketchup.backend.credientials.Credential;
 
@@ -122,9 +123,9 @@ public class LoginUI {
             if(emailField.getText().isEmpty() || passwordField.getText().isEmpty()){
                 DisplayMessage.displayError(this.mainFrame, "Required field must not be empty");
             }else{
-                if(Credential.verifyCredential(emailField.getText())){
+                if(CredentialRepository.verifyCredential(emailField.getText())){
                     String role = (String) roleComboBox.getSelectedItem();
-                    Credential c = Credential.getUser(emailField.getText());
+                    Credential c = CredentialRepository.getUser(emailField.getText());
                     if(!c.isAdmin() && role.equals("Admin")){
                         DisplayMessage.displayError(this.mainFrame, "Authentication failed");
                     }else{
