@@ -3,6 +3,8 @@ package com.ducksabervn.projects.ketchup.backend.helper;
 import com.ducksabervn.projects.ketchup.backend.admin.MovieRepository;
 import com.ducksabervn.projects.ketchup.backend.credientials.Credential;
 import com.ducksabervn.projects.ketchup.backend.admin.Movie;
+import com.ducksabervn.projects.ketchup.backend.credientials.CredentialRepository;
+import com.ducksabervn.projects.ketchup.frontend.AdminMovieListUI;
 
 import java.io.BufferedWriter;
 import java.io.FileWriter;
@@ -27,7 +29,7 @@ public final class ReadCSVFile{
             }
             if(!Files.exists(USER_CREDENTIALS)){
                 Files.createFile(USER_CREDENTIALS);
-                Files.writeString(USER_CREDENTIALS, "EMAIL;PASSWORD");
+                Files.writeString(USER_CREDENTIALS, "USERNAME;EMAIL;PASSWORD;IS_ADMIN");
             }
 
             if(!Files.exists(MOVIES)){
@@ -35,7 +37,10 @@ public final class ReadCSVFile{
                 Files.writeString(MOVIES, "MOVIEID;TITLE;GENRE;DURATION;RATING;SHOWTIME;SEAT;SPRICE");
             }
         }catch (IOException e){
-            e.printStackTrace();
+            //I still cant figure out for which JFrame will responsible to display the
+            //exception string, but this will work as a fallback for now
+            DisplayMessage.displayError(AdminMovieListUI.getAdminMovieListUI().getMainFrame(),
+                    e.getMessage());
         }
     }
 
@@ -46,11 +51,14 @@ public final class ReadCSVFile{
             LinkedHashMap<String, Credential> credMap = new LinkedHashMap<>();
             for(String str: allCreds){
                 String[] split = str.split(";");
-                credMap.put(split[0], new Credential(split[0], split[1], Boolean.valueOf(split[2])));
+                credMap.put(split[1], new Credential(split[0], split[1], split[2],Boolean.valueOf(split[3])));
             }
             return credMap;
         }catch(IOException e){
-            e.printStackTrace();
+            //I still cant figure out for which JFrame will responsible to display the
+            //exception string, but this will work as a fallback for now
+            DisplayMessage.displayError(AdminMovieListUI.getAdminMovieListUI().getMainFrame(),
+                    e.getMessage());
             return null;
         }
     }
@@ -73,7 +81,10 @@ public final class ReadCSVFile{
             }
             return movies;
         }catch(IOException e){
-            e.printStackTrace();
+            //I still cant figure out for which JFrame will responsible to display the
+            //exception string, but this will work as a fallback for now
+            DisplayMessage.displayError(AdminMovieListUI.getAdminMovieListUI().getMainFrame(),
+                    e.getMessage());
             return null;
         }
     }
@@ -85,20 +96,33 @@ public final class ReadCSVFile{
             bw.newLine();
             bw.write(data);
         }catch(IOException e){
-            e.printStackTrace();
+            //I still cant figure out for which JFrame will responsible to display the
+            //exception string, but this will work as a fallback for now
+            DisplayMessage.displayError(AdminMovieListUI.getAdminMovieListUI().getMainFrame(),
+                    e.getMessage());
         }
     }
 
     public static void updateDataBackground() {
         LinkedHashMap<String, Movie> updatedMovies = MovieRepository.getMovies();
-        try(BufferedWriter bw = new BufferedWriter(new FileWriter(MOVIES.toFile()))){
+        LinkedHashMap<String, Credential> updatedCredentials = CredentialRepository.getCredentials();
+        try(BufferedWriter bw = new BufferedWriter(new FileWriter(MOVIES.toFile()));
+            BufferedWriter bw2 = new BufferedWriter(new FileWriter(USER_CREDENTIALS.toFile()))){
             bw.write("MOVIEID;TITLE;GENRE;DURATION;RATING;SHOWTIME;SEAT;SPRICE");
             for(Movie m: updatedMovies.values()){
                 bw.newLine();
                 bw.write(MovieRepository.generateMovieDataAsString(m));
             }
+            bw2.write("USERNAME;EMAIL;PASSWORD;IS_ADMIN");
+            for(Credential c: updatedCredentials.values()){
+                bw2.newLine();
+                bw2.write(CredentialRepository.generateCredentialDataAsString(c));
+            }
         }catch(IOException e){
-            e.printStackTrace();
+            //I still cant figure out for which JFrame will responsible to display the
+            //exception string, but this will work as a fallback for now
+            DisplayMessage.displayError(AdminMovieListUI.getAdminMovieListUI().getMainFrame(),
+                    e.getMessage());
         }
     }
 }
