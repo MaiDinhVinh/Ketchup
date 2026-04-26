@@ -72,9 +72,9 @@ public class LoginUI {
     public static void initialize(){
         if(LoginUI.loginUI == null){
             LoginUI.loginUI = new LoginUI();
+            LoginUI.loginUI.initalizeAllElement();
+            LoginUI.loginUI.mainFrame.add(LoginUI.loginUI.mainPanel);
         }
-        LoginUI.loginUI.initalizeAllElement();
-        LoginUI.loginUI.mainFrame.add(LoginUI.loginUI.mainPanel);
         LoginUI.loginUI.mainFrame.setVisible(true);
     }
 
@@ -130,16 +130,16 @@ public class LoginUI {
                         DisplayMessage.displayError(this.mainFrame, "Authentication failed");
                     }else{
                         if(role.equals("Admin")){
-                            AdminMovieListUI.initialize();
+                            AdminMovieListUI.initialize(c.getUsername());
                         }else{
-                            CustomerHomeUI.initialize(c.getEmail());
+                            CustomerHomeUI.initialize(c.getUsername());
                         }
                     }
+                    this.mainFrame.dispose();
                 }else{
                     DisplayMessage.displayError(this.mainFrame, "Authentication failed");
                 }
             }
-            this.mainFrame.dispose();
         });
 
         ////SUBSECTION - ADDING LISTENER TO THE REGISTER BUTTON
