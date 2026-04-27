@@ -1,5 +1,11 @@
 package com.ducksabervn.projects.ketchup.frontend;
 
+import com.ducksabervn.projects.ketchup.backend.admin.Movie;
+import com.ducksabervn.projects.ketchup.backend.admin.MovieRepository;
+import com.ducksabervn.projects.ketchup.backend.credientials.Credential;
+import com.ducksabervn.projects.ketchup.backend.credientials.CredentialRepository;
+import com.ducksabervn.projects.ketchup.backend.helper.DisplayMessage;
+
 import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
@@ -21,20 +27,16 @@ public class CustomerSeatSelectionUI {
     //list of seat IDs the customer has currently selected
     private List<String> selectedSeatIds;
 
+    //current login email
+    private String currentEmail;
+
     //the main frame
-    private JFrame mainFrame;
+    private JDialog mainFrame;
     private JPanel mainPanel;
 
     //top bar: movie title + back button
     private JPanel topPanel;
     private JLabel titleLabel;
-    private JButton backButton;
-
-    //showtime selection section
-    private JPanel showtimePanel;
-    private JLabel showtimeLabel;
-    private JComboBox<String> showtimeComboBox;
-    private JButton loadSeatsButton;
 
     //seat layout section
     private JPanel seatSectionPanel;
@@ -42,7 +44,7 @@ public class CustomerSeatSelectionUI {
     //screen indicator above seat grid
     private JLabel screenLabel;
 
-    //fixed seat grid: rows x cols of JButtons, aisle gaps are null
+    //fixed seat grid: rows x cols of JButtons
     private JButton[][] seatGrid;
     private JPanel seatGridPanel;
 
@@ -56,26 +58,20 @@ public class CustomerSeatSelectionUI {
     private JPanel bottomPanel;
     private JLabel selectedSeatsLabel;
     private JLabel totalPriceLabel;
+    private JPanel actionButtonPanel;
+    private JButton cancelButton;
     private JButton proceedButton;
 
     private CustomerSeatSelectionUI() {
         this.selectedSeatIds = new ArrayList<>();
         this.seatGrid = new JButton[ROW_LABELS.length][SEATS_PER_ROW];
-        this.mainFrame = new JFrame("Movie Booking System - Select Seat");
+        this.mainFrame = new JDialog();
         this.mainPanel = new JPanel();
         this.topPanel = new JPanel(new BorderLayout());
         this.titleLabel = new JLabel("", SwingConstants.LEFT);
-        this.backButton = new JButton("Back");
-        this.showtimePanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 5));
-        this.showtimeLabel = new JLabel("Select Showtime:");
-        this.showtimeComboBox = new JComboBox<>();
-        this.loadSeatsButton = new JButton("Load Seats");
         this.seatSectionPanel = new JPanel(new BorderLayout(0, 5));
         this.screenLabel = new JLabel("[ SCREEN ]", SwingConstants.CENTER);
-
-        //seat grid panel: cols = row label + 6 seats + aisle gap + 6 seats
         this.seatGridPanel = new JPanel(new GridBagLayout());
-
         this.legendPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 15, 5));
         this.legendAvailable = new JLabel("  Available  ");
         this.legendBooked = new JLabel("  Booked  ");
@@ -83,6 +79,8 @@ public class CustomerSeatSelectionUI {
         this.bottomPanel = new JPanel(new BorderLayout(10, 5));
         this.selectedSeatsLabel = new JLabel("Selected Seats: None");
         this.totalPriceLabel = new JLabel("Total Price: $0");
+        this.actionButtonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 8, 0));
+        this.cancelButton = new JButton("Cancel");
         this.proceedButton = new JButton("Proceed to Confirm");
     }
 
@@ -90,20 +88,21 @@ public class CustomerSeatSelectionUI {
      * Since we are using singleton design pattern, this UI will only be initialized once
      * movieId is the ID of the movie the customer wants to book
      */
-    public static void initialize(String movieId) {
-        if (CustomerSeatSelectionUI.customerSeatSelectionUI == null) {
-            CustomerSeatSelectionUI.customerSeatSelectionUI = new CustomerSeatSelectionUI();
-        }
+    public static void initialize(String movieId, String currentEmail) {
+        CustomerSeatSelectionUI.customerSeatSelectionUI = new CustomerSeatSelectionUI();
         CustomerSeatSelectionUI.customerSeatSelectionUI.currentMovieId = movieId;
+        CustomerSeatSelectionUI.customerSeatSelectionUI.currentEmail = currentEmail;
         CustomerSeatSelectionUI.customerSeatSelectionUI.initializeAllElements();
         CustomerSeatSelectionUI.customerSeatSelectionUI.mainFrame.add(CustomerSeatSelectionUI.customerSeatSelectionUI.mainPanel);
+        CustomerSeatSelectionUI.customerSeatSelectionUI.mainFrame.setModalityType(Dialog.ModalityType.APPLICATION_MODAL);
         CustomerSeatSelectionUI.customerSeatSelectionUI.mainFrame.setVisible(true);
     }
 
     private void initializeAllElements() {
         //initialize the main frame
+        mainFrame.setTitle("Ketchup - Select Seat");
         mainFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        mainFrame.setSize(720, 640);
+        mainFrame.setSize(720, 600);
         mainFrame.setLocationRelativeTo(null);
         mainFrame.setResizable(false);
 
@@ -113,20 +112,9 @@ public class CustomerSeatSelectionUI {
 
         //initialize the top bar (movie title + back button)
         titleLabel.setFont(new Font("Arial", Font.BOLD, 20));
-        // TODO: titleLabel.setText(MovieService.getMovieById(currentMovieId).getTitle())
-        backButton.setPreferredSize(new Dimension(80, 30));
         topPanel.add(titleLabel, BorderLayout.WEST);
-        topPanel.add(backButton, BorderLayout.EAST);
         topPanel.setBorder(BorderFactory.createEmptyBorder(0, 0, 5, 0));
         mainPanel.add(topPanel, BorderLayout.NORTH);
-
-        //initialize the showtime selection row
-        showtimeComboBox.setPreferredSize(new Dimension(250, 28));
-        showtimePanel.setBorder(BorderFactory.createTitledBorder("Showtime"));
-        showtimePanel.add(showtimeLabel);
-        showtimePanel.add(showtimeComboBox);
-        showtimePanel.add(loadSeatsButton);
-        // TODO: Call ShowtimeService.getShowtimesByMovieId(currentMovieId) and populate showtimeComboBox
 
         //initialize the screen indicator
         screenLabel.setFont(new Font("Arial", Font.BOLD, 13));
@@ -143,7 +131,7 @@ public class CustomerSeatSelectionUI {
         legendAvailable.setBackground(new Color(144, 238, 144));
         legendAvailable.setBorder(BorderFactory.createLineBorder(Color.GRAY));
         legendBooked.setOpaque(true);
-        legendBooked.setBackground(new Color(220, 80, 80));
+        legendBooked.setBackground(new Color(200, 200, 200));
         legendBooked.setForeground(Color.WHITE);
         legendBooked.setBorder(BorderFactory.createLineBorder(Color.GRAY));
         legendSelected.setOpaque(true);
@@ -162,55 +150,41 @@ public class CustomerSeatSelectionUI {
         seatGridWrapper.add(legendPanel, BorderLayout.SOUTH);
         seatSectionPanel.setBorder(BorderFactory.createTitledBorder("Seat Layout"));
         seatSectionPanel.add(seatGridWrapper, BorderLayout.CENTER);
-
-        //group showtime row + seat section into CENTER
-        JPanel centerPanel = new JPanel(new BorderLayout(0, 10));
-        centerPanel.add(showtimePanel, BorderLayout.NORTH);
-        centerPanel.add(seatSectionPanel, BorderLayout.CENTER);
-        mainPanel.add(centerPanel, BorderLayout.CENTER);
+        mainPanel.add(seatSectionPanel, BorderLayout.CENTER);
 
         //initialize the bottom summary section
         selectedSeatsLabel.setFont(new Font("Arial", Font.PLAIN, 13));
         totalPriceLabel.setFont(new Font("Arial", Font.BOLD, 13));
+        cancelButton.setPreferredSize(new Dimension(100, 30));
         proceedButton.setPreferredSize(new Dimension(170, 30));
+        actionButtonPanel.add(cancelButton);
+        actionButtonPanel.add(proceedButton);
         JPanel summaryLeft = new JPanel(new GridLayout(2, 1, 0, 4));
         summaryLeft.add(selectedSeatsLabel);
         summaryLeft.add(totalPriceLabel);
         bottomPanel.setBorder(BorderFactory.createTitledBorder("Summary"));
         bottomPanel.add(summaryLeft, BorderLayout.CENTER);
-        bottomPanel.add(proceedButton, BorderLayout.EAST);
+        bottomPanel.add(actionButtonPanel, BorderLayout.EAST);
         mainPanel.add(bottomPanel, BorderLayout.SOUTH);
 
-        ////SUBSECTION - ADDING LISTENER TO THE LOAD SEATS BUTTON
-        this.loadSeatsButton.addActionListener(e -> {
-            String selectedShowtime = (String) showtimeComboBox.getSelectedItem();
-            if (selectedShowtime == null) {
-                JOptionPane.showMessageDialog(mainFrame, "No showtime available.", "Error", JOptionPane.ERROR_MESSAGE);
-                return;
-            }
-            selectedSeatIds.clear();
-            updateSummary();
-            resetAllSeatsToAvailable();
-            // TODO: Get showtime ID from selected item in showtimeComboBox
-            // TODO: Call SeatService.getBookedSeatIdsByShowtimeId(showtimeId) to get booked seat ID list
-            // TODO: Pass the booked seat list into markBookedSeats(bookedSeatIds)
-        });
+        //load booked seats immediately on startup
+        Movie m = MovieRepository.getMovies().get(this.currentMovieId);
+        titleLabel.setText(m.getTitle() + " (Showtime: " + m.getShowTime().format(Movie.getDatetimeFormat()) + ")");
+        this.markBookedSeats(m.getOccupiedSeat());
 
         ////SUBSECTION - ADDING LISTENER TO THE PROCEED BUTTON
         this.proceedButton.addActionListener(e -> {
             if (selectedSeatIds.isEmpty()) {
-                JOptionPane.showMessageDialog(mainFrame, "Please select at least one seat.", "No Seat Selected", JOptionPane.WARNING_MESSAGE);
+                DisplayMessage.displayWarning(this.mainFrame, "Please select at least one seat.");
                 return;
             }
-            // TODO: Get showtime ID from selected item in showtimeComboBox
-            // TODO: Open CustomerBookingConfirmUI with currentMovieId, showtimeId, selectedSeatIds
+            mainFrame.dispose();
+            CustomerBookingConfirmUI.initialize(this.currentMovieId, this.selectedSeatIds, this.currentEmail);
         });
 
-        ////SUBSECTION - ADDING LISTENER TO THE BACK BUTTON
-        this.backButton.addActionListener(e -> {
+        ////SUBSECTION - ADDING LISTENER TO THE CANCEL BUTTON
+        this.cancelButton.addActionListener(e -> {
             mainFrame.dispose();
-            customerSeatSelectionUI = null;
-            // TODO: Open CustomerMovieDetailUI.initialize(currentMovieId)
         });
     }
 
@@ -264,18 +238,6 @@ public class CustomerSeatSelectionUI {
         return button;
     }
 
-    //reset all seats back to available state (called before loading new showtime)
-    private void resetAllSeatsToAvailable() {
-        for (int row = 0; row < ROW_LABELS.length; row++) {
-            for (int col = 0; col < SEATS_PER_ROW; col++) {
-                JButton btn = seatGrid[row][col];
-                btn.setBackground(new Color(144, 238, 144));
-                btn.setForeground(Color.BLACK);
-                btn.setEnabled(true);
-            }
-        }
-    }
-
     //mark a list of seat IDs as booked (red + disabled)
     private void markBookedSeats(List<String> bookedSeatIds) {
         for (int row = 0; row < ROW_LABELS.length; row++) {
@@ -313,10 +275,10 @@ public class CustomerSeatSelectionUI {
             selectedSeatsLabel.setText("Selected Seats: None");
             totalPriceLabel.setText("Total Price: $0");
         } else {
-            selectedSeatsLabel.setText("Selected Seats: " + String.join(", ", selectedSeatIds));
-            // TODO: Get ticket price from ShowtimeService.getShowtimeById(showtimeId).getTicketPrice()
-            // TODO: int total = selectedSeatIds.size() * ticketPrice
-            // TODO: totalPriceLabel.setText("Total Price: $" + total)
+            selectedSeatsLabel.setText("Selected Seats: " + String.join(",", selectedSeatIds));
+            int ticketPrice = MovieRepository.getMovies().get(currentMovieId).getSeatPrice();
+            int total = selectedSeatIds.size() * ticketPrice;
+            totalPriceLabel.setText("Total Price: $" + total);
         }
     }
 }
