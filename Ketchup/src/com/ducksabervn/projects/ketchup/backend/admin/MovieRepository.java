@@ -56,7 +56,9 @@ public class MovieRepository {
                 if(m.getTitle().equals(information) ||
                 m.getGenre().equals(information) ||
                  Integer.toString(m.getDuration()).equals(information) ||
-                m.getRating().equals(information)){
+                m.getRating().equals(information) ||
+                m.getShowTime().format(Movie.getDatetimeFormat()).equals(information) ||
+                Integer.toString(m.getSeatPrice()).equals(information)){
                     arr.add(m);
                 }
             }
@@ -72,7 +74,7 @@ public class MovieRepository {
                 m.getGenre(),
                 m.getDuration(),
                 m.getRating(),
-                m.getShowTime(),
+                m.getShowTime().format(Movie.getDatetimeFormat()),
                 occupiedSeats,
                 m.getSeatPrice());
         return data;
