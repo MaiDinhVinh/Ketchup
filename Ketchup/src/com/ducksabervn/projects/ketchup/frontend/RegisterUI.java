@@ -1,5 +1,6 @@
 package com.ducksabervn.projects.ketchup.frontend;
 
+import com.ducksabervn.projects.ketchup.backend.credientials.Credential;
 import com.ducksabervn.projects.ketchup.backend.credientials.CredentialRepository;
 import com.ducksabervn.projects.ketchup.backend.helper.DisplayMessage;
 
@@ -132,16 +133,28 @@ public class RegisterUI {
 
         ////SUBSECTION - ADDING ACTION LISTENER TO THE REGISTER BUTTON
         this.registerButton.addActionListener(e -> {
-            boolean isAdmin = roleComboBox.getSelectedItem().equals("Admin");
-            if(CredentialRepository.register(this.usernameField.getText().trim(),
-                    this.emailField.getText().trim(),
-                    new String(this.passwordField.getPassword()),
-                    isAdmin)){
-                DisplayMessage.displayInformation(this.mainFrame, "Account created successful");
-                mainFrame.dispose();
-                LoginUI.initialize();
+            if(this.usernameField.getText().isEmpty() ||
+            this.emailField.getText().isEmpty() ||
+            new String(this.passwordField.getPassword()).isEmpty()){
+                DisplayMessage.displayError(this.mainFrame, "Required field must not be empty");
+            }else if(!new String(this.passwordField.getPassword()).equals(
+                    new String(this.confirmPasswordField.getPassword())
+            )){
+                DisplayMessage.displayError(this.mainFrame, "Passwords do not match");
+            }else if(!Credential.isValidEmail(this.emailField.getText())){
+                DisplayMessage.displayError(this.mainFrame, "Invalid email type");
             }else{
-                DisplayMessage.displayError(this.mainFrame, "Failed to create account");
+                boolean isAdmin = roleComboBox.getSelectedItem().equals("Admin");
+                if(CredentialRepository.register(this.usernameField.getText().trim(),
+                        this.emailField.getText().trim(),
+                        new String(this.passwordField.getPassword()),
+                        isAdmin)){
+                    DisplayMessage.displayInformation(this.mainFrame, "Account created successful");
+                    mainFrame.dispose();
+                    LoginUI.initialize();
+                }else{
+                    DisplayMessage.displayError(this.mainFrame, "Failed to create account");
+                }
             }
         });
 
@@ -149,7 +162,6 @@ public class RegisterUI {
         this.backButton.addActionListener(e -> {
             //shutdown the current window to move to a new one
             mainFrame.dispose();
-            RegisterUI.registerUI = null;
             LoginUI.initialize();
         });
     }
