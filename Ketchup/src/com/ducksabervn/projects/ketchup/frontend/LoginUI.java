@@ -143,7 +143,6 @@ public class LoginUI {
         this.registerButton.addActionListener(e -> {
             //shutdown the current window to move to a new one
             this.mainFrame.dispose();
-            LoginUI.loginUI = null;
             RegisterUI.initialize();
         });
     }
