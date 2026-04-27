@@ -1,7 +1,6 @@
 package com.ducksabervn.projects.ketchup.main;
 
 import com.ducksabervn.projects.ketchup.backend.admin.MovieRepository;
-import com.ducksabervn.projects.ketchup.backend.credientials.Credential;
 import com.ducksabervn.projects.ketchup.backend.credientials.CredentialRepository;
 import com.ducksabervn.projects.ketchup.backend.helper.ReadCSVFile;
 import com.ducksabervn.projects.ketchup.frontend.LoginUI;
