@@ -9,7 +9,6 @@ import java.awt.*;
 
 public class LoginUI {
 
-    //SINGLETON DESIGN PATTERN => 1 UI INSTANCE AT A TIME
     private static LoginUI loginUI;
 
     //The login main frame
@@ -70,11 +69,9 @@ public class LoginUI {
      * Since we are using singleton design pattern, this UI will only be initialized once
      * */
     public static void initialize(){
-        if(LoginUI.loginUI == null){
-            LoginUI.loginUI = new LoginUI();
-            LoginUI.loginUI.initalizeAllElement();
-            LoginUI.loginUI.mainFrame.add(LoginUI.loginUI.mainPanel);
-        }
+        LoginUI.loginUI = new LoginUI();
+        LoginUI.loginUI.initalizeAllElement();
+        LoginUI.loginUI.mainFrame.add(LoginUI.loginUI.mainPanel);
         LoginUI.loginUI.mainFrame.setVisible(true);
     }
 
@@ -146,6 +143,7 @@ public class LoginUI {
         this.registerButton.addActionListener(e -> {
             //shutdown the current window to move to a new one
             this.mainFrame.dispose();
+            LoginUI.loginUI = null;
             RegisterUI.initialize();
         });
     }
