@@ -1,5 +1,8 @@
 package com.ducksabervn.projects.ketchup.frontend;
 
+import com.ducksabervn.projects.ketchup.backend.admin.Movie;
+import com.ducksabervn.projects.ketchup.backend.admin.MovieRepository;
+
 import javax.swing.*;
 import java.awt.*;
 
@@ -23,11 +26,7 @@ public class CustomerMovieDetailUI {
     //movie detail section
     private JPanel detailPanel;
 
-    //movie poster placeholder
-    private JLabel posterLabel;
-
-    //movie info panel (right side of poster)
-    private JPanel infoPanel;
+    //movie info rows (label + value side by side)
     private JLabel movieTitleLabel;
     private JLabel movieTitleValue;
     private JLabel genreLabel;
@@ -36,26 +35,21 @@ public class CustomerMovieDetailUI {
     private JLabel durationValue;
     private JLabel ratingLabel;
     private JLabel ratingValue;
-
-    //movie description section
-    private JPanel descriptionPanel;
-    private JLabel descriptionTitleLabel;
-    private JTextArea descriptionArea;
-    private JScrollPane descriptionScrollPane;
+    private JLabel showtimeLabel;
+    private JLabel showtimeValue;
+    private JLabel seatPriceLabel;
+    private JLabel seatPriceValue;
 
     //action button at the bottom
     private JPanel buttonPanel;
-    private JButton bookNowButton;
 
     private CustomerMovieDetailUI() {
-        this.mainFrame = new JFrame("Movie Booking System - Movie Detail");
+        this.mainFrame = new JFrame("Ketchup");
         this.mainPanel = new JPanel();
         this.topPanel = new JPanel(new BorderLayout());
         this.titleLabel = new JLabel("Movie Detail", SwingConstants.LEFT);
         this.backButton = new JButton("Back");
-        this.detailPanel = new JPanel(new BorderLayout(15, 0));
-        this.posterLabel = new JLabel("No Image", SwingConstants.CENTER);
-        this.infoPanel = new JPanel(new GridLayout(8, 1, 4, 4));
+        this.detailPanel = new JPanel();
         this.movieTitleLabel = new JLabel("Title:");
         this.movieTitleValue = new JLabel("-");
         this.genreLabel = new JLabel("Genre:");
@@ -64,12 +58,11 @@ public class CustomerMovieDetailUI {
         this.durationValue = new JLabel("-");
         this.ratingLabel = new JLabel("Rating:");
         this.ratingValue = new JLabel("-");
-        this.descriptionPanel = new JPanel(new BorderLayout(0, 5));
-        this.descriptionTitleLabel = new JLabel("Description:");
-        this.descriptionArea = new JTextArea(5, 20);
-        this.descriptionScrollPane = new JScrollPane(descriptionArea);
+        this.showtimeLabel = new JLabel("Showtime:");
+        this.showtimeValue = new JLabel("-");
+        this.seatPriceLabel = new JLabel("Seat Price:");
+        this.seatPriceValue = new JLabel("-");
         this.buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
-        this.bookNowButton = new JButton("Book Now");
     }
 
     /**
@@ -77,9 +70,7 @@ public class CustomerMovieDetailUI {
      * movieId is the ID of the movie to display
      */
     public static void initialize(String movieId) {
-        if (CustomerMovieDetailUI.customerMovieDetailUI == null) {
-            CustomerMovieDetailUI.customerMovieDetailUI = new CustomerMovieDetailUI();
-        }
+        CustomerMovieDetailUI.customerMovieDetailUI = new CustomerMovieDetailUI();
         CustomerMovieDetailUI.customerMovieDetailUI.currentMovieId = movieId;
         CustomerMovieDetailUI.customerMovieDetailUI.initializeAllElements();
         CustomerMovieDetailUI.customerMovieDetailUI.mainFrame.add(CustomerMovieDetailUI.customerMovieDetailUI.mainPanel);
@@ -89,100 +80,70 @@ public class CustomerMovieDetailUI {
     private void initializeAllElements() {
         //initialize the main frame
         mainFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        mainFrame.setSize(600, 480);
+        mainFrame.setSize(480, 380);
         mainFrame.setLocationRelativeTo(null);
         mainFrame.setResizable(false);
 
         //initialize the main content panel
         mainPanel.setLayout(new BorderLayout(10, 10));
-        mainPanel.setBorder(BorderFactory.createEmptyBorder(15, 15, 15, 15));
+        mainPanel.setBorder(BorderFactory.createEmptyBorder(20, 30, 20, 30));
 
-        //initialize the top bar (title + back button)
+        //initialize the top bar (title)
         titleLabel.setFont(new Font("Arial", Font.BOLD, 20));
         backButton.setPreferredSize(new Dimension(80, 30));
         topPanel.add(titleLabel, BorderLayout.WEST);
-        topPanel.add(backButton, BorderLayout.EAST);
         topPanel.setBorder(BorderFactory.createEmptyBorder(0, 0, 5, 0));
         mainPanel.add(topPanel, BorderLayout.NORTH);
 
-        //initialize the poster placeholder
-        posterLabel.setPreferredSize(new Dimension(160, 220));
-        posterLabel.setBorder(BorderFactory.createLineBorder(Color.GRAY));
-        posterLabel.setOpaque(true);
-        posterLabel.setBackground(Color.LIGHT_GRAY);
-        // TODO: Load actual poster image from MovieService and set via new ImageIcon(...)
+        //initialize the detail panel using BoxLayout so all rows are visible
+        detailPanel.setLayout(new BoxLayout(detailPanel, BoxLayout.Y_AXIS));
+        detailPanel.setBorder(BorderFactory.createTitledBorder("Movie Information"));
 
-        //initialize the movie info panel (right side)
-        movieTitleLabel.setFont(new Font("Arial", Font.BOLD, 13));
-        movieTitleValue.setFont(new Font("Arial", Font.PLAIN, 13));
-        genreLabel.setFont(new Font("Arial", Font.BOLD, 13));
-        genreValue.setFont(new Font("Arial", Font.PLAIN, 13));
-        durationLabel.setFont(new Font("Arial", Font.BOLD, 13));
-        durationValue.setFont(new Font("Arial", Font.PLAIN, 13));
-        ratingLabel.setFont(new Font("Arial", Font.BOLD, 13));
-        ratingValue.setFont(new Font("Arial", Font.PLAIN, 13));
-        infoPanel.add(movieTitleLabel);
-        infoPanel.add(movieTitleValue);
-        infoPanel.add(genreLabel);
-        infoPanel.add(genreValue);
-        infoPanel.add(durationLabel);
-        infoPanel.add(durationValue);
-        infoPanel.add(ratingLabel);
-        infoPanel.add(ratingValue);
+        Dimension labelSize = new Dimension(100, 28);
+        detailPanel.add(buildInfoRow(movieTitleLabel, movieTitleValue, labelSize, false));
+        detailPanel.add(buildInfoRow(genreLabel, genreValue, labelSize, false));
+        detailPanel.add(buildInfoRow(durationLabel, durationValue, labelSize, false));
+        detailPanel.add(buildInfoRow(ratingLabel, ratingValue, labelSize, false));
+        detailPanel.add(buildInfoRow(showtimeLabel, showtimeValue, labelSize, false));
+        detailPanel.add(buildInfoRow(seatPriceLabel, seatPriceValue, labelSize, true));
 
-        //group poster + info into the detail panel
-        detailPanel.add(posterLabel, BorderLayout.WEST);
-        detailPanel.add(infoPanel, BorderLayout.CENTER);
+        mainPanel.add(detailPanel, BorderLayout.CENTER);
 
-        //initialize the description section
-        descriptionTitleLabel.setFont(new Font("Arial", Font.BOLD, 13));
-        descriptionArea.setLineWrap(true);
-        descriptionArea.setWrapStyleWord(true);
-        descriptionArea.setEditable(false);
-        descriptionArea.setBackground(mainPanel.getBackground());
-        descriptionPanel.add(descriptionTitleLabel, BorderLayout.NORTH);
-        descriptionPanel.add(descriptionScrollPane, BorderLayout.CENTER);
-
-        //group detail panel + description into the CENTER section
-        JPanel centerPanel = new JPanel(new BorderLayout(0, 10));
-        centerPanel.add(detailPanel, BorderLayout.NORTH);
-        centerPanel.add(descriptionPanel, BorderLayout.CENTER);
-        mainPanel.add(centerPanel, BorderLayout.CENTER);
-
-        //initialize the book now button
-        bookNowButton.setPreferredSize(new Dimension(120, 30));
-        buttonPanel.add(bookNowButton);
+        //initialize the back button
+        buttonPanel.add(backButton);
         mainPanel.add(buttonPanel, BorderLayout.SOUTH);
 
         //load movie data into the UI fields
         loadMovieDetail();
 
-        ////SUBSECTION - ADDING LISTENER TO THE BOOK NOW BUTTON
-        this.bookNowButton.addActionListener(e -> {
-            // TODO: Open CustomerShowtimeListUI with currentMovieId
-        });
-
         ////SUBSECTION - ADDING LISTENER TO THE BACK BUTTON
         this.backButton.addActionListener(e -> {
             mainFrame.dispose();
-            // TODO: Open CustomerMovieListUI.initialize(username) if not already open
         });
+    }
+
+    //build a single info row with a bold label on the left and a value on the right
+    private JPanel buildInfoRow(JLabel label, JLabel value, Dimension labelSize, boolean highlightValue) {
+        JPanel row = new JPanel(new BorderLayout(8, 0));
+        row.setMaximumSize(new Dimension(Integer.MAX_VALUE, 32));
+        row.setBorder(BorderFactory.createEmptyBorder(2, 6, 2, 6));
+        label.setFont(new Font("Arial", Font.BOLD, 13));
+        label.setPreferredSize(labelSize);
+        value.setFont(new Font("Arial", highlightValue ? Font.BOLD : Font.PLAIN, 13));
+        if (highlightValue) value.setForeground(new Color(0, 128, 0));
+        row.add(label, BorderLayout.WEST);
+        row.add(value, BorderLayout.CENTER);
+        return row;
     }
 
     //fetch movie data from service and populate all UI fields
     private void loadMovieDetail() {
-        // TODO: Call MovieService.getMovieById(currentMovieId) to fetch movie data
-        // TODO: movieTitleValue.setText(movie.getTitle())
-        // TODO: genreValue.setText(movie.getGenre())
-        // TODO: durationValue.setText(movie.getDuration() + " min")
-        // TODO: ratingValue.setText(movie.getRating())
-        // TODO: descriptionArea.setText(movie.getDescription())
-
-        //sample data for UI testing, remove when backend is connected
-        movieTitleValue.setText("Inception");
-        genreValue.setText("Sci-Fi");
-        durationValue.setText("148 min");
-        ratingValue.setText("PG-13");
-        descriptionArea.setText("A thief who steals corporate secrets through the use of dream-sharing technology is given the inverse task of planting an idea into the mind of a C.E.O.");
+        Movie m = MovieRepository.getMovies().get(this.currentMovieId);
+        movieTitleValue.setText(m.getTitle());
+        genreValue.setText(m.getGenre());
+        durationValue.setText(m.getDuration() + " min");
+        ratingValue.setText(m.getRating());
+        showtimeValue.setText(m.getShowTime().format(Movie.getDatetimeFormat()));
+        seatPriceValue.setText("$" + m.getSeatPrice());
     }
 }
