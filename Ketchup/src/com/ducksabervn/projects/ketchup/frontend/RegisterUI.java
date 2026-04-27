@@ -72,11 +72,9 @@ public class RegisterUI {
     }
 
     public static void initialize() {
-        if (RegisterUI.registerUI == null) {
-            RegisterUI.registerUI = new RegisterUI();
-            RegisterUI.registerUI.initializeAllElements();
-            RegisterUI.registerUI.mainFrame.add(RegisterUI.registerUI.mainPanel);
-        }
+        RegisterUI.registerUI = new RegisterUI();
+        RegisterUI.registerUI.initializeAllElements();
+        RegisterUI.registerUI.mainFrame.add(RegisterUI.registerUI.mainPanel);
         RegisterUI.registerUI.mainFrame.setVisible(true);
     }
 
@@ -151,6 +149,7 @@ public class RegisterUI {
         this.backButton.addActionListener(e -> {
             //shutdown the current window to move to a new one
             mainFrame.dispose();
+            RegisterUI.registerUI = null;
             LoginUI.initialize();
         });
     }
