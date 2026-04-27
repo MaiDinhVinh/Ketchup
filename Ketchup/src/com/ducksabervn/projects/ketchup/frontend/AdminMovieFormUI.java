@@ -2,13 +2,15 @@ package com.ducksabervn.projects.ketchup.frontend;
 
 import com.ducksabervn.projects.ketchup.backend.admin.Movie;
 import com.ducksabervn.projects.ketchup.backend.admin.MovieRepository;
+import com.ducksabervn.projects.ketchup.backend.helper.DisplayMessage;
 
 import javax.swing.*;
 import java.awt.*;
+import java.time.DateTimeException;
+import java.time.LocalDateTime;
 
 public class AdminMovieFormUI {
 
-    //SINGLETON DESIGN PATTERN => 1 UI INSTANCE AT A TIME
     private static AdminMovieFormUI adminMovieFormUI;
 
     //form mode: "ADD" or "EDIT"
@@ -51,14 +53,12 @@ public class AdminMovieFormUI {
     private JPanel showtimeRow;
     private JLabel showtimeLabel;
     private JTextField showtimeField;
+    private JLabel showtimeHintLabel;
 
     //seat price row
     private JPanel seatPriceRow;
     private JLabel seatPriceLabel;
     private JTextField seatPriceField;
-
-    //error/success message label
-    private JLabel messageLabel;
 
     //action buttons
     private JPanel buttonPanel;
@@ -69,7 +69,7 @@ public class AdminMovieFormUI {
         this.mainFrame = new JDialog();
         this.mainPanel = new JPanel();
         this.titleLabel = new JLabel("", SwingConstants.CENTER);
-        this.formPanel = new JPanel(new GridLayout(8, 1, 8, 8));
+        this.formPanel = new JPanel();
         this.currentMovieId = null;
         this.movieTitleRow = new JPanel(new BorderLayout(8, 0));
         this.movieTitleLabel = new JLabel("Title:");
@@ -86,10 +86,10 @@ public class AdminMovieFormUI {
         this.showtimeRow = new JPanel(new BorderLayout(8, 0));
         this.showtimeLabel = new JLabel("Showtime:");
         this.showtimeField = new JTextField();
+        this.showtimeHintLabel = new JLabel("*Please use the format: yyyy-MM-dd HH:mm");
         this.seatPriceRow = new JPanel(new BorderLayout(8, 0));
         this.seatPriceLabel = new JLabel("Seat Price ($):");
         this.seatPriceField = new JTextField();
-        this.messageLabel = new JLabel("", SwingConstants.CENTER);
         this.buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 0));
         this.saveButton = new JButton("Save");
         this.cancelButton = new JButton("Cancel");
@@ -101,20 +101,18 @@ public class AdminMovieFormUI {
      * movieId is only required in EDIT mode, pass null for ADD mode
      */
     public static void initialize(String mode, String movieId) {
-        if (AdminMovieFormUI.adminMovieFormUI == null) {
-            AdminMovieFormUI.adminMovieFormUI = new AdminMovieFormUI();
-            AdminMovieFormUI.adminMovieFormUI.initializeAllElements();
-            AdminMovieFormUI.adminMovieFormUI.mainFrame.add(AdminMovieFormUI.adminMovieFormUI.mainPanel);
-        }
+        AdminMovieFormUI.adminMovieFormUI = new AdminMovieFormUI();
         AdminMovieFormUI.adminMovieFormUI.mode = mode;
         AdminMovieFormUI.adminMovieFormUI.currentMovieId = movieId;
+        AdminMovieFormUI.adminMovieFormUI.initializeAllElements();
+        AdminMovieFormUI.adminMovieFormUI.mainFrame.add(AdminMovieFormUI.adminMovieFormUI.mainPanel);
         AdminMovieFormUI.adminMovieFormUI.mainFrame.setModalityType(Dialog.ModalityType.APPLICATION_MODAL);
         AdminMovieFormUI.adminMovieFormUI.mainFrame.setVisible(true);
     }
 
     private void initializeAllElements() {
         //initialize the main frame
-        mainFrame.setTitle("Movie Booking System - " + (mode.equals("ADD") ? "Add Movie" : "Edit Movie"));
+        mainFrame.setTitle("Ketchup - " + (mode.equals("ADD") ? "Add Movie" : "Edit Movie"));
         mainFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         mainFrame.setSize(450, 480);
         mainFrame.setLocationRelativeTo(null);
@@ -150,19 +148,40 @@ public class AdminMovieFormUI {
         showtimeRow.add(showtimeLabel, BorderLayout.WEST);
         showtimeRow.add(showtimeField, BorderLayout.CENTER);
 
+        showtimeHintLabel.setForeground(Color.RED);
+        showtimeHintLabel.setFont(new Font("Arial", Font.ITALIC, 13));
+
+        JPanel showtimeWrapper = new JPanel(new BorderLayout(0, 2));
+        showtimeWrapper.add(showtimeRow, BorderLayout.NORTH);
+        showtimeWrapper.add(showtimeHintLabel, BorderLayout.SOUTH);
+
         seatPriceLabel.setPreferredSize(new Dimension(110, 25));
         seatPriceRow.add(seatPriceLabel, BorderLayout.WEST);
         seatPriceRow.add(seatPriceField, BorderLayout.CENTER);
 
-        messageLabel.setFont(new Font("Arial", Font.PLAIN, 12));
+        Dimension rowSize = new Dimension(Integer.MAX_VALUE, 30);
+        Dimension showtimeRowSize = new Dimension(Integer.MAX_VALUE, 55);
+
+        movieTitleRow.setMaximumSize(new Dimension(Integer.MAX_VALUE, 30));
+        genreRow.setMaximumSize(rowSize);
+        durationRow.setMaximumSize(rowSize);
+        ratingRow.setMaximumSize(rowSize);
+        showtimeWrapper.setMaximumSize(showtimeRowSize);
+        seatPriceRow.setMaximumSize(rowSize);
+
+        formPanel.setLayout(new BoxLayout(formPanel, BoxLayout.Y_AXIS));
 
         formPanel.add(movieTitleRow);
+        formPanel.add(Box.createVerticalStrut(8));
         formPanel.add(genreRow);
+        formPanel.add(Box.createVerticalStrut(8));
         formPanel.add(durationRow);
+        formPanel.add(Box.createVerticalStrut(8));
         formPanel.add(ratingRow);
-        formPanel.add(showtimeRow);
+        formPanel.add(Box.createVerticalStrut(8));
+        formPanel.add(showtimeWrapper);
+        formPanel.add(Box.createVerticalStrut(8));
         formPanel.add(seatPriceRow);
-        formPanel.add(messageLabel);
         mainPanel.add(formPanel, BorderLayout.CENTER);
 
         //initialize the action buttons
@@ -179,7 +198,7 @@ public class AdminMovieFormUI {
             this.genreField.setText(m.getGenre());
             this.durationField.setText(Integer.toString(m.getDuration()));
             this.ratingComboBox.setSelectedItem(m.getRating());
-            this.showtimeField.setText(m.getShowTime());
+            this.showtimeField.setText(m.getShowTime().format(Movie.getDatetimeFormat()));
             this.seatPriceField.setText(Integer.toString(m.getSeatPrice()));
         }
 
@@ -191,17 +210,36 @@ public class AdminMovieFormUI {
             String rating       = (String) ratingComboBox.getSelectedItem();
             String showtime     = showtimeField.getText().trim();
             String seatPriceStr = seatPriceField.getText().trim();
-
-            if (mode.equals("ADD")) {
-                Movie m = MovieRepository.addMovie(title, genre, Integer.parseInt(durationStr), rating, showtime, "",
-                        Integer.parseInt(seatPriceStr));
-                AdminMovieListUI.addMovieRow(m);
-            } else {
-                Movie edited = new Movie(this.currentMovieId, title, genre, Integer.parseInt(durationStr), rating, showtime, "",
-                        Integer.parseInt(seatPriceStr));
-                MovieRepository.editMovie(this.currentMovieId, edited);
+            if(title.isEmpty() || genre.isEmpty() || durationStr.isEmpty() || rating.isEmpty() ||
+            showtime.isEmpty() || seatPriceStr.isEmpty()){
+                DisplayMessage.displayError(this.mainFrame, "Required field must not be empty");
+            }else{
+                boolean failed = false;
+                try{
+                    Integer.parseInt(seatPriceStr);
+                }catch(NumberFormatException ex){
+                    DisplayMessage.displayError(this.mainFrame, "Invalid seat price value");
+                    failed = true;
+                }
+                try{
+                    LocalDateTime.parse(showtime, Movie.getDatetimeFormat());
+                }catch(DateTimeException ex){
+                    DisplayMessage.displayError(this.mainFrame, "Invalid showtime value");
+                    failed = true;
+                }
+                if(!failed){
+                    if (mode.equals("ADD")) {
+                        Movie m = MovieRepository.addMovie(title, genre, Integer.parseInt(durationStr), rating, showtime, "",
+                                Integer.parseInt(seatPriceStr));
+                        AdminMovieListUI.addMovieRow(m);
+                    } else {
+                        Movie edited = new Movie(this.currentMovieId, title, genre, Integer.parseInt(durationStr), rating, showtime, "",
+                                Integer.parseInt(seatPriceStr));
+                        MovieRepository.editMovie(this.currentMovieId, edited);
+                    }
+                    mainFrame.dispose();
+                }
             }
-            mainFrame.dispose();
         });
 
         ////SUBSECTION - ADDING LISTENER TO THE CANCEL BUTTON
