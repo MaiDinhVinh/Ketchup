@@ -112,7 +112,7 @@ public class AdminMovieFormUI {
 
     private void initializeAllElements() {
         //initialize the main frame
-        mainFrame.setTitle("Ketchup - " + (mode.equals("ADD") ? "Add Movie" : "Edit Movie"));
+        mainFrame.setTitle("Ketchup");
         mainFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         mainFrame.setSize(450, 480);
         mainFrame.setLocationRelativeTo(null);
