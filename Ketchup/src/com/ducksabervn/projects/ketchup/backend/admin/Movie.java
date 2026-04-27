@@ -1,5 +1,7 @@
 package com.ducksabervn.projects.ketchup.backend.admin;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.TreeMap;
 
@@ -10,9 +12,11 @@ public class Movie {
     private String genre;
     private int duration;
     private String rating;
-    private String showTime;
+    private LocalDateTime showTime;
     private ArrayList<String> occupiedSeat;
     private int seatPrice;
+
+    private static final DateTimeFormatter DATETIME_FORMAT = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
 
     public Movie(String movieId,
                  String title,
@@ -27,7 +31,7 @@ public class Movie {
         this.genre = genre;
         this.duration = duration;
         this.rating = rating;
-        this.showTime = showTime;
+        this.showTime = LocalDateTime.parse(showTime, DATETIME_FORMAT);
         this.seatPrice = seatPrice;
 
         String[] allOccupiedSeats = occupiedSeat.split(",");
@@ -61,7 +65,7 @@ public class Movie {
         return rating;
     }
 
-    public String getShowTime() {
+    public LocalDateTime getShowTime() {
         return showTime;
     }
 
@@ -81,5 +85,9 @@ public class Movie {
                 ", occupiedSeat=" + occupiedSeat +
                 ", seatPrice=" + seatPrice +
                 '}';
+    }
+
+    public static DateTimeFormatter getDatetimeFormat() {
+        return DATETIME_FORMAT;
     }
 }
