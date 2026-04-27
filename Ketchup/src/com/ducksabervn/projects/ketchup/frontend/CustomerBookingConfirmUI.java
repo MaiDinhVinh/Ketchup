@@ -1,7 +1,17 @@
 package com.ducksabervn.projects.ketchup.frontend;
 
+import com.ducksabervn.projects.ketchup.backend.admin.Movie;
+import com.ducksabervn.projects.ketchup.backend.admin.MovieRepository;
+import com.ducksabervn.projects.ketchup.backend.credientials.Credential;
+import com.ducksabervn.projects.ketchup.backend.credientials.CredentialRepository;
+import com.ducksabervn.projects.ketchup.backend.helper.ReadCSVFile;
+import com.ducksabervn.projects.ketchup.backend.user.Booking;
+import com.ducksabervn.projects.ketchup.backend.user.BookingRepository;
+
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.util.List;
 
 public class CustomerBookingConfirmUI {
@@ -12,16 +22,16 @@ public class CustomerBookingConfirmUI {
     //booking context passed in from CustomerSeatSelectionUI
     private String currentMovieId;
     private String currentShowtimeId;
+    private String currentEmail;
     private List<String> currentSelectedSeatIds;
 
     //the main frame
-    private JFrame mainFrame;
+    private JDialog mainFrame;
     private JPanel mainPanel;
 
     //top bar: title + back button
     private JPanel topPanel;
     private JLabel titleLabel;
-    private JButton backButton;
 
     //booking summary section
     private JPanel summaryPanel;
@@ -35,9 +45,6 @@ public class CustomerBookingConfirmUI {
     private JLabel showtimeLabel;
     private JLabel showtimeValue;
 
-    private JPanel hallRow;
-    private JLabel hallLabel;
-    private JLabel hallValue;
 
     private JPanel seatsRow;
     private JLabel seatsLabel;
@@ -67,11 +74,10 @@ public class CustomerBookingConfirmUI {
     private JButton cancelButton;
 
     private CustomerBookingConfirmUI() {
-        this.mainFrame = new JFrame("Movie Booking System - Confirm Booking");
+        this.mainFrame = new JDialog();
         this.mainPanel = new JPanel();
         this.topPanel = new JPanel(new BorderLayout());
         this.titleLabel = new JLabel("Booking Confirmation", SwingConstants.LEFT);
-        this.backButton = new JButton("Back");
         this.summaryPanel = new JPanel(new GridLayout(9, 1, 6, 6));
         this.movieTitleRow = new JPanel(new BorderLayout());
         this.movieTitleLabel = new JLabel("Movie:");
@@ -79,9 +85,6 @@ public class CustomerBookingConfirmUI {
         this.showtimeRow = new JPanel(new BorderLayout());
         this.showtimeLabel = new JLabel("Showtime:");
         this.showtimeValue = new JLabel();
-        this.hallRow = new JPanel(new BorderLayout());
-        this.hallLabel = new JLabel("Hall:");
-        this.hallValue = new JLabel();
         this.seatsRow = new JPanel(new BorderLayout());
         this.seatsLabel = new JLabel("Selected Seats:");
         this.seatsValue = new JLabel();
@@ -105,20 +108,20 @@ public class CustomerBookingConfirmUI {
      * Since we are using singleton design pattern, this UI will only be initialized once
      * movieId, showtimeId, selectedSeatIds are passed in from CustomerSeatSelectionUI
      */
-    public static void initialize(String movieId, String showtimeId, List<String> selectedSeatIds) {
-        if (CustomerBookingConfirmUI.customerBookingConfirmUI == null) {
-            CustomerBookingConfirmUI.customerBookingConfirmUI = new CustomerBookingConfirmUI();
-        }
+    public static void initialize(String movieId, List<String> selectedSeatIds, String email) {
+        CustomerBookingConfirmUI.customerBookingConfirmUI = new CustomerBookingConfirmUI();
         CustomerBookingConfirmUI.customerBookingConfirmUI.currentMovieId = movieId;
-        CustomerBookingConfirmUI.customerBookingConfirmUI.currentShowtimeId = showtimeId;
+        CustomerBookingConfirmUI.customerBookingConfirmUI.currentEmail = email;
         CustomerBookingConfirmUI.customerBookingConfirmUI.currentSelectedSeatIds = selectedSeatIds;
         CustomerBookingConfirmUI.customerBookingConfirmUI.initializeAllElements();
         CustomerBookingConfirmUI.customerBookingConfirmUI.mainFrame.add(CustomerBookingConfirmUI.customerBookingConfirmUI.mainPanel);
+        CustomerBookingConfirmUI.customerBookingConfirmUI.mainFrame.setModalityType(Dialog.ModalityType.APPLICATION_MODAL);
         CustomerBookingConfirmUI.customerBookingConfirmUI.mainFrame.setVisible(true);
     }
 
     private void initializeAllElements() {
         //initialize the main frame
+        mainFrame.setTitle("Ketchup - Confirm Booking");
         mainFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         mainFrame.setSize(480, 460);
         mainFrame.setLocationRelativeTo(null);
@@ -130,9 +133,7 @@ public class CustomerBookingConfirmUI {
 
         //initialize the top bar (title + back button)
         titleLabel.setFont(new Font("Arial", Font.BOLD, 20));
-        backButton.setPreferredSize(new Dimension(80, 30));
         topPanel.add(titleLabel, BorderLayout.WEST);
-        topPanel.add(backButton, BorderLayout.EAST);
         topPanel.setBorder(BorderFactory.createEmptyBorder(0, 0, 5, 0));
         mainPanel.add(topPanel, BorderLayout.NORTH);
 
@@ -150,12 +151,6 @@ public class CustomerBookingConfirmUI {
         showtimeValue.setFont(new Font("Arial", Font.PLAIN, 13));
         showtimeRow.add(showtimeLabel, BorderLayout.WEST);
         showtimeRow.add(showtimeValue, BorderLayout.CENTER);
-
-        hallLabel.setFont(new Font("Arial", Font.BOLD, 13));
-        hallLabel.setPreferredSize(labelWidth);
-        hallValue.setFont(new Font("Arial", Font.PLAIN, 13));
-        hallRow.add(hallLabel, BorderLayout.WEST);
-        hallRow.add(hallValue, BorderLayout.CENTER);
 
         seatsLabel.setFont(new Font("Arial", Font.BOLD, 13));
         seatsLabel.setPreferredSize(labelWidth);
@@ -185,7 +180,6 @@ public class CustomerBookingConfirmUI {
         summaryPanel.setBorder(BorderFactory.createTitledBorder("Booking Summary"));
         summaryPanel.add(movieTitleRow);
         summaryPanel.add(showtimeRow);
-        summaryPanel.add(hallRow);
         summaryPanel.add(seatsRow);
         summaryPanel.add(seatCountRow);
         summaryPanel.add(pricePerSeatRow);
@@ -206,9 +200,15 @@ public class CustomerBookingConfirmUI {
 
         ////SUBSECTION - ADDING LISTENER TO THE CONFIRM BUTTON
         this.confirmButton.addActionListener(e -> {
-            // TODO: Call BookingService.createBooking(currentMovieId, currentShowtimeId, currentSelectedSeatIds)
-            // TODO: If booking success -> generate booking ID and open CustomerBookingDetailUI with the booking ID
-            // TODO: If booking failed -> messageLabel.setForeground(Color.RED) + messageLabel.setText("Booking failed. Please try again.")
+            Movie m = MovieRepository.getMovies().get(this.currentMovieId);
+            int ticketPrice = m.getSeatPrice();
+            int total = currentSelectedSeatIds.size() * ticketPrice;
+            Booking b = BookingRepository.addBooking(this.currentEmail, this.currentMovieId,
+                    m.getShowTime().format(Movie.getDatetimeFormat()),
+                    this.currentSelectedSeatIds, total);
+            CustomerHomeUI.removeMovie(this.currentMovieId);
+            CustomerHomeUI.addBookingRow(b);
+            mainFrame.dispose();
         });
 
         ////SUBSECTION - ADDING LISTENER TO THE CANCEL BUTTON
@@ -216,26 +216,20 @@ public class CustomerBookingConfirmUI {
             int confirm = JOptionPane.showConfirmDialog(mainFrame, "Are you sure you want to cancel this booking?", "Confirm Cancel", JOptionPane.YES_NO_OPTION);
             if (confirm == JOptionPane.YES_OPTION) {
                 mainFrame.dispose();
-                customerBookingConfirmUI = null;
-                // TODO: Open CustomerSeatSelectionUI.initialize(currentMovieId) to go back to seat selection
+                CustomerSeatSelectionUI.initialize(this.currentMovieId, this.currentEmail);
             }
-        });
-
-        ////SUBSECTION - ADDING LISTENER TO THE BACK BUTTON
-        this.backButton.addActionListener(e -> {
-            mainFrame.dispose();
-            customerBookingConfirmUI = null;
-            // TODO: Open CustomerSeatSelectionUI.initialize(currentMovieId) to go back to seat selection
         });
     }
 
     //fetch all booking data from backend and populate summary fields
     private void loadBookingSummary() {
-        // TODO: Call MovieService.getMovieById(currentMovieId) and set movieTitleValue
-        // TODO: Call ShowtimeService.getShowtimeById(currentShowtimeId) and set showtimeValue (date + time)
-        // TODO: Call ShowtimeService.getShowtimeById(currentShowtimeId) and set hallValue (hall name)
-        // TODO: Call ShowtimeService.getShowtimeById(currentShowtimeId).getTicketPrice() and set pricePerSeatValue
-        // TODO: Calculate total = selectedSeatIds.size() * ticketPrice and set totalPriceValue
+        Movie m = MovieRepository.getMovies().get(this.currentMovieId);
+        this.movieTitleLabel.setText(m.getTitle());
+        this.showtimeLabel.setText(m.getShowTime().format(Movie.getDatetimeFormat()));
+        int ticketPrice = m.getSeatPrice();
+        int total = currentSelectedSeatIds.size() * ticketPrice;
+        this.pricePerSeatValue.setText(Integer.toString(total));
+        this.totalPriceValue.setText(Integer.toString(total));
         seatsValue.setText(String.join(", ", currentSelectedSeatIds));
         seatCountValue.setText(String.valueOf(currentSelectedSeatIds.size()));
     }
