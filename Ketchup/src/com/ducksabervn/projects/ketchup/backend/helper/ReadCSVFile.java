@@ -4,8 +4,6 @@ import com.ducksabervn.projects.ketchup.backend.admin.MovieRepository;
 import com.ducksabervn.projects.ketchup.backend.credientials.Credential;
 import com.ducksabervn.projects.ketchup.backend.admin.Movie;
 import com.ducksabervn.projects.ketchup.backend.credientials.CredentialRepository;
-import com.ducksabervn.projects.ketchup.backend.user.Booking;
-import com.ducksabervn.projects.ketchup.backend.user.BookingRepository;
 import com.ducksabervn.projects.ketchup.frontend.AdminMovieListUI;
 
 import java.io.BufferedWriter;
@@ -13,9 +11,6 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.LinkedHashMap;
 
@@ -27,8 +22,6 @@ public final class ReadCSVFile{
                                     "USER_CREDENTIALS.csv");
     private static final Path MOVIES = Path.of(System.getProperty("user.home"), "Ketchup",
                                         "MOVIES.csv");
-    private static final Path BOOKINGS = Path.of(System.getProperty("user.home"), "Ketchup",
-                                        "BOOKINGS.csv");
     public static void initalize(){
         try{
             if(!Files.exists(APP_DIRECTORY)) {
@@ -41,10 +34,6 @@ public final class ReadCSVFile{
             if(!Files.exists(MOVIES)){
                 Files.createFile(MOVIES);
                 Files.writeString(MOVIES, "MOVIEID;TITLE;GENRE;DURATION;RATING;SHOWTIME;SEAT;SPRICE");
-            }
-            if(!Files.exists(BOOKINGS)){
-                Files.createFile(BOOKINGS);
-                Files.writeString(BOOKINGS, "EMAIL;BOOKINGID;MOVIEID;SHOWTIME;SEATS;TOTAL_PRICE");
             }
         }catch (IOException e){
             //I still cant figure out for which JFrame will responsible to display the
@@ -99,33 +88,6 @@ public final class ReadCSVFile{
         }
     }
 
-    //why we need userEmail ? Because normal/admin user can't see other user's private data
-    public static LinkedHashMap<String, Booking> readBookingCsv(String userEmail){
-        try{
-            List<String> allBookings = Files.readAllLines(BOOKINGS);
-            allBookings.remove(0);
-            LinkedHashMap<String, Booking> bookings = new LinkedHashMap<>();
-            for(String b: allBookings){
-                String[] split = b.split(";");
-                if(split[0].equals(userEmail)){
-                    LocalDateTime showtime = LocalDateTime.parse(split[3], Movie.getDatetimeFormat());
-                    ArrayList<String> chosenSeats = new ArrayList<>(Arrays.asList(split[4].split(",")));
-                    int totalPrice = Integer.parseInt(split[5]);
-                    boolean isProcessed = Boolean.parseBoolean(split[6]);
-                    bookings.put(split[1], new Booking(split[0],
-                            split[1], split[2], showtime, chosenSeats, totalPrice, isProcessed));
-                }
-            }
-            return bookings;
-        }catch(IOException e){
-            //I still cant figure out for which JFrame will responsible to display the
-            //exception string, but this will work as a fallback for now
-            DisplayMessage.displayError(AdminMovieListUI.getAdminMovieListUI().getMainFrame(),
-                    e.getMessage());
-            return null;
-        }
-    }
-
     public static void writeMovieData(String data){
         //adding true to FileWriter will turn on append mode and won't override the CSV file
         //fuck ass i forgor this shit for 3 times
@@ -142,49 +104,18 @@ public final class ReadCSVFile{
 
     public static void updateDataBackground() {
         LinkedHashMap<String, Movie> updatedMovies = MovieRepository.getMovies();
-        LinkedHashMap<String, Booking> allBookings = BookingRepository.getBookings();
         LinkedHashMap<String, Credential> updatedCredentials = CredentialRepository.getCredentials();
         try(BufferedWriter bw = new BufferedWriter(new FileWriter(MOVIES.toFile()));
-            BufferedWriter bw2 = new BufferedWriter(new FileWriter(USER_CREDENTIALS.toFile()));
-            BufferedWriter bw3 = new BufferedWriter(new FileWriter(BOOKINGS.toFile(), true))){
+            BufferedWriter bw2 = new BufferedWriter(new FileWriter(USER_CREDENTIALS.toFile()))){
             bw.write("MOVIEID;TITLE;GENRE;DURATION;RATING;SHOWTIME;SEAT;SPRICE");
-            if(allBookings != null){
-                ArrayList<Booking> bookings = new ArrayList<>(allBookings.values());
-                ArrayList<Movie> allMovies = new ArrayList<>(updatedMovies.values());
-                int bookingCount = bookings.size();
-                int movieCount = allMovies.size();
-                for(int i = 0; i < bookingCount; i++){
-                    for(int j = 0; j < movieCount; j++){
-                        if(bookings.get(i).getMovieId().equals(allMovies.get(j).getMovieId()) &&
-                        !bookings.get(i).isProcessed()){
-                            Movie m = allMovies.get(j);
-                            Booking b = bookings.get(i);
-                            m.getOccupiedSeat().addAll(b.getChosenSeats());
-                            allMovies.set(j, m);
-                        }
-                    }
-                }
-                for(Movie m: allMovies){
-                    bw.newLine();
-                    bw.write(MovieRepository.generateMovieDataAsString(m));
-                }
-            }else{
-                for(Movie m: updatedMovies.values()){
-                    bw.newLine();
-                    bw.write(MovieRepository.generateMovieDataAsString(m));
-                }
+            for(Movie m: updatedMovies.values()){
+                bw.newLine();
+                bw.write(MovieRepository.generateMovieDataAsString(m));
             }
             bw2.write("USERNAME;EMAIL;PASSWORD;IS_ADMIN");
             for(Credential c: updatedCredentials.values()){
                 bw2.newLine();
                 bw2.write(CredentialRepository.generateCredentialDataAsString(c));
-            }
-            for(Booking b: allBookings.values()){
-                if(!b.isProcessed()){
-                    b.setProcessed(true);
-                    bw3.newLine();
-                    bw3.write(BookingRepository.generateDataAsString(b));
-                }
             }
         }catch(IOException e){
             //I still cant figure out for which JFrame will responsible to display the
