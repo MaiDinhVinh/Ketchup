@@ -4,7 +4,6 @@ import com.ducksabervn.projects.ketchup.backend.credientials.CredentialRepositor
 import com.ducksabervn.projects.ketchup.backend.helper.DisplayMessage;
 import com.ducksabervn.projects.ketchup.backend.credientials.Credential;
 import com.ducksabervn.projects.ketchup.backend.helper.ReadCSVFile;
-import com.ducksabervn.projects.ketchup.backend.user.BookingRepository;
 
 import javax.swing.*;
 import java.awt.*;
@@ -130,9 +129,6 @@ public class LoginUI {
                     }else{
                         if(role.equals("Admin")){
                             AdminMovieListUI.initialize(c.getUsername());
-                        }else{
-                            BookingRepository.setBookings(ReadCSVFile.readBookingCsv(c.getEmail()));
-                            CustomerHomeUI.initialize(c.getUsername(), c.getEmail());
                         }
                     }
                     this.mainFrame.dispose();
