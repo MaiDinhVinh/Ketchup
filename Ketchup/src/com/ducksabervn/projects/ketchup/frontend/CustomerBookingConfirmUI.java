@@ -228,7 +228,7 @@ public class CustomerBookingConfirmUI {
         this.showtimeLabel.setText(m.getShowTime().format(Movie.getDatetimeFormat()));
         int ticketPrice = m.getSeatPrice();
         int total = currentSelectedSeatIds.size() * ticketPrice;
-        this.pricePerSeatValue.setText(Integer.toString(total));
+        this.pricePerSeatValue.setText(Integer.toString(ticketPrice));
         this.totalPriceValue.setText(Integer.toString(total));
         seatsValue.setText(String.join(", ", currentSelectedSeatIds));
         seatCountValue.setText(String.valueOf(currentSelectedSeatIds.size()));
