@@ -9,6 +9,7 @@ import com.ducksabervn.projects.ketchup.backend.helper.DisplayMessage;
 import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
 public class CustomerSeatSelectionUI {
@@ -25,7 +26,9 @@ public class CustomerSeatSelectionUI {
     private String currentMovieId;
 
     //list of seat IDs the customer has currently selected
-    private List<String> selectedSeatIds;
+
+    //change log: Changed from List<String> to HashSet<String>, for constant time checking
+    private HashSet<String> selectedSeatIds;
 
     //current login email
     private String currentEmail;
@@ -63,7 +66,7 @@ public class CustomerSeatSelectionUI {
     private JButton proceedButton;
 
     private CustomerSeatSelectionUI() {
-        this.selectedSeatIds = new ArrayList<>();
+        this.selectedSeatIds = new HashSet<>();
         this.seatGrid = new JButton[ROW_LABELS.length][SEATS_PER_ROW];
         this.mainFrame = new JDialog();
         this.mainPanel = new JPanel();
@@ -179,7 +182,7 @@ public class CustomerSeatSelectionUI {
                 return;
             }
             mainFrame.dispose();
-            CustomerBookingConfirmUI.initialize(this.currentMovieId, this.selectedSeatIds, this.currentEmail);
+            CustomerBookingConfirmUI.initialize(this.currentMovieId, new ArrayList<>(this.selectedSeatIds), this.currentEmail);
         });
 
         ////SUBSECTION - ADDING LISTENER TO THE CANCEL BUTTON
