@@ -14,6 +14,7 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.HashSet;
 import java.util.stream.Collectors;
 
 public class CustomerHomeUI {
@@ -419,11 +420,17 @@ public class CustomerHomeUI {
         new SwingWorker<ArrayList<Movie>, Void>() {
             @Override
             protected ArrayList<Movie> doInBackground() {
-                ArrayList<Movie> nonBookedMovies = new ArrayList<>(MovieRepository.getMovies().values());
-                ArrayList<Booking> bookings = new ArrayList<>(BookingRepository.getBookings().values());
-                for (Booking b : bookings) {
-                    nonBookedMovies.removeIf((Movie m) -> m.getMovieId().equals(b.getMovieId()));
-                }
+                //Also changing to HashSet for constant time accessing
+                HashSet<String> bookingIds = BookingRepository.getBookings().values()
+                        .stream()
+                        .map(Booking::getBookingId)
+                        .collect(Collectors.toCollection(HashSet::new));
+
+                ArrayList<Movie> nonBookedMovies = MovieRepository.getMovies().values()
+                        .stream()
+                        .filter(m -> !bookingIds.contains(m.getMovieId()))
+                        .collect(Collectors.toCollection(ArrayList::new));
+
                 return nonBookedMovies;
             }
 
