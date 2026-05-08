@@ -1,10 +1,10 @@
 package com.ducksabervn.projects.ketchup.frontend;
 
-import com.ducksabervn.projects.ketchup.backend.credientials.CredentialRepository;
-import com.ducksabervn.projects.ketchup.backend.helper.DisplayMessage;
-import com.ducksabervn.projects.ketchup.backend.credientials.Credential;
-import com.ducksabervn.projects.ketchup.backend.helper.ReadCSVFile;
-import com.ducksabervn.projects.ketchup.backend.user.BookingRepository;
+import com.ducksabervn.projects.ketchup.backend.auth.CredentialRepository;
+import com.ducksabervn.projects.ketchup.backend.io.BookingCsvIO;
+import com.ducksabervn.projects.ketchup.backend.ui.DisplayMessage;
+import com.ducksabervn.projects.ketchup.backend.auth.Credential;
+import com.ducksabervn.projects.ketchup.backend.booking.BookingRepository;
 
 import javax.swing.*;
 import java.awt.*;
@@ -131,7 +131,7 @@ public class LoginUI {
                         if(role.equals("Admin")){
                             AdminMovieListUI.initialize(c.getUsername());
                         }else{
-                            BookingRepository.setBookings(ReadCSVFile.readBookingCsv(c.getEmail()));
+                            BookingRepository.setBookings(BookingCsvIO.getIO().readCsvFile(c.getEmail()));
                             CustomerHomeUI.initialize(c.getUsername(), c.getEmail());
                         }
                     }
