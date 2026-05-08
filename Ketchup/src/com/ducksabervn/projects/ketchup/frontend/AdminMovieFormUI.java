@@ -1,8 +1,8 @@
 package com.ducksabervn.projects.ketchup.frontend;
 
-import com.ducksabervn.projects.ketchup.backend.admin.Movie;
-import com.ducksabervn.projects.ketchup.backend.admin.MovieRepository;
-import com.ducksabervn.projects.ketchup.backend.helper.DisplayMessage;
+import com.ducksabervn.projects.ketchup.backend.movie.Movie;
+import com.ducksabervn.projects.ketchup.backend.movie.MovieRepository;
+import com.ducksabervn.projects.ketchup.backend.ui.DisplayMessage;
 
 import javax.swing.*;
 import java.awt.*;
