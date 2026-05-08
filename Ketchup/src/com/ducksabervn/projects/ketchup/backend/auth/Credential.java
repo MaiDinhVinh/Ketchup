@@ -1,6 +1,5 @@
-package com.ducksabervn.projects.ketchup.backend.credientials;
+package com.ducksabervn.projects.ketchup.backend.auth;
 
-import java.util.TreeMap;
 import java.util.regex.Pattern;
 
 public class Credential {
