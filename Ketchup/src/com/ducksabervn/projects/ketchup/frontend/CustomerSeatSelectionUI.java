@@ -1,16 +1,16 @@
 package com.ducksabervn.projects.ketchup.frontend;
 
-import com.ducksabervn.projects.ketchup.backend.admin.Movie;
-import com.ducksabervn.projects.ketchup.backend.admin.MovieRepository;
-import com.ducksabervn.projects.ketchup.backend.credientials.Credential;
-import com.ducksabervn.projects.ketchup.backend.credientials.CredentialRepository;
-import com.ducksabervn.projects.ketchup.backend.helper.DisplayMessage;
+import com.ducksabervn.projects.ketchup.backend.booking.BookingRepository;
+import com.ducksabervn.projects.ketchup.backend.movie.Movie;
+import com.ducksabervn.projects.ketchup.backend.movie.MovieRepository;
+import com.ducksabervn.projects.ketchup.backend.ui.DisplayMessage;
 
 import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class CustomerSeatSelectionUI {
 
@@ -173,7 +173,7 @@ public class CustomerSeatSelectionUI {
         //load booked seats immediately on startup
         Movie m = MovieRepository.getMovies().get(this.currentMovieId);
         titleLabel.setText(m.getTitle() + " (Showtime: " + m.getShowTime().format(Movie.getDatetimeFormat()) + ")");
-        this.markBookedSeats(m.getOccupiedSeat());
+        this.markBookedSeats(new HashSet<>(m.getOccupiedSeat()));
 
         ////SUBSECTION - ADDING LISTENER TO THE PROCEED BUTTON
         this.proceedButton.addActionListener(e -> {
@@ -242,7 +242,7 @@ public class CustomerSeatSelectionUI {
     }
 
     //mark a list of seat IDs as booked (red + disabled)
-    private void markBookedSeats(List<String> bookedSeatIds) {
+    private void markBookedSeats(Set<String> bookedSeatIds) {
         for (int row = 0; row < ROW_LABELS.length; row++) {
             for (int col = 0; col < SEATS_PER_ROW; col++) {
                 String seatId = ROW_LABELS[row] + (col + 1);
@@ -280,7 +280,7 @@ public class CustomerSeatSelectionUI {
         } else {
             selectedSeatsLabel.setText("Selected Seats: " + String.join(",", selectedSeatIds));
             int ticketPrice = MovieRepository.getMovies().get(currentMovieId).getSeatPrice();
-            int total = selectedSeatIds.size() * ticketPrice;
+            int total = BookingRepository.calculateTotalPrice(new ArrayList<>(selectedSeatIds), ticketPrice);
             totalPriceLabel.setText("Total Price: $" + total);
         }
     }
