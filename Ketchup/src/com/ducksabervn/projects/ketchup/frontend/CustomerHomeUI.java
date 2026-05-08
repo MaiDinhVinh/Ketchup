@@ -1,11 +1,13 @@
 package com.ducksabervn.projects.ketchup.frontend;
 
-import com.ducksabervn.projects.ketchup.backend.admin.Movie;
-import com.ducksabervn.projects.ketchup.backend.admin.MovieRepository;
-import com.ducksabervn.projects.ketchup.backend.helper.DisplayMessage;
-import com.ducksabervn.projects.ketchup.backend.helper.ReadCSVFile;
-import com.ducksabervn.projects.ketchup.backend.user.Booking;
-import com.ducksabervn.projects.ketchup.backend.user.BookingRepository;
+import com.ducksabervn.projects.ketchup.backend.io.BookingCsvIO;
+import com.ducksabervn.projects.ketchup.backend.io.CredentialCsvIO;
+import com.ducksabervn.projects.ketchup.backend.io.MovieCsvIO;
+import com.ducksabervn.projects.ketchup.backend.movie.Movie;
+import com.ducksabervn.projects.ketchup.backend.movie.MovieRepository;
+import com.ducksabervn.projects.ketchup.backend.ui.DisplayMessage;
+import com.ducksabervn.projects.ketchup.backend.booking.Booking;
+import com.ducksabervn.projects.ketchup.backend.booking.BookingRepository;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
@@ -93,11 +95,20 @@ public class CustomerHomeUI {
     private JPanel bookingButtonPanel;
     private JButton bookingRefreshButton;
 
-    //SORTING CRITERIONS
+    //Movie SORTING CRITERIONS
     private static final Comparator<Movie> SORT_BY_TITLE = Comparator.comparing(Movie::getTitle);
     private static final Comparator<Movie> SORT_BY_GENRE = Comparator.comparing(Movie::getGenre);
     private static final Comparator<Movie> SORT_BY_DURATION = Comparator.comparing(Movie::getDuration);
     private static final Comparator<Movie> SORT_BY_SHOWTIME = Comparator.comparing(Movie::getShowTime);
+
+    //Booking SORTING CRITERIONS
+
+    private static final Comparator<Booking> SORT_BY_ID = Comparator.comparing(Booking::getBookingId);
+    private static final Comparator<Booking> SORT_BY_MOVIE = Comparator.comparing(
+            (Booking b) -> MovieRepository.getMovies().get(b.getMovieId()).getTitle()
+    );
+    private static final Comparator<Booking> SORT_BY_BOOKING_SHOWTIME = Comparator.comparing(Booking::getShowtime);
+    private static final Comparator<Booking> SORT_BY_TOTAL_PRICE = Comparator.comparing(Booking::getTotalPrice);
 
     private CustomerHomeUI() {
         this.mainFrame = new JFrame("Ketchup");
@@ -205,7 +216,9 @@ public class CustomerHomeUI {
                 new SwingWorker<Void, Void>() {
                     @Override
                     protected Void doInBackground() {
-                        ReadCSVFile.updateDataBackground();
+                        MovieCsvIO.getIO().updateLatestData();
+                        CredentialCsvIO.getIO().updateLatestData();
+                        BookingCsvIO.getIO().updateLatestData();
                         return null;
                     }
                     @Override
@@ -217,15 +230,22 @@ public class CustomerHomeUI {
         });
 
         ////SUBSECTION - ADDING LISTENER TO THE "X" - EXIT BUTTON
-        this.mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        this.mainFrame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         this.mainFrame.addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
                 new SwingWorker<Void, Void>() {
                     @Override
                     protected Void doInBackground() {
-                        ReadCSVFile.updateDataBackground();
+                        MovieCsvIO.getIO().updateLatestData();
+                        CredentialCsvIO.getIO().updateLatestData();
+                        BookingCsvIO.getIO().updateLatestData();
                         return null;
+                    }
+
+                    @Override
+                    protected void done() {
+                        System.exit(0);
                     }
                 }.execute();
             }
@@ -347,7 +367,7 @@ public class CustomerHomeUI {
         this.bookNowButton.addActionListener(e -> {
             int selectedRow = movieTable.getSelectedRow();
             if (selectedRow == -1) {
-                JOptionPane.showMessageDialog(mainFrame, "Please select a movie to book.", "No Selection", JOptionPane.WARNING_MESSAGE);
+                DisplayMessage.displayWarning(mainFrame, "Please select a movie to book.");
                 return;
             }
             String currentMovieId = this.currentMovieData.get(this.movieTable.getSelectedRow()).getMovieId();
@@ -406,12 +426,42 @@ public class CustomerHomeUI {
         ////SUBSECTION - ADDING LISTENER TO THE SEARCH BUTTON
         this.bookingSearchButton.addActionListener(e -> {
             String keyword = bookingSearchField.getText().trim();
-            // TODO: implement booking search logic
+            new SwingWorker<ArrayList<Booking>, Void>() {
+                @Override
+                protected ArrayList<Booking> doInBackground() {
+                    return BookingRepository.searchBookings(keyword);
+                }
+
+                @Override
+                protected void done() {
+                    try {
+                        movieTableModel.setRowCount(0);
+                        currentBookingData = get();
+                        updateBookingRows(currentBookingData);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            }.execute();
         });
 
         ////SUBSECTION - ADDING LISTENER TO THE SORT BUTTON
         this.bookingSortButton.addActionListener(e -> {
-            // TODO: implement booking sort logic
+            String sortingCriteria = ((String) this.bookingSortComboBox.getSelectedItem());
+            switch (sortingCriteria) {
+                case "Booking ID":
+                    CustomerHomeUI.customerHomeUI.sortBookingByCriterion(0);
+                    break;
+                case "Movie":
+                    CustomerHomeUI.customerHomeUI.sortBookingByCriterion(1);
+                    break;
+                case "Showtime":
+                    CustomerHomeUI.customerHomeUI.sortBookingByCriterion(2);
+                    break;
+                case "Total Price":
+                    CustomerHomeUI.customerHomeUI.sortBookingByCriterion(3);
+                    break;
+            }
         });
     }
 
@@ -421,14 +471,14 @@ public class CustomerHomeUI {
             @Override
             protected ArrayList<Movie> doInBackground() {
                 //Also changing to HashSet for constant time accessing
-                HashSet<String> bookingIds = BookingRepository.getBookings().values()
+                HashSet<String> bookedMovieIds = BookingRepository.getBookings().values()
                         .stream()
-                        .map(Booking::getBookingId)
+                        .map(Booking::getMovieId)
                         .collect(Collectors.toCollection(HashSet::new));
 
                 ArrayList<Movie> nonBookedMovies = MovieRepository.getMovies().values()
                         .stream()
-                        .filter(m -> !bookingIds.contains(m.getMovieId()))
+                        .filter(m -> !bookedMovieIds.contains(m.getMovieId()))
                         .collect(Collectors.toCollection(ArrayList::new));
 
                 return nonBookedMovies;
@@ -501,6 +551,13 @@ public class CustomerHomeUI {
         }
     }
 
+    private void updateBookingRows(ArrayList<Booking> arr){
+        bookingTableModel.setRowCount(0);
+        for(Booking b: arr){
+            addBooking(b);
+        }
+    }
+
     private void sortMovieByCriterion(int criterion) {
         ArrayList<Movie> arr = CustomerHomeUI.customerHomeUI.currentMovieData;
         switch (criterion) {
@@ -518,6 +575,25 @@ public class CustomerHomeUI {
                 break;
         }
         this.updateMovieRows(arr);
+    }
+
+    private void sortBookingByCriterion(int criterion){
+        ArrayList<Booking> arr = CustomerHomeUI.customerHomeUI.currentBookingData;
+        switch (criterion) {
+            case 0:
+                arr.sort(SORT_BY_ID);
+                break;
+            case 1:
+                arr.sort(SORT_BY_MOVIE);
+                break;
+            case 2:
+                arr.sort(SORT_BY_BOOKING_SHOWTIME);
+                break;
+            case 3:
+                arr.sort(SORT_BY_TOTAL_PRICE);
+                break;
+        }
+        this.updateBookingRows(arr);
     }
 
     public static void removeMovie(String movieId) {
