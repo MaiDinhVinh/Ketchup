@@ -1,8 +1,8 @@
 package com.ducksabervn.projects.ketchup.frontend;
 
-import com.ducksabervn.projects.ketchup.backend.credientials.Credential;
-import com.ducksabervn.projects.ketchup.backend.credientials.CredentialRepository;
-import com.ducksabervn.projects.ketchup.backend.helper.DisplayMessage;
+import com.ducksabervn.projects.ketchup.backend.auth.Credential;
+import com.ducksabervn.projects.ketchup.backend.auth.CredentialRepository;
+import com.ducksabervn.projects.ketchup.backend.ui.DisplayMessage;
 
 import javax.swing.*;
 import java.awt.*;
