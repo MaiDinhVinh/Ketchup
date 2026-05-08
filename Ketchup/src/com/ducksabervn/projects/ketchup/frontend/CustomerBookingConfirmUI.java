@@ -1,17 +1,12 @@
 package com.ducksabervn.projects.ketchup.frontend;
 
-import com.ducksabervn.projects.ketchup.backend.admin.Movie;
-import com.ducksabervn.projects.ketchup.backend.admin.MovieRepository;
-import com.ducksabervn.projects.ketchup.backend.credientials.Credential;
-import com.ducksabervn.projects.ketchup.backend.credientials.CredentialRepository;
-import com.ducksabervn.projects.ketchup.backend.helper.ReadCSVFile;
-import com.ducksabervn.projects.ketchup.backend.user.Booking;
-import com.ducksabervn.projects.ketchup.backend.user.BookingRepository;
+import com.ducksabervn.projects.ketchup.backend.movie.Movie;
+import com.ducksabervn.projects.ketchup.backend.movie.MovieRepository;
+import com.ducksabervn.projects.ketchup.backend.booking.Booking;
+import com.ducksabervn.projects.ketchup.backend.booking.BookingRepository;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
 import java.util.List;
 
 public class CustomerBookingConfirmUI {
@@ -202,7 +197,7 @@ public class CustomerBookingConfirmUI {
         this.confirmButton.addActionListener(e -> {
             Movie m = MovieRepository.getMovies().get(this.currentMovieId);
             int ticketPrice = m.getSeatPrice();
-            int total = currentSelectedSeatIds.size() * ticketPrice;
+            int total = BookingRepository.calculateTotalPrice(currentSelectedSeatIds, ticketPrice);
             Booking b = BookingRepository.addBooking(this.currentEmail, this.currentMovieId,
                     m.getShowTime().format(Movie.getDatetimeFormat()),
                     this.currentSelectedSeatIds, total);
@@ -227,7 +222,7 @@ public class CustomerBookingConfirmUI {
         this.movieTitleLabel.setText(m.getTitle());
         this.showtimeLabel.setText(m.getShowTime().format(Movie.getDatetimeFormat()));
         int ticketPrice = m.getSeatPrice();
-        int total = currentSelectedSeatIds.size() * ticketPrice;
+        int total = BookingRepository.calculateTotalPrice(currentSelectedSeatIds, ticketPrice);
         this.pricePerSeatValue.setText(Integer.toString(ticketPrice));
         this.totalPriceValue.setText(Integer.toString(total));
         seatsValue.setText(String.join(", ", currentSelectedSeatIds));
