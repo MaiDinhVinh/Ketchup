@@ -1,9 +1,10 @@
 package com.ducksabervn.projects.ketchup.frontend;
 
-import com.ducksabervn.projects.ketchup.backend.admin.Movie;
-import com.ducksabervn.projects.ketchup.backend.admin.MovieRepository;
-import com.ducksabervn.projects.ketchup.backend.helper.DisplayMessage;
-import com.ducksabervn.projects.ketchup.backend.helper.ReadCSVFile;
+import com.ducksabervn.projects.ketchup.backend.io.CredentialCsvIO;
+import com.ducksabervn.projects.ketchup.backend.io.MovieCsvIO;
+import com.ducksabervn.projects.ketchup.backend.movie.Movie;
+import com.ducksabervn.projects.ketchup.backend.movie.MovieRepository;
+import com.ducksabervn.projects.ketchup.backend.ui.DisplayMessage;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
@@ -315,27 +316,35 @@ public class AdminMovieListUI {
                 new SwingWorker<Void, Void>() {
                     @Override
                     protected Void doInBackground() {
-                        ReadCSVFile.updateDataBackground(); // Ghi file nặng
+                        MovieCsvIO.getIO().updateLatestData();
+                        CredentialCsvIO.getIO().updateLatestData();
                         return null;
                     }
                     @Override
                     protected void done() {
-                        LoginUI.initialize(); // Mở LoginUI sau khi ghi xong
+                        LoginUI.initialize();
                     }
                 }.execute();
             }
         });
 
         ////SUBSECTION - ADDING LISTENER TO THE "X" - EXIT BUTTON
-        this.mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        this.mainFrame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         this.mainFrame.addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
                 new SwingWorker<Void, Void>() {
                     @Override
                     protected Void doInBackground() {
-                        ReadCSVFile.updateDataBackground();
+                        MovieCsvIO.getIO().updateLatestData();
+                        CredentialCsvIO.getIO().updateLatestData();
                         return null;
+                    }
+
+                    @Override
+                    protected void done() {
+                        // Chỉ tắt JVM sau khi ghi xong
+                        System.exit(0);
                     }
                 }.execute();
             }
