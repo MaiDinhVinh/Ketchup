@@ -1,10 +1,8 @@
 package com.ducksabervn.projects.ketchup.backend.io;
 
-import com.ducksabervn.projects.ketchup.backend.booking.Booking;
-import com.ducksabervn.projects.ketchup.backend.booking.BookingRepository;
-import com.ducksabervn.projects.ketchup.backend.movie.Movie;
-import com.ducksabervn.projects.ketchup.backend.ui.DisplayMessage;
-import com.ducksabervn.projects.ketchup.frontend.AdminMovieListUI;
+import com.ducksabervn.projects.ketchup.backend.model.Booking;
+import com.ducksabervn.projects.ketchup.backend.repositories.BookingRepository;
+import com.ducksabervn.projects.ketchup.backend.model.Movie;
 
 import java.io.BufferedWriter;
 import java.io.FileWriter;
@@ -29,45 +27,37 @@ public class BookingCsvIO implements FilteredCsvIO<String, Booking>{
     }
 
     @Override
-    public LinkedHashMap<String, Booking> readCsvFile(String requiredInformation) {
+    public LinkedHashMap<String, Booking> readCsvFile(String requiredInformation) throws IOException{
         return this.readBookingCsv(requiredInformation);
     }
 
     @Override
-    public void updateLatestData() {
+    public void updateLatestData() throws IOException{
         this.updateBookingCsv();
     }
 
     //why we need userEmail ? Because normal/admin user can't see other user's private data
-    private LinkedHashMap<String, Booking> readBookingCsv(String userEmail){
-        try{
-            List<String> allBookings = Files.readAllLines(CsvPersistable.BOOKINGS);
-            allBookings.remove(0);
-            LinkedHashMap<String, Booking> bookings = new LinkedHashMap<>();
-            for(String b: allBookings){
-                String[] split = b.split(";");
-                if(split[0].equals(userEmail)){
-                    LocalDateTime showtime = LocalDateTime.parse(split[3], Movie.getDatetimeFormat());
-                    HashSet<String> chosenSeats = new HashSet<>(Arrays.asList(split[4].split(",")));
-                    int totalPrice = Integer.parseInt(split[5]);
-                    boolean isProcessed = Boolean.parseBoolean(split[6]);
-                    bookings.put(split[1], new Booking(split[0],
-                            split[1], split[2], showtime, chosenSeats, totalPrice, isProcessed));
-                }
+    private LinkedHashMap<String, Booking> readBookingCsv(String userEmail) throws IOException{
+        List<String> allBookings = Files.readAllLines(AppPath.BOOKINGS.getAppPath());
+        allBookings.remove(0);
+        LinkedHashMap<String, Booking> bookings = new LinkedHashMap<>();
+        for(String b: allBookings){
+            String[] split = b.split(";");
+            if(split[0].equals(userEmail)){
+                LocalDateTime showtime = LocalDateTime.parse(split[3], Movie.getDatetimeFormat());
+                HashSet<String> chosenSeats = new HashSet<>(Arrays.asList(split[4].split(",")));
+                int totalPrice = Integer.parseInt(split[5]);
+                boolean isProcessed = Boolean.parseBoolean(split[6]);
+                bookings.put(split[1], new Booking(split[0],
+                        split[1], split[2], showtime, chosenSeats, totalPrice, isProcessed));
             }
-            return bookings;
-        }catch(IOException e){
-            //I still cant figure out for which JFrame will responsible to display the
-            //exception string, but this will work as a fallback for now
-            DisplayMessage.displayError(AdminMovieListUI.getAdminMovieListUI().getMainFrame(),
-                    e.getMessage());
-            return null;
         }
+        return bookings;
     }
 
-    private void updateBookingCsv(){
+    private void updateBookingCsv() throws IOException{
         LinkedHashMap<String, Booking> allBookings = BookingRepository.getBookings();
-        try(BufferedWriter bw3 = new BufferedWriter(new FileWriter(CsvPersistable.BOOKINGS.toFile(), true))){
+        try(BufferedWriter bw3 = new BufferedWriter(new FileWriter(AppPath.BOOKINGS.getAppPath().toFile(), true))){
             for(Booking b: allBookings.values()){
                 if(!b.isProcessed()){
                     b.setProcessed(true);
@@ -76,10 +66,7 @@ public class BookingCsvIO implements FilteredCsvIO<String, Booking>{
                 }
             }
         }catch(IOException e){
-            //I still cant figure out for which JFrame will responsible to display the
-            //exception string, but this will work as a fallback for now
-            DisplayMessage.displayError(AdminMovieListUI.getAdminMovieListUI().getMainFrame(),
-                    e.getMessage());
+            throw e;
         }
     }
 
