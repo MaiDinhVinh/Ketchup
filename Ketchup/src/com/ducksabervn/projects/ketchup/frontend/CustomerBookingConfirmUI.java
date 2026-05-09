@@ -1,9 +1,9 @@
 package com.ducksabervn.projects.ketchup.frontend;
 
-import com.ducksabervn.projects.ketchup.backend.movie.Movie;
-import com.ducksabervn.projects.ketchup.backend.movie.MovieRepository;
-import com.ducksabervn.projects.ketchup.backend.booking.Booking;
-import com.ducksabervn.projects.ketchup.backend.booking.BookingRepository;
+import com.ducksabervn.projects.ketchup.backend.model.Movie;
+import com.ducksabervn.projects.ketchup.backend.repositories.MovieRepository;
+import com.ducksabervn.projects.ketchup.backend.model.Booking;
+import com.ducksabervn.projects.ketchup.backend.repositories.BookingRepository;
 
 import javax.swing.*;
 import java.awt.*;
