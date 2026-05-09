@@ -1,13 +1,15 @@
 package com.ducksabervn.projects.ketchup.frontend;
 
-import com.ducksabervn.projects.ketchup.backend.movie.Movie;
-import com.ducksabervn.projects.ketchup.backend.movie.MovieRepository;
-import com.ducksabervn.projects.ketchup.backend.ui.DisplayMessage;
+import com.ducksabervn.projects.ketchup.backend.model.Movie;
+import com.ducksabervn.projects.ketchup.backend.repositories.MovieRepository;
+import com.ducksabervn.projects.ketchup.frontend.util.DisplayMessage;
 
 import javax.swing.*;
 import java.awt.*;
+import java.io.IOException;
 import java.time.DateTimeException;
 import java.time.LocalDateTime;
+import java.util.stream.Collectors;
 
 public class AdminMovieFormUI {
 
@@ -229,11 +231,22 @@ public class AdminMovieFormUI {
                 }
                 if(!failed){
                     if (mode.equals("ADD")) {
-                        Movie m = MovieRepository.addMovie(title, genre, Integer.parseInt(durationStr), rating, showtime, "",
-                                Integer.parseInt(seatPriceStr));
-                        AdminMovieListUI.addMovieRow(m);
+                        try{
+                            Movie m = MovieRepository.addMovie(title, genre, Integer.parseInt(durationStr), rating, showtime, "",
+                                    Integer.parseInt(seatPriceStr));
+                            AdminMovieListUI.addMovieRow(m);
+                        } catch (IOException ex) {
+                            //I still cant figure out for which JFrame will responsible to display the
+                            //exception string, but this will work as a fallback for now
+                            DisplayMessage.displayError(AdminMovieListUI.getAdminMovieListUI().getMainFrame(),
+                                    ex.getMessage());
+                        }
                     } else {
-                        Movie edited = new Movie(this.currentMovieId, title, genre, Integer.parseInt(durationStr), rating, showtime, "",
+                        Movie old = MovieRepository.getMovies().get(this.currentMovieId);
+                        String occupiedSeats = old.getOccupiedSeat()
+                                .stream()
+                                .collect(Collectors.joining(","));
+                        Movie edited = new Movie(this.currentMovieId, title, genre, Integer.parseInt(durationStr), rating, showtime, occupiedSeats,
                                 Integer.parseInt(seatPriceStr));
                         MovieRepository.editMovie(this.currentMovieId, edited);
                     }
