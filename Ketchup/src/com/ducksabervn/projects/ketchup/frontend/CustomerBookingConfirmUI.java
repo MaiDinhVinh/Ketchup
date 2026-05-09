@@ -219,8 +219,8 @@ public class CustomerBookingConfirmUI {
     //fetch all booking data from backend and populate summary fields
     private void loadBookingSummary() {
         Movie m = MovieRepository.getMovies().get(this.currentMovieId);
-        this.movieTitleLabel.setText(m.getTitle());
-        this.showtimeLabel.setText(m.getShowTime().format(Movie.getDatetimeFormat()));
+        this.movieTitleValue.setText(m.getTitle());
+        this.showtimeValue.setText(m.getShowTime().format(Movie.getDatetimeFormat()));
         int ticketPrice = m.getSeatPrice();
         int total = BookingRepository.calculateTotalPrice(currentSelectedSeatIds, ticketPrice);
         this.pricePerSeatValue.setText(Integer.toString(ticketPrice));
