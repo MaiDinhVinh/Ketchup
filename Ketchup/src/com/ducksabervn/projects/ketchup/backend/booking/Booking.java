@@ -2,14 +2,14 @@ package com.ducksabervn.projects.ketchup.backend.booking;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
 
 public class Booking {
     private String bookingEmail;
     private String bookingId;
     private String movieId;
     private LocalDateTime showtime;
-    private ArrayList<String> chosenSeats;
+    private HashSet<String> chosenSeats;
     private int totalPrice;
     private boolean isProcessed;
 
@@ -17,7 +17,7 @@ public class Booking {
                    String bookingId,
                    String movieId,
                    LocalDateTime showtime,
-                   ArrayList<String> chosenSeats,
+                   HashSet<String> chosenSeats,
                    int totalPrice,
                    boolean isProcessed){
         this.bookingEmail = bookingEmail;
@@ -45,7 +45,7 @@ public class Booking {
         return showtime;
     }
 
-    public ArrayList<String> getChosenSeats() {
+    public HashSet<String> getChosenSeats() {
         return chosenSeats;
     }
 
