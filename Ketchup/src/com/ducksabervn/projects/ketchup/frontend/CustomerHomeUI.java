@@ -128,7 +128,7 @@ public class CustomerHomeUI {
         this.searchNoteLabel = new JLabel("* If searching for showtime, please use the format \"yyyy-MM-dd HH:mm\"");
         this.searchNoteLabel2 = new JLabel("* Searching for occupied seats is not supported");
         this.sortLabel = new JLabel("Sort by:");
-        this.sortComboBox = new JComboBox<>(new String[]{"Title", "Genre", "Duration (min)", "Show time"});
+        this.sortComboBox = new JComboBox<>(new String[]{"Title", "Genre", "Duration (min)", "Showtime"});
         this.sortButton = new JButton("Sort");
         this.movieTableColumns = new String[]{"Title", "Genre", "Duration (min)", "Show time"};
         this.movieTableModel = new DefaultTableModel(movieTableColumns, 0) {
@@ -332,7 +332,14 @@ public class CustomerHomeUI {
             new SwingWorker<ArrayList<Movie>, Void>() {
                 @Override
                 protected ArrayList<Movie> doInBackground() {
-                    return MovieRepository.searchMovie(keyword);
+                    HashSet<String> bookedMovieIds = BookingRepository.getBookings().values()
+                            .stream()
+                            .map(Booking::getMovieId)
+                            .collect(Collectors.toCollection(HashSet::new));
+                    return MovieRepository.searchMovie(keyword)
+                            .stream()
+                            .filter(m -> !bookedMovieIds.contains(m.getMovieId()))
+                            .collect(Collectors.toCollection(ArrayList::new));
                 }
 
                 @Override
