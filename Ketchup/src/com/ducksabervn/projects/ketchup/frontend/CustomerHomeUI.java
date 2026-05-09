@@ -3,17 +3,18 @@ package com.ducksabervn.projects.ketchup.frontend;
 import com.ducksabervn.projects.ketchup.backend.io.BookingCsvIO;
 import com.ducksabervn.projects.ketchup.backend.io.CredentialCsvIO;
 import com.ducksabervn.projects.ketchup.backend.io.MovieCsvIO;
-import com.ducksabervn.projects.ketchup.backend.movie.Movie;
-import com.ducksabervn.projects.ketchup.backend.movie.MovieRepository;
-import com.ducksabervn.projects.ketchup.backend.ui.DisplayMessage;
-import com.ducksabervn.projects.ketchup.backend.booking.Booking;
-import com.ducksabervn.projects.ketchup.backend.booking.BookingRepository;
+import com.ducksabervn.projects.ketchup.backend.model.Movie;
+import com.ducksabervn.projects.ketchup.backend.repositories.MovieRepository;
+import com.ducksabervn.projects.ketchup.backend.model.Booking;
+import com.ducksabervn.projects.ketchup.backend.repositories.BookingRepository;
+import com.ducksabervn.projects.ketchup.frontend.util.DisplayMessage;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashSet;
@@ -216,9 +217,16 @@ public class CustomerHomeUI {
                 new SwingWorker<Void, Void>() {
                     @Override
                     protected Void doInBackground() {
-                        MovieCsvIO.getIO().updateLatestData();
-                        CredentialCsvIO.getIO().updateLatestData();
-                        BookingCsvIO.getIO().updateLatestData();
+                        try{
+                            MovieCsvIO.getIO().updateLatestData();
+                            CredentialCsvIO.getIO().updateLatestData();
+                            BookingCsvIO.getIO().updateLatestData();
+                        }catch(IOException e){
+                            //I still cant figure out for which JFrame will responsible to display the
+                            //exception string, but this will work as a fallback for now
+                            DisplayMessage.displayError(AdminMovieListUI.getAdminMovieListUI().getMainFrame(),
+                                    e.getMessage());
+                        }
                         return null;
                     }
                     @Override
@@ -237,9 +245,16 @@ public class CustomerHomeUI {
                 new SwingWorker<Void, Void>() {
                     @Override
                     protected Void doInBackground() {
-                        MovieCsvIO.getIO().updateLatestData();
-                        CredentialCsvIO.getIO().updateLatestData();
-                        BookingCsvIO.getIO().updateLatestData();
+                        try{
+                            MovieCsvIO.getIO().updateLatestData();
+                            CredentialCsvIO.getIO().updateLatestData();
+                            BookingCsvIO.getIO().updateLatestData();
+                        }catch(IOException e){
+                            //I still cant figure out for which JFrame will responsible to display the
+                            //exception string, but this will work as a fallback for now
+                            DisplayMessage.displayError(AdminMovieListUI.getAdminMovieListUI().getMainFrame(),
+                                    e.getMessage());
+                        }
                         return null;
                     }
 
