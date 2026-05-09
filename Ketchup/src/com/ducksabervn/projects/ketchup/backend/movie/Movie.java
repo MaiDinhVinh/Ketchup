@@ -2,7 +2,8 @@ package com.ducksabervn.projects.ketchup.backend.movie;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
 
 public class Movie {
 
@@ -12,7 +13,7 @@ public class Movie {
     private int duration;
     private String rating;
     private LocalDateTime showTime;
-    private ArrayList<String> occupiedSeat;
+    private HashSet<String> occupiedSeat;
     private int seatPrice;
 
     private static final DateTimeFormatter DATETIME_FORMAT = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
@@ -32,11 +33,10 @@ public class Movie {
         this.rating = rating;
         this.showTime = LocalDateTime.parse(showTime, DATETIME_FORMAT);
         this.seatPrice = seatPrice;
-
-        String[] allOccupiedSeats = occupiedSeat.split(",");
-        this.occupiedSeat = new ArrayList<>();
-        for(String str: allOccupiedSeats){
-            this.occupiedSeat.add(str);
+        if (occupiedSeat == null || occupiedSeat.isBlank()) {
+            this.occupiedSeat = new HashSet<>();
+        } else {
+            this.occupiedSeat = new HashSet<>(Arrays.asList(occupiedSeat.split(",")));
         }
     }
 
@@ -48,7 +48,7 @@ public class Movie {
         return duration;
     }
 
-    public ArrayList<String> getOccupiedSeat() {
+    public HashSet<String> getOccupiedSeat() {
         return occupiedSeat;
     }
 
