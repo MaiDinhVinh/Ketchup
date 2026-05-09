@@ -45,7 +45,9 @@ public class BookingCsvIO implements FilteredCsvIO<String, Booking>{
             String[] split = b.split(";");
             if(split[0].equals(userEmail)){
                 LocalDateTime showtime = LocalDateTime.parse(split[3], Movie.getDatetimeFormat());
-                HashSet<String> chosenSeats = new HashSet<>(Arrays.asList(split[4].split(",")));
+                HashSet<String> chosenSeats = (split[4] == null || split[4].isBlank())
+                        ? new HashSet<>()
+                        : new HashSet<>(Arrays.asList(split[4].split(",")));
                 int totalPrice = Integer.parseInt(split[5]);
                 boolean isProcessed = Boolean.parseBoolean(split[6]);
                 bookings.put(split[1], new Booking(split[0],
