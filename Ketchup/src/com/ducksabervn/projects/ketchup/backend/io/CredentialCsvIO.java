@@ -1,9 +1,7 @@
 package com.ducksabervn.projects.ketchup.backend.io;
 
-import com.ducksabervn.projects.ketchup.backend.auth.Credential;
-import com.ducksabervn.projects.ketchup.backend.auth.CredentialRepository;
-import com.ducksabervn.projects.ketchup.backend.ui.DisplayMessage;
-import com.ducksabervn.projects.ketchup.frontend.AdminMovieListUI;
+import com.ducksabervn.projects.ketchup.backend.model.Credential;
+import com.ducksabervn.projects.ketchup.backend.repositories.CredentialRepository;
 
 import java.io.BufferedWriter;
 import java.io.FileWriter;
@@ -27,47 +25,36 @@ public class CredentialCsvIO implements CsvIO<String, Credential> {
     }
 
     @Override
-    public LinkedHashMap<String, Credential> readCsvFile(){
+    public LinkedHashMap<String, Credential> readCsvFile() throws IOException{
         return this.readUserCredentialsCsv();
     }
 
     @Override
-    public void updateLatestData() {
+    public void updateLatestData() throws IOException{
         this.updateCredCsv();
     }
 
-    private LinkedHashMap<String, Credential> readUserCredentialsCsv(){
-        try{
-            List<String> allCreds = Files.readAllLines(CsvPersistable.USER_CREDENTIALS);
-            allCreds.remove(0);
-            LinkedHashMap<String, Credential> credMap = new LinkedHashMap<>();
-            for(String str: allCreds){
-                String[] split = str.split(";");
-                credMap.put(split[1], new Credential(split[0], split[1], split[2],Boolean.valueOf(split[3])));
-            }
-            return credMap;
-        }catch(IOException e){
-            //I still cant figure out for which JFrame will responsible to display the
-            //exception string, but this will work as a fallback for now
-            DisplayMessage.displayError(AdminMovieListUI.getAdminMovieListUI().getMainFrame(),
-                    e.getMessage());
-            return null;
+    private LinkedHashMap<String, Credential> readUserCredentialsCsv() throws IOException{
+        List<String> allCreds = Files.readAllLines(AppPath.USER_CREDENTIALS.getAppPath());
+        allCreds.remove(0);
+        LinkedHashMap<String, Credential> credMap = new LinkedHashMap<>();
+        for(String str: allCreds){
+            String[] split = str.split(";");
+            credMap.put(split[1], new Credential(split[0], split[1], split[2],Boolean.valueOf(split[3])));
         }
+        return credMap;
     }
 
-    private void updateCredCsv(){
+    private void updateCredCsv() throws IOException{
         LinkedHashMap<String, Credential> updatedCredentials = CredentialRepository.getCredentials();
-        try(BufferedWriter bw2 = new BufferedWriter(new FileWriter(CsvPersistable.USER_CREDENTIALS.toFile()))){
+        try(BufferedWriter bw2 = new BufferedWriter(new FileWriter(AppPath.USER_CREDENTIALS.getAppPath().toFile()))){
             bw2.write("USERNAME;EMAIL;PASSWORD;IS_ADMIN");
             for(Credential c: updatedCredentials.values()){
                 bw2.newLine();
                 bw2.write(generateCredentialDataAsString(c));
             }
         }catch(IOException e){
-            //I still cant figure out for which JFrame will responsible to display the
-            //exception string, but this will work as a fallback for now
-            DisplayMessage.displayError(AdminMovieListUI.getAdminMovieListUI().getMainFrame(),
-                    e.getMessage());
+            throw e;
         }
     }
 
