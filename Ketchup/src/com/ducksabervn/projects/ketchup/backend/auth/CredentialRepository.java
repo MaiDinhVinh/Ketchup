@@ -13,8 +13,9 @@ public class CredentialRepository {
         CredentialRepository.credentials = credentials;
     }
 
-    public static boolean verifyCredential(String email){
-        return CredentialRepository.credentials.containsKey(email);
+    public static boolean verifyCredential(String email, String password){
+        return CredentialRepository.credentials.containsKey(email) &&
+                CredentialRepository.credentials.get(email).getPassword().equals(password);
     }
 
     public static Credential getUser(String email){
@@ -28,11 +29,5 @@ public class CredentialRepository {
             CredentialRepository.credentials.put(email, new Credential(username, email, password, isAdmin));
             return true;
         }
-    }
-
-    public static String generateCredentialDataAsString(Credential c){
-        String data = "%s;%s;%s;%b".formatted(c.getUsername(),
-                c.getEmail(), c.getPassword(), c.isAdmin());
-        return data;
     }
 }
