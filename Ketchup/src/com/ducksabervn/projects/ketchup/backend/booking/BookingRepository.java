@@ -22,12 +22,12 @@ public class BookingRepository {
     public static Booking addBooking(String email,
                                      String movieId,
                                      String showtime,
-                                     List<String> selectedSeats,
+                                     HashSet<String> selectedSeats,
                                      int totalPrice) {
         String bookingId = UUID.randomUUID().toString();
         LocalDateTime st = LocalDateTime.parse(showtime, Movie.getDatetimeFormat());
         Booking b = new Booking(email,
-                bookingId, movieId, st, new ArrayList<>(selectedSeats), totalPrice, false);
+                bookingId, movieId, st, selectedSeats, totalPrice, false);
         BookingRepository.bookings.put(bookingId, b);
         return b;
     }
@@ -48,16 +48,7 @@ public class BookingRepository {
         return arr;
     }
 
-    public static String generateDataAsString(Booking b){
-        String selectedSeatIds = b.getChosenSeats().stream().
-                collect(Collectors.joining(","));
-        String data = "%s;%s;%s;%s;%s;%d;%b".formatted(b.getBookingEmail(),
-                b.getBookingId(), b.getMovieId(), b.getShowtime().format(Movie.getDatetimeFormat()),
-                selectedSeatIds, b.getTotalPrice(), b.isProcessed());
-        return data;
-    }
-
-    public static int calculateTotalPrice(List<String> chosenSeats, int pricePerSeat){
+    public static int calculateTotalPrice(HashSet<String> chosenSeats, int pricePerSeat){
         return chosenSeats.size() * pricePerSeat;
     }
 }
