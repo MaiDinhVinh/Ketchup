@@ -7,7 +7,7 @@ import com.ducksabervn.projects.ketchup.backend.booking.BookingRepository;
 
 import javax.swing.*;
 import java.awt.*;
-import java.util.List;
+import java.util.HashSet;
 
 public class CustomerBookingConfirmUI {
 
@@ -18,7 +18,7 @@ public class CustomerBookingConfirmUI {
     private String currentMovieId;
     private String currentShowtimeId;
     private String currentEmail;
-    private List<String> currentSelectedSeatIds;
+    private HashSet<String> currentSelectedSeatIds;
 
     //the main frame
     private JDialog mainFrame;
@@ -103,7 +103,7 @@ public class CustomerBookingConfirmUI {
      * Since we are using singleton design pattern, this UI will only be initialized once
      * movieId, showtimeId, selectedSeatIds are passed in from CustomerSeatSelectionUI
      */
-    public static void initialize(String movieId, List<String> selectedSeatIds, String email) {
+    public static void initialize(String movieId, HashSet<String> selectedSeatIds, String email) {
         CustomerBookingConfirmUI.customerBookingConfirmUI = new CustomerBookingConfirmUI();
         CustomerBookingConfirmUI.customerBookingConfirmUI.currentMovieId = movieId;
         CustomerBookingConfirmUI.customerBookingConfirmUI.currentEmail = email;
