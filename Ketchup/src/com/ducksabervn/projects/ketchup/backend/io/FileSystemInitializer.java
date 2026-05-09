@@ -19,7 +19,7 @@ public final class FileSystemInitializer {
             }
             if(!Files.exists(AppPath.BOOKINGS.getAppPath())){
                 Files.createFile(AppPath.BOOKINGS.getAppPath());
-                Files.writeString(AppPath.BOOKINGS.getAppPath(), "EMAIL;BOOKINGID;MOVIEID;SHOWTIME;SEATS;TOTAL_PRICE");
+                Files.writeString(AppPath.BOOKINGS.getAppPath(), "EMAIL;BOOKINGID;MOVIEID;SHOWTIME;SEATS;TOTAL_PRICE;IS_PROCESSED");
             }
         }catch (IOException e){
             throw e;
