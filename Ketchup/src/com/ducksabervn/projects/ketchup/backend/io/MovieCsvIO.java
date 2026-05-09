@@ -11,9 +11,9 @@ import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
-import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class MovieCsvIO implements CsvIO<String, Movie>{
 
@@ -32,11 +32,6 @@ public class MovieCsvIO implements CsvIO<String, Movie>{
     @Override
     public LinkedHashMap<String, Movie> readCsvFile() {
         return this.readMoviesCsv();
-    }
-
-    @Override
-    public LinkedHashMap<String, Movie> readCsvFile(String requiredInformation) {
-        throw new UnsupportedOperationException("Unsupported Operation");
     }
 
     @Override
@@ -85,35 +80,21 @@ public class MovieCsvIO implements CsvIO<String, Movie>{
     }
 
     private void updateMovieCsv(){
-        LinkedHashMap<String, Movie> updatedMovies = MovieRepository.getMovies();
-        LinkedHashMap<String, Booking> allBookings = BookingRepository.getBookings();
         try(BufferedWriter bw = new BufferedWriter(new FileWriter(FileSystemInitializer.getMOVIES().toFile()));){
             bw.write("MOVIEID;TITLE;GENRE;DURATION;RATING;SHOWTIME;SEAT;SPRICE");
-            if(allBookings != null){
-                ArrayList<Booking> bookings = new ArrayList<>(allBookings.values());
-                ArrayList<Movie> allMovies = new ArrayList<>(updatedMovies.values());
-                int bookingCount = bookings.size();
-                int movieCount = allMovies.size();
-                for(int i = 0; i < bookingCount; i++){
-                    for(int j = 0; j < movieCount; j++){
-                        if(bookings.get(i).getMovieId().equals(allMovies.get(j).getMovieId()) &&
-                                !bookings.get(i).isProcessed()){
-                            Movie m = allMovies.get(j);
-                            Booking b = bookings.get(i);
+            if(BookingRepository.getBookings() != null) {
+                for (Booking b : BookingRepository.getBookings().values()) {
+                    if (!b.isProcessed()) {
+                        Movie m = MovieRepository.getMovies().get(b.getMovieId());
+                        if (m != null) {
                             m.getOccupiedSeat().addAll(b.getChosenSeats());
-                            allMovies.set(j, m);
                         }
                     }
                 }
-                for(Movie m: allMovies){
-                    bw.newLine();
-                    bw.write(MovieRepository.generateMovieDataAsString(m));
-                }
-            }else{
-                for(Movie m: updatedMovies.values()){
-                    bw.newLine();
-                    bw.write(MovieRepository.generateMovieDataAsString(m));
-                }
+            }
+            for(Movie m: MovieRepository.getMovies().values()){
+                bw.newLine();
+                bw.write(generateMovieDataAsString(m));
             }
         }catch(IOException e){
             //I still cant figure out for which JFrame will responsible to display the
@@ -121,5 +102,19 @@ public class MovieCsvIO implements CsvIO<String, Movie>{
             DisplayMessage.displayError(AdminMovieListUI.getAdminMovieListUI().getMainFrame(),
                     e.getMessage());
         }
+    }
+
+    public static String generateMovieDataAsString(Movie m){
+        String occupiedSeats = m.getOccupiedSeat().stream().
+                collect(Collectors.joining(","));
+        String data = "%s;%s;%s;%d;%s;%s;%s;%d".formatted(m.getMovieId(),
+                m.getTitle(),
+                m.getGenre(),
+                m.getDuration(),
+                m.getRating(),
+                m.getShowTime().format(Movie.getDatetimeFormat()),
+                occupiedSeats,
+                m.getSeatPrice());
+        return data;
     }
 }
