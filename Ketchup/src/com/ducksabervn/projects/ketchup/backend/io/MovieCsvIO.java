@@ -1,11 +1,9 @@
 package com.ducksabervn.projects.ketchup.backend.io;
 
-import com.ducksabervn.projects.ketchup.backend.movie.Movie;
-import com.ducksabervn.projects.ketchup.backend.movie.MovieRepository;
-import com.ducksabervn.projects.ketchup.backend.ui.DisplayMessage;
-import com.ducksabervn.projects.ketchup.backend.booking.Booking;
-import com.ducksabervn.projects.ketchup.backend.booking.BookingRepository;
-import com.ducksabervn.projects.ketchup.frontend.AdminMovieListUI;
+import com.ducksabervn.projects.ketchup.backend.model.Movie;
+import com.ducksabervn.projects.ketchup.backend.repositories.MovieRepository;
+import com.ducksabervn.projects.ketchup.backend.model.Booking;
+import com.ducksabervn.projects.ketchup.backend.repositories.BookingRepository;
 
 import java.io.BufferedWriter;
 import java.io.FileWriter;
@@ -30,57 +28,46 @@ public class MovieCsvIO implements CsvIO<String, Movie>{
     }
 
     @Override
-    public LinkedHashMap<String, Movie> readCsvFile() {
+    public LinkedHashMap<String, Movie> readCsvFile() throws IOException{
         return this.readMoviesCsv();
     }
 
     @Override
-    public void updateLatestData() {
+    public void updateLatestData() throws IOException{
         this.updateMovieCsv();
     }
 
-    public void writeMovieData(String data){
+    public void writeMovieData(String data) throws IOException{
         //adding true to FileWriter will turn on append mode and won't override the CSV file
         //fuck ass i forgor this shit for 3 times
-        try(BufferedWriter bw = new BufferedWriter(new FileWriter(FileSystemInitializer.getMOVIES().toFile(), true))){
+        try(BufferedWriter bw = new BufferedWriter(new FileWriter(AppPath.MOVIES.getAppPath().toFile(), true))){
             bw.newLine();
             bw.write(data);
         }catch(IOException e){
-            //I still cant figure out for which JFrame will responsible to display the
-            //exception string, but this will work as a fallback for now
-            DisplayMessage.displayError(AdminMovieListUI.getAdminMovieListUI().getMainFrame(),
-                    e.getMessage());
+            throw e;
         }
     }
 
-    private LinkedHashMap<String, Movie> readMoviesCsv(){
-        try{
-            List<String> allMovies = Files.readAllLines(FileSystemInitializer.getMOVIES());
-            allMovies.remove(0);
-            LinkedHashMap<String, Movie> movies = new LinkedHashMap<>();
-            for(String str: allMovies){
-                String[] split = str.split(";");
-                movies.put(split[0],
-                        new Movie(split[0], split[1],
-                                split[2],
-                                Integer.parseInt(split[3]),
-                                split[4],
-                                split[5],
-                                split[6],
-                                Integer.parseInt(split[7])));
-            }
-            return movies;
-        }catch(IOException e){
-            //I still cant figure out for which JFrame will responsible to display the
-            //exception string, but this will work as a fallback for now
-            DisplayMessage.displayError(AdminMovieListUI.getAdminMovieListUI().getMainFrame(),
-                    e.getMessage());
-            return null;
+    private LinkedHashMap<String, Movie> readMoviesCsv() throws IOException{
+        List<String> allMovies = Files.readAllLines(AppPath.MOVIES.getAppPath());
+        allMovies.remove(0);
+        LinkedHashMap<String, Movie> movies = new LinkedHashMap<>();
+        for(String str: allMovies){
+            String[] split = str.split(";");
+            movies.put(split[0],
+                    new Movie(split[0], split[1],
+                            split[2],
+                            Integer.parseInt(split[3]),
+                            split[4],
+                            split[5],
+                            split[6],
+                            Integer.parseInt(split[7])));
         }
+        return movies;
     }
 
-    private void updateMovieCsv(){
-        try(BufferedWriter bw = new BufferedWriter(new FileWriter(FileSystemInitializer.getMOVIES().toFile()));){
+    private void updateMovieCsv() throws IOException{
+        try(BufferedWriter bw = new BufferedWriter(new FileWriter(AppPath.MOVIES.getAppPath().toFile()));){
             bw.write("MOVIEID;TITLE;GENRE;DURATION;RATING;SHOWTIME;SEAT;SPRICE");
             if(BookingRepository.getBookings() != null) {
                 for (Booking b : BookingRepository.getBookings().values()) {
@@ -97,10 +84,7 @@ public class MovieCsvIO implements CsvIO<String, Movie>{
                 bw.write(generateMovieDataAsString(m));
             }
         }catch(IOException e){
-            //I still cant figure out for which JFrame will responsible to display the
-            //exception string, but this will work as a fallback for now
-            DisplayMessage.displayError(AdminMovieListUI.getAdminMovieListUI().getMainFrame(),
-                    e.getMessage());
+            throw e;
         }
     }
 
