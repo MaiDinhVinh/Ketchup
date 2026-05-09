@@ -122,7 +122,7 @@ public class LoginUI {
             if(emailField.getText().isEmpty() || passwordField.getText().isEmpty()){
                 DisplayMessage.displayError(this.mainFrame, "Required field must not be empty");
             }else{
-                if(CredentialRepository.verifyCredential(emailField.getText())){
+                if(CredentialRepository.verifyCredential(emailField.getText(), new String(passwordField.getPassword()))){
                     String role = (String) roleComboBox.getSelectedItem();
                     Credential c = CredentialRepository.getUser(emailField.getText());
                     if(!c.isAdmin() && role.equals("Admin")){
