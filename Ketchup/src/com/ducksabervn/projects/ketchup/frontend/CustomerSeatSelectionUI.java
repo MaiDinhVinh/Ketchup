@@ -7,9 +7,7 @@ import com.ducksabervn.projects.ketchup.backend.ui.DisplayMessage;
 
 import javax.swing.*;
 import java.awt.*;
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 public class CustomerSeatSelectionUI {
@@ -173,7 +171,7 @@ public class CustomerSeatSelectionUI {
         //load booked seats immediately on startup
         Movie m = MovieRepository.getMovies().get(this.currentMovieId);
         titleLabel.setText(m.getTitle() + " (Showtime: " + m.getShowTime().format(Movie.getDatetimeFormat()) + ")");
-        this.markBookedSeats(new HashSet<>(m.getOccupiedSeat()));
+        this.markBookedSeats(m.getOccupiedSeat());
 
         ////SUBSECTION - ADDING LISTENER TO THE PROCEED BUTTON
         this.proceedButton.addActionListener(e -> {
@@ -182,7 +180,7 @@ public class CustomerSeatSelectionUI {
                 return;
             }
             mainFrame.dispose();
-            CustomerBookingConfirmUI.initialize(this.currentMovieId, new ArrayList<>(this.selectedSeatIds), this.currentEmail);
+            CustomerBookingConfirmUI.initialize(this.currentMovieId, this.selectedSeatIds, this.currentEmail);
         });
 
         ////SUBSECTION - ADDING LISTENER TO THE CANCEL BUTTON
@@ -280,7 +278,7 @@ public class CustomerSeatSelectionUI {
         } else {
             selectedSeatsLabel.setText("Selected Seats: " + String.join(",", selectedSeatIds));
             int ticketPrice = MovieRepository.getMovies().get(currentMovieId).getSeatPrice();
-            int total = BookingRepository.calculateTotalPrice(new ArrayList<>(selectedSeatIds), ticketPrice);
+            int total = BookingRepository.calculateTotalPrice(selectedSeatIds, ticketPrice);
             totalPriceLabel.setText("Total Price: $" + total);
         }
     }
