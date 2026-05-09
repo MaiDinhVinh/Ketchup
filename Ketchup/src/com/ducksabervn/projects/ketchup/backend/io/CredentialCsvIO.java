@@ -32,18 +32,13 @@ public class CredentialCsvIO implements CsvIO<String, Credential> {
     }
 
     @Override
-    public LinkedHashMap<String, Credential> readCsvFile(String requiredInformation) {
-        throw new UnsupportedOperationException("Unsupported Operation");
-    }
-
-    @Override
     public void updateLatestData() {
         this.updateCredCsv();
     }
 
     private LinkedHashMap<String, Credential> readUserCredentialsCsv(){
         try{
-            List<String> allCreds = Files.readAllLines(FileSystemInitializer.getUserCredentials());
+            List<String> allCreds = Files.readAllLines(CsvPersistable.USER_CREDENTIALS);
             allCreds.remove(0);
             LinkedHashMap<String, Credential> credMap = new LinkedHashMap<>();
             for(String str: allCreds){
@@ -62,11 +57,11 @@ public class CredentialCsvIO implements CsvIO<String, Credential> {
 
     private void updateCredCsv(){
         LinkedHashMap<String, Credential> updatedCredentials = CredentialRepository.getCredentials();
-        try(BufferedWriter bw2 = new BufferedWriter(new FileWriter(FileSystemInitializer.getUserCredentials().toFile()))){
+        try(BufferedWriter bw2 = new BufferedWriter(new FileWriter(CsvPersistable.USER_CREDENTIALS.toFile()))){
             bw2.write("USERNAME;EMAIL;PASSWORD;IS_ADMIN");
             for(Credential c: updatedCredentials.values()){
                 bw2.newLine();
-                bw2.write(CredentialRepository.generateCredentialDataAsString(c));
+                bw2.write(generateCredentialDataAsString(c));
             }
         }catch(IOException e){
             //I still cant figure out for which JFrame will responsible to display the
@@ -74,5 +69,11 @@ public class CredentialCsvIO implements CsvIO<String, Credential> {
             DisplayMessage.displayError(AdminMovieListUI.getAdminMovieListUI().getMainFrame(),
                     e.getMessage());
         }
+    }
+
+    public static String generateCredentialDataAsString(Credential c){
+        String data = "%s;%s;%s;%b".formatted(c.getUsername(),
+                c.getEmail(), c.getPassword(), c.isAdmin());
+        return data;
     }
 }
