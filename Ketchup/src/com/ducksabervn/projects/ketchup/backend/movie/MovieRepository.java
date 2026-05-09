@@ -3,7 +3,6 @@ package com.ducksabervn.projects.ketchup.backend.movie;
 import com.ducksabervn.projects.ketchup.backend.io.MovieCsvIO;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 public class MovieRepository {
     //this motherfucker will maintain the insert input unlike HashMap, bro i want to kms
@@ -34,7 +33,7 @@ public class MovieRepository {
                 occupiedSeat,
                 seatPrice);
         MovieRepository.movies.put(movieId, m);
-        MovieCsvIO.getIO().writeMovieData(generateMovieDataAsString(m));
+        MovieCsvIO.getIO().writeMovieData(MovieCsvIO.generateMovieDataAsString(m));
         return m;
     }
 
@@ -63,19 +62,5 @@ public class MovieRepository {
             }
         }
         return arr;
-    }
-
-    public static String generateMovieDataAsString(Movie m){
-        String occupiedSeats = m.getOccupiedSeat().stream().
-                collect(Collectors.joining(","));
-        String data = "%s;%s;%s;%d;%s;%s;%s;%d".formatted(m.getMovieId(),
-                m.getTitle(),
-                m.getGenre(),
-                m.getDuration(),
-                m.getRating(),
-                m.getShowTime().format(Movie.getDatetimeFormat()),
-                occupiedSeats,
-                m.getSeatPrice());
-        return data;
     }
 }
