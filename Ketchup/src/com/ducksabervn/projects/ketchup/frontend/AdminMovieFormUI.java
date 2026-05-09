@@ -217,14 +217,14 @@ public class AdminMovieFormUI {
                 boolean failed = false;
                 try{
                     Integer.parseInt(seatPriceStr);
-                }catch(NumberFormatException ex){
-                    DisplayMessage.displayError(this.mainFrame, "Invalid seat price value");
-                    failed = true;
-                }
-                try{
+                    Integer.parseInt(durationStr);
                     LocalDateTime.parse(showtime, Movie.getDatetimeFormat());
-                }catch(DateTimeException ex){
-                    DisplayMessage.displayError(this.mainFrame, "Invalid showtime value");
+                }catch(NumberFormatException | DateTimeException ex){
+                    if(ex instanceof NumberFormatException){
+                        DisplayMessage.displayError(this.mainFrame, "Invalid seat price/duration value");
+                    }else{
+                        DisplayMessage.displayError(this.mainFrame, "Invalid showtime value");
+                    }
                     failed = true;
                 }
                 if(!failed){
