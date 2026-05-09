@@ -1,3 +1,23 @@
+/******************************************************************************
+ * Project Name:    Ketchup - A movie management system
+ * Course:          COMP1020 - OOP and Data Structure
+ * Semester:        Spring 2026
+ * <p>
+ * Members: Tran Phan Anh <25anh.tp@vinuni.edu.vn>,
+ *          Nguyen The Khoi Nguyen <25nguyen.ntk@vinuni.edu.vn>,
+ *          Nguyen Dinh Quy <25quy.nd@vinuni.edu.vn>,
+ *          Hoang Duc Phat <25phat.hd@vinuni.edu.vn>,
+ *          Mai Dinh Vinh <25vinh.md@vinuni.edu.vn>
+ * <p>
+ * File Name:       CustomerBookingConfirmUI.java
+ * Developer:       Tran Phan Anh*, Nguyen The Khoi Nguyen*, Nguyen Dinh Quy*,
+ *                  Mai Dinh Vinh* (* equal contributions)
+ * Description:     Modal dialog presenting a full booking summary to the
+ *                  customer before final confirmation, allowing them to either
+ *                  commit the booking to the repository or return to seat
+ *                  selection to revise their choices.
+ ******************************************************************************/
+
 package com.ducksabervn.projects.ketchup.frontend;
 
 import com.ducksabervn.projects.ketchup.backend.model.Movie;
@@ -9,65 +29,157 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.HashSet;
 
+/**
+ * Modal confirmation dialog shown to the customer as the final step of the
+ * booking flow. Displays a full summary of the pending booking — including
+ * movie title, showtime, selected seats, seat count, per-seat price, and
+ * total price — before the customer commits or cancels. On confirmation,
+ * the booking is added to {@link BookingRepository}, the movie is removed
+ * from the available listings in {@link CustomerHomeUI}, and the new booking
+ * appears in the customer's booking history.
+ */
 public class CustomerBookingConfirmUI {
 
-    //SINGLETON DESIGN PATTERN => 1 UI INSTANCE AT A TIME
+    /**
+     * The sole instance of {@code CustomerBookingConfirmUI}, replaced on
+     * each call to {@link #initialize(String, HashSet, String)}.
+     */
     private static CustomerBookingConfirmUI customerBookingConfirmUI;
 
-    //booking context passed in from CustomerSeatSelectionUI
+    /**
+     * The ID of the movie being booked, used to retrieve movie details
+     * from {@link MovieRepository}.
+     */
     private String currentMovieId;
+
+    /**
+     * The showtime ID associated with the booking context.
+     * Retained for reference within the confirmation flow.
+     */
     private String currentShowtimeId;
+
+    /**
+     * The email address of the currently logged-in customer, used to
+     * associate the confirmed booking with the correct account.
+     */
     private String currentEmail;
+
+    /**
+     * The set of seat IDs selected by the customer in
+     * {@link CustomerSeatSelectionUI}, passed in at initialization.
+     */
     private HashSet<String> currentSelectedSeatIds;
 
-    //the main frame
+    /** The main modal dialog window hosting all confirmation UI components. */
     private JDialog mainFrame;
+
+    /** The root content panel using {@link BorderLayout}. */
     private JPanel mainPanel;
 
-    //top bar: title + back button
+    /** Panel containing the confirmation screen heading. */
     private JPanel topPanel;
+
+    /** Label displaying the "Booking Confirmation" screen heading. */
     private JLabel titleLabel;
 
-    //booking summary section
+    /**
+     * Panel containing all booking summary rows, laid out in a
+     * {@link GridLayout} to align labels and values consistently.
+     */
     private JPanel summaryPanel;
 
-    //movie info rows
+    /** Row panel grouping the movie title label and value. */
     private JPanel movieTitleRow;
+
+    /** Bold label identifying the movie title field. */
     private JLabel movieTitleLabel;
+
+    /** Label displaying the title of the movie being booked. */
     private JLabel movieTitleValue;
 
+    /** Row panel grouping the showtime label and value. */
     private JPanel showtimeRow;
+
+    /** Bold label identifying the showtime field. */
     private JLabel showtimeLabel;
+
+    /** Label displaying the formatted showtime of the selected screening. */
     private JLabel showtimeValue;
 
-
+    /** Row panel grouping the selected seats label and value. */
     private JPanel seatsRow;
+
+    /** Bold label identifying the selected seats field. */
     private JLabel seatsLabel;
+
+    /** Label displaying the comma-separated list of selected seat IDs. */
     private JLabel seatsValue;
 
+    /** Row panel grouping the seat count label and value. */
     private JPanel seatCountRow;
+
+    /** Bold label identifying the number of seats field. */
     private JLabel seatCountLabel;
+
+    /** Label displaying the total number of seats selected. */
     private JLabel seatCountValue;
 
+    /** Row panel grouping the per-seat price label and value. */
     private JPanel pricePerSeatRow;
+
+    /** Bold label identifying the per-seat price field. */
     private JLabel pricePerSeatLabel;
+
+    /** Label displaying the price charged per individual seat. */
     private JLabel pricePerSeatValue;
 
-    private JPanel totalPriceRow;
-    private JLabel totalPriceLabel;
-    private JLabel totalPriceValue;
-
-    //separator between summary and total
+    /**
+     * Visual separator drawn between the per-seat price row and the
+     * total price row to distinguish the subtotals from the final amount.
+     */
     private JSeparator separator;
 
-    //error/success message label
+    /** Row panel grouping the total price label and value. */
+    private JPanel totalPriceRow;
+
+    /** Bold label identifying the total price field. */
+    private JLabel totalPriceLabel;
+
+    /**
+     * Label displaying the final total price in green bold text,
+     * calculated as seat count × per-seat price.
+     */
+    private JLabel totalPriceValue;
+
+    /**
+     * Label reserved for displaying success or error messages
+     * within the summary panel.
+     */
     private JLabel messageLabel;
 
-    //action buttons
+    /**
+     * Panel containing the Confirm Booking and Cancel buttons,
+     * centered at the bottom of the dialog.
+     */
     private JPanel buttonPanel;
+
+    /**
+     * Button that finalizes the booking by adding it to
+     * {@link BookingRepository} and updating {@link CustomerHomeUI}.
+     */
     private JButton confirmButton;
+
+    /**
+     * Button that cancels the confirmation and reopens
+     * {@link CustomerSeatSelectionUI} so the customer can revise their seat choices.
+     */
     private JButton cancelButton;
 
+    /**
+     * Private constructor that initializes all Swing components with default
+     * values. Customization and layout are handled by
+     * {@link #initializeAllElements()}.
+     */
     private CustomerBookingConfirmUI() {
         this.mainFrame = new JDialog();
         this.mainPanel = new JPanel();
@@ -100,8 +212,14 @@ public class CustomerBookingConfirmUI {
     }
 
     /**
-     * Since we are using singleton design pattern, this UI will only be initialized once
-     * movieId, showtimeId, selectedSeatIds are passed in from CustomerSeatSelectionUI
+     * Creates a new {@code CustomerBookingConfirmUI} instance, populates it
+     * with the provided booking context, and displays it as an
+     * application-modal dialog.
+     *
+     * @param movieId         the ID of the movie being booked
+     * @param selectedSeatIds the set of seat IDs chosen by the customer
+     *                        in {@link CustomerSeatSelectionUI}
+     * @param email           the email address of the currently logged-in customer
      */
     public static void initialize(String movieId, HashSet<String> selectedSeatIds, String email) {
         CustomerBookingConfirmUI.customerBookingConfirmUI = new CustomerBookingConfirmUI();
@@ -109,30 +227,43 @@ public class CustomerBookingConfirmUI {
         CustomerBookingConfirmUI.customerBookingConfirmUI.currentEmail = email;
         CustomerBookingConfirmUI.customerBookingConfirmUI.currentSelectedSeatIds = selectedSeatIds;
         CustomerBookingConfirmUI.customerBookingConfirmUI.initializeAllElements();
-        CustomerBookingConfirmUI.customerBookingConfirmUI.mainFrame.add(CustomerBookingConfirmUI.customerBookingConfirmUI.mainPanel);
-        CustomerBookingConfirmUI.customerBookingConfirmUI.mainFrame.setModalityType(Dialog.ModalityType.APPLICATION_MODAL);
+        CustomerBookingConfirmUI.customerBookingConfirmUI.mainFrame.add(
+                CustomerBookingConfirmUI.customerBookingConfirmUI.mainPanel);
+        CustomerBookingConfirmUI.customerBookingConfirmUI.mainFrame.setModalityType(
+                Dialog.ModalityType.APPLICATION_MODAL);
         CustomerBookingConfirmUI.customerBookingConfirmUI.mainFrame.setVisible(true);
     }
 
+    /**
+     * Configures and lays out all UI components within the dialog, loads
+     * the booking summary data into the display fields, and attaches action
+     * listeners to the Confirm and Cancel buttons.
+     * <p>
+     * On confirm: creates a new {@link Booking} via
+     * {@link BookingRepository#addBooking}, removes the booked movie from the
+     * customer's available movie list via {@link CustomerHomeUI#removeMovie},
+     * appends the new booking to the history table via
+     * {@link CustomerHomeUI#addBookingRow}, then closes the dialog.
+     * <p>
+     * On cancel: prompts the customer for confirmation, and if confirmed,
+     * closes this dialog and reopens {@link CustomerSeatSelectionUI} to
+     * allow seat revision.
+     */
     private void initializeAllElements() {
-        //initialize the main frame
         mainFrame.setTitle("Ketchup - Confirm Booking");
         mainFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         mainFrame.setSize(480, 460);
         mainFrame.setLocationRelativeTo(null);
         mainFrame.setResizable(false);
 
-        //initialize the main content panel
         mainPanel.setLayout(new BorderLayout(10, 10));
         mainPanel.setBorder(BorderFactory.createEmptyBorder(20, 30, 20, 30));
 
-        //initialize the top bar (title + back button)
         titleLabel.setFont(new Font("Arial", Font.BOLD, 20));
         topPanel.add(titleLabel, BorderLayout.WEST);
         topPanel.setBorder(BorderFactory.createEmptyBorder(0, 0, 5, 0));
         mainPanel.add(topPanel, BorderLayout.NORTH);
 
-        //initialize the booking summary rows
         Dimension labelWidth = new Dimension(140, 25);
 
         movieTitleLabel.setFont(new Font("Arial", Font.BOLD, 13));
@@ -183,14 +314,12 @@ public class CustomerBookingConfirmUI {
         summaryPanel.add(messageLabel);
         mainPanel.add(summaryPanel, BorderLayout.CENTER);
 
-        //initialize the action buttons
         confirmButton.setPreferredSize(new Dimension(150, 32));
         cancelButton.setPreferredSize(new Dimension(100, 32));
         buttonPanel.add(confirmButton);
         buttonPanel.add(cancelButton);
         mainPanel.add(buttonPanel, BorderLayout.SOUTH);
 
-        //load booking summary data into the UI fields
         loadBookingSummary();
 
         ////SUBSECTION - ADDING LISTENER TO THE CONFIRM BUTTON
@@ -208,7 +337,9 @@ public class CustomerBookingConfirmUI {
 
         ////SUBSECTION - ADDING LISTENER TO THE CANCEL BUTTON
         this.cancelButton.addActionListener(e -> {
-            int confirm = JOptionPane.showConfirmDialog(mainFrame, "Are you sure you want to cancel this booking?", "Confirm Cancel", JOptionPane.YES_NO_OPTION);
+            int confirm = JOptionPane.showConfirmDialog(mainFrame,
+                    "Are you sure you want to cancel this booking?",
+                    "Confirm Cancel", JOptionPane.YES_NO_OPTION);
             if (confirm == JOptionPane.YES_OPTION) {
                 mainFrame.dispose();
                 CustomerSeatSelectionUI.initialize(this.currentMovieId, this.currentEmail);
@@ -216,7 +347,11 @@ public class CustomerBookingConfirmUI {
         });
     }
 
-    //fetch all booking data from backend and populate summary fields
+    /**
+     * Retrieves the movie and seat data for the current booking context and
+     * populates all summary display labels in the dialog. Computes the total
+     * price using {@link BookingRepository#calculateTotalPrice}.
+     */
     private void loadBookingSummary() {
         Movie m = MovieRepository.getMovies().get(this.currentMovieId);
         this.movieTitleValue.setText(m.getTitle());
