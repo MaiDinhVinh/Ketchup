@@ -1,13 +1,14 @@
 package com.ducksabervn.projects.ketchup.frontend;
 
-import com.ducksabervn.projects.ketchup.backend.auth.CredentialRepository;
+import com.ducksabervn.projects.ketchup.backend.repositories.CredentialRepository;
 import com.ducksabervn.projects.ketchup.backend.io.BookingCsvIO;
-import com.ducksabervn.projects.ketchup.backend.ui.DisplayMessage;
-import com.ducksabervn.projects.ketchup.backend.auth.Credential;
-import com.ducksabervn.projects.ketchup.backend.booking.BookingRepository;
+import com.ducksabervn.projects.ketchup.backend.model.Credential;
+import com.ducksabervn.projects.ketchup.backend.repositories.BookingRepository;
+import com.ducksabervn.projects.ketchup.frontend.util.DisplayMessage;
 
 import javax.swing.*;
 import java.awt.*;
+import java.io.IOException;
 
 public class LoginUI {
 
@@ -131,7 +132,15 @@ public class LoginUI {
                         if(role.equals("Admin")){
                             AdminMovieListUI.initialize(c.getUsername());
                         }else{
-                            BookingRepository.setBookings(BookingCsvIO.getIO().readCsvFile(c.getEmail()));
+                            try{
+                                BookingRepository.setBookings(BookingCsvIO.getIO().readCsvFile(c.getEmail()));
+                            }catch(IOException ex){
+                                //I still cant figure out for which JFrame will responsible to display the
+                                //exception string, but this will work as a fallback for now
+                                DisplayMessage.displayError(AdminMovieListUI.getAdminMovieListUI().getMainFrame(),
+                                        ex.getMessage());
+                            }
+
                             CustomerHomeUI.initialize(c.getUsername(), c.getEmail());
                         }
                     }
