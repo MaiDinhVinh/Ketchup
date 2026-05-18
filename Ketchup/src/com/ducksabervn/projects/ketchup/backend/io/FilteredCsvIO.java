@@ -4,7 +4,7 @@
  * Semester:        Spring 2026
  * <p>
  * Members: Tran Phan Anh <25anh.tp@vinuni.edu.vn>,
- *          Nguyen The Khoi Nguyen <25nguyen.ntk@vinuni.edu.vn>,
+ *          Nguyen Trong Khoi Nguyen <25nguyen.ntk@vinuni.edu.vn>,
  *          Nguyen Dinh Quy <25quy.nd@vinuni.edu.vn>,
  *          Hoang Duc Phat <25phat.hd@vinuni.edu.vn>,
  *          Mai Dinh Vinh <25vinh.md@vinuni.edu.vn>
