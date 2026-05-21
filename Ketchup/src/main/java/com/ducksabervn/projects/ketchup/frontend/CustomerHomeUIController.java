@@ -22,9 +22,6 @@
 
 package com.ducksabervn.projects.ketchup.frontend;
 
-import com.ducksabervn.projects.ketchup.backend.io.BookingCsvIO;
-import com.ducksabervn.projects.ketchup.backend.io.CredentialCsvIO;
-import com.ducksabervn.projects.ketchup.backend.io.MovieCsvIO;
 import com.ducksabervn.projects.ketchup.backend.model.Booking;
 import com.ducksabervn.projects.ketchup.backend.model.Movie;
 import com.ducksabervn.projects.ketchup.backend.repositories.BookingRepository;
@@ -176,7 +173,6 @@ public class CustomerHomeUIController implements Initializable {
             stage.setTitle("Ketchup");
             stage.setScene(new Scene(root, 1050, 650));
             stage.setResizable(true);
-            stage.setOnCloseRequest(event -> controller.handleWindowClose(event));
             stage.show();
         } catch (IOException e) {
             e.printStackTrace();
@@ -340,18 +336,7 @@ public class CustomerHomeUIController implements Initializable {
             return;
         }
         getStage().close();
-        saveAndThen(() -> Platform.runLater(LoginUIController::initialize));
-    }
-
-    /**
-     * Handles the window "X" close button. Saves all 3 CSVs on a background
-     * thread then exits. Mirrors original WindowAdapter.windowClosing logic.
-     *
-     * @param event consumed to prevent premature closure
-     */
-    private void handleWindowClose(WindowEvent event) {
-        event.consume();
-        saveAndThen(() -> Platform.runLater(Platform::exit));
+        LoginUIController.initialize();
     }
 
     // Private helpers
@@ -438,29 +423,6 @@ public class CustomerHomeUIController implements Initializable {
         return BookingRepository.getBookings().values().stream()
                 .map(Booking::getMovieId)
                 .collect(Collectors.toCollection(HashSet::new));
-    }
-
-    /**
-     * Saves MovieCsvIO, CredentialCsvIO, and BookingCsvIO on a background thread,
-     * then runs andThen on the JavaFX Application Thread.
-     * Mirrors the original SwingWorker used in logout and window-close handlers.
-     *
-     * @param andThen action to run after a successful save
-     */
-    private void saveAndThen(Runnable andThen) {
-        Task<Void> task = new Task<>() {
-            @Override
-            protected Void call() throws Exception {
-                MovieCsvIO.getIO().updateLatestData();
-                CredentialCsvIO.getIO().updateLatestData();
-                BookingCsvIO.getIO().updateLatestData();
-                return null;
-            }
-        };
-        task.setOnSucceeded(e -> andThen.run());
-        task.setOnFailed(e -> Platform.runLater(() ->
-                DisplayMessage.displayError(task.getException().getMessage())));
-        new Thread(task, "save-csv-thread").start();
     }
 
     /** Returns the Stage that owns this controller's scene. */
