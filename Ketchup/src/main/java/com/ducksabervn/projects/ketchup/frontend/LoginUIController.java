@@ -40,6 +40,7 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.net.URL;
+import java.sql.SQLException;
 import java.util.ResourceBundle;
 
 /**
@@ -147,9 +148,8 @@ public class LoginUIController implements Initializable {
             AdminMovieListUIController.initialize(c.getUsername());
         } else {
             try {
-                BookingRepository.setBookings(
-                        BookingCsvIO.getIO().readCsvFile(c.getEmail()));
-            } catch (IOException ex) {
+                BookingRepository.loadBookingsForUser(c.getEmail());
+            } catch (SQLException ex) {
                 DisplayMessage.displayError(ex.getMessage());
                 return;
             }
