@@ -20,8 +20,6 @@
 
 package com.ducksabervn.projects.ketchup.frontend;
 
-import com.ducksabervn.projects.ketchup.backend.io.CredentialCsvIO;
-import com.ducksabervn.projects.ketchup.backend.io.MovieCsvIO;
 import com.ducksabervn.projects.ketchup.backend.model.Movie;
 import com.ducksabervn.projects.ketchup.backend.repositories.MovieRepository;
 import com.ducksabervn.projects.ketchup.frontend.util.DisplayMessage;
@@ -43,7 +41,6 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
-import javafx.stage.WindowEvent;
 
 import java.io.IOException;
 import java.net.URL;
@@ -187,10 +184,6 @@ public class AdminMovieListUIController implements Initializable {
             stage.setTitle("Ketchup – Admin");
             stage.setScene(new Scene(root, 1100, 650));
             stage.setResizable(true);
-
-            // ── Window-close handler (mirrors original WindowAdapter) ──
-            stage.setOnCloseRequest(event -> controller.handleWindowClose(event));
-
             stage.show();
         } catch (IOException e) {
             e.printStackTrace();
@@ -276,7 +269,7 @@ public class AdminMovieListUIController implements Initializable {
     }
 
     /**
-     * Handles the Refresh (⟳) button click.
+     * Handles the Refresh button click.
      * Reloads all movies from {@link MovieRepository} asynchronously.
      */
     @FXML
@@ -356,20 +349,7 @@ public class AdminMovieListUIController implements Initializable {
             return;
         }
         getStage().close();
-        saveAndThen(() -> Platform.runLater(LoginUIController::initialize));
-    }
-
-    /**
-     * Handles the window "X" close button.
-     * Saves both CSVs on a background thread, then exits the application.
-     * Mirrors original {@code WindowAdapter.windowClosing} logic.
-     *
-     * @param event the window close {@link WindowEvent} — consumed to prevent
-     *              premature closure before the save completes
-     */
-    private void handleWindowClose(WindowEvent event) {
-        event.consume(); // prevent immediate close
-        saveAndThen(() -> Platform.runLater(Platform::exit));
+        LoginUIController.initialize();
     }
 
     /**
@@ -396,28 +376,5 @@ public class AdminMovieListUIController implements Initializable {
      */
     private void sortByCriterion(Comparator<Movie> comparator) {
         FXCollections.sort(tableData, comparator);
-    }
-
-    /**
-     * Saves {@code MOVIES.csv} and {@code CREDENTIALS.csv} on a background
-     * thread, then runs {@code andThen} on the JavaFX Application Thread.
-     * Mirrors the original {@code SwingWorker<Void, Void>} used in logout
-     * and window-close handlers.
-     *
-     * @param andThen the action to run after a successful save
-     */
-    private void saveAndThen(Runnable andThen) {
-        Task<Void> task = new Task<>() {
-            @Override
-            protected Void call() throws Exception {
-                MovieCsvIO.getIO().updateLatestData();
-                CredentialCsvIO.getIO().updateLatestData();
-                return null;
-            }
-        };
-        task.setOnSucceeded(e -> andThen.run());
-        task.setOnFailed(e -> Platform.runLater(() ->
-                DisplayMessage.displayError(task.getException().getMessage())));
-        new Thread(task, "save-csv-thread").start();
     }
 }
