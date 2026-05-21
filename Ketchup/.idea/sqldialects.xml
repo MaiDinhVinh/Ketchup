@@ -3,5 +3,7 @@
   <component name="SqlDialectMappings">
     <file url="file://$PROJECT_DIR$/src/main/java/com/ducksabervn/projects/ketchup/backend/database/Dataset.sql" dialect="MySQL" />
     <file url="file://$PROJECT_DIR$/src/main/java/com/ducksabervn/projects/ketchup/backend/database/KetchupSchema.sql" dialect="MySQL" />
+    <file url="file://$PROJECT_DIR$/src/main/java/com/ducksabervn/projects/ketchup/backend/repositories/BookingRepository.java" dialect="GenericSQL" />
+    <file url="PROJECT" dialect="MariaDB" />
   </component>
 </project>
