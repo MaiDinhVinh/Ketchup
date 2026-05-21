@@ -118,7 +118,6 @@ public class CustomerSeatSelectionUIController implements Initializable {
             dialog.setResizable(false);
             dialog.initModality(Modality.APPLICATION_MODAL);
             if (owner != null) dialog.initOwner(owner);
-
             dialog.showAndWait();
         } catch (IOException e) {
             e.printStackTrace();
@@ -144,8 +143,7 @@ public class CustomerSeatSelectionUIController implements Initializable {
         CustomerBookingConfirmUIController.initialize(
                 currentMovieId,
                 new HashSet<>(selectedSeatIds),
-                currentEmail,
-                null);
+                currentEmail);
     }
 
     /**
