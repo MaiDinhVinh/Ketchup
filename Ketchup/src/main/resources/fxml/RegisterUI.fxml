@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.control.Label?>
+<?import io.github.palexdev.materialfx.controls.MFXTextField?>
+<?import io.github.palexdev.materialfx.controls.MFXPasswordField?>
+<?import io.github.palexdev.materialfx.controls.MFXComboBox?>
+<?import io.github.palexdev.materialfx.controls.MFXButton?>
+
+<!--
+    RegisterUI.fxml
+    Netflix-themed registration screen for Ketchup.
+    Controller: com.ducksabervn.projects.ketchup.frontend.controller.RegisterUIController
+-->
+<StackPane
+        xmlns="http://javafx.com/javafx/21"
+        xmlns:fx="http://javafx.com/fxml/1"
+        fx:controller="com.ducksabervn.projects.ketchup.frontend.RegisterUIController"
+        styleClass="root-pane"
+        stylesheets="@../css/RegisterUI.css">
+
+    <VBox styleClass="bg-overlay" alignment="CENTER">
+
+        <!-- Register Card -->
+        <VBox styleClass="register-card" alignment="CENTER_LEFT" spacing="0">
+
+            <Label styleClass="brand-logo" text="KETCHUP" />
+            <Label styleClass="brand-tagline" text="Create your account" />
+
+            <VBox spacing="0" style="-fx-padding: 1 0 0 0;">
+
+                <!-- Username -->
+                <Label styleClass="field-label" text="Username" style="-fx-padding: 18 0 7 0;"/>
+                <MFXTextField
+                        fx:id="usernameField"
+                        styleClass="mfx-field"
+                        promptText="Choose a username" />
+
+                <!-- Email -->
+                <Label styleClass="field-label" text="Email" style="-fx-padding: 18 0 7 0;"/>
+                <MFXTextField
+                        fx:id="emailField"
+                        styleClass="mfx-field"
+                        promptText="Enter your email" />
+
+                <!-- Password -->
+                <Label styleClass="field-label" text="Password" style="-fx-padding: 18 0 7 0;"/>
+                <MFXPasswordField
+                        fx:id="passwordField"
+                        styleClass="mfx-field"
+                        promptText="Create a password" />
+
+                <!-- Confirm Password -->
+                <Label styleClass="field-label" text="Confirm Password" style="-fx-padding: 18 0 7 0;"/>
+                <MFXPasswordField
+                        fx:id="confirmPasswordField"
+                        styleClass="mfx-field"
+                        promptText="Re-enter your password" />
+
+                <!-- Role -->
+                <Label styleClass="field-label" text="Register as" style="-fx-padding: 18 0 7 0;"/>
+                <MFXComboBox
+                        fx:id="roleComboBox"
+                        styleClass="mfx-combo"
+                        promptText="Select role" />
+
+                <!-- Message -->
+                <Label
+                        fx:id="messageLabel"
+                        styleClass="error-label"
+                        text=""
+                        wrapText="true"
+                        style="-fx-padding: 12 0 0 0;" />
+
+                <!-- Create Account -->
+                <MFXButton
+                        fx:id="registerButton"
+                        styleClass="btn-primary"
+                        text="Create Account"
+                        onAction="#handleRegister"
+                        maxWidth="Infinity"
+                        style="-fx-padding: 12 0 12 0; -fx-margin: 18 0 0 0;" />
+
+                <!-- Divider -->
+                <HBox alignment="CENTER" spacing="10" style="-fx-padding: 16 0 16 0;">
+                    <VBox styleClass="divider-line" HBox.hgrow="ALWAYS" />
+                    <Label styleClass="divider-text" text="ALREADY A MEMBER?" />
+                    <VBox styleClass="divider-line" HBox.hgrow="ALWAYS" />
+                </HBox>
+
+                <!-- Back to Login -->
+                <MFXButton
+                        fx:id="backButton"
+                        styleClass="btn-secondary"
+                        text="Back to Sign In"
+                        onAction="#handleBack"
+                        maxWidth="Infinity" />
+            </VBox>
+        </VBox>
+    </VBox>
+
+</StackPane>
