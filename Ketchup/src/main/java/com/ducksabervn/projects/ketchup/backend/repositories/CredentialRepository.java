@@ -19,7 +19,7 @@
 
 package com.ducksabervn.projects.ketchup.backend.repositories;
 
-import com.ducksabervn.projects.ketchup.backend.database.MySQLService;
+import com.ducksabervn.projects.ketchup.backend.database.DatabaseService;
 import com.ducksabervn.projects.ketchup.backend.model.Credential;
 
 import java.sql.*;
@@ -54,7 +54,7 @@ public class CredentialRepository {
         LinkedHashMap<String, Credential> result = new LinkedHashMap<>();
         String sql = "SELECT email, username, password, is_admin FROM users";
 
-        try (PreparedStatement ps = MySQLService.getConnection().prepareStatement(sql);
+        try (PreparedStatement ps = DatabaseService.getConnection().prepareStatement(sql);
              ResultSet rs = ps.executeQuery()) {
             while (rs.next()) {
                 Credential c = new Credential(
@@ -136,7 +136,7 @@ public class CredentialRepository {
 
         String sql = "INSERT INTO users (email, username, password, is_admin) VALUES (?, ?, ?, ?)";
 
-        try (PreparedStatement ps = MySQLService.getConnection().prepareStatement(sql)) {
+        try (PreparedStatement ps = DatabaseService.getConnection().prepareStatement(sql)) {
             ps.setString(1, email);
             ps.setString(2, username);
             ps.setString(3, password);
