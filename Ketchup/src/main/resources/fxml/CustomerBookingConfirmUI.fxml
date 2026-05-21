@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Separator?>
+<?import io.github.palexdev.materialfx.controls.MFXButton?>
+
+<!--
+    CustomerBookingConfirmUI.fxml
+    Netflix-themed booking confirmation modal dialog.
+    Shown as APPLICATION_MODAL — final step of the booking flow.
+    Controller: com.ducksabervn.projects.ketchup.frontend.controller.CustomerBookingConfirmUIController
+-->
+<VBox
+        xmlns="http://javafx.com/javafx/21"
+        xmlns:fx="http://javafx.com/fxml/1"
+        fx:controller="com.ducksabervn.projects.ketchup.frontend.CustomerBookingConfirmUIController"
+        styleClass="modal-root"
+        stylesheets="@../css/CustomerBookingConfirmUI.css"
+        spacing="0">
+
+    <!-- Header -->
+    <HBox styleClass="modal-header" alignment="CENTER_LEFT" spacing="12">
+        <Region styleClass="accent-bar" />
+        <Label styleClass="modal-title" text="Booking Confirmation" />
+    </HBox>
+
+    <Separator styleClass="header-separator" />
+
+    <!-- Summary body -->
+    <VBox styleClass="summary-body" spacing="0">
+
+        <!-- Section label -->
+        <Label styleClass="section-label" text="BOOKING SUMMARY" />
+
+        <!-- Movie -->
+        <HBox styleClass="summary-row" alignment="CENTER_LEFT">
+            <Label styleClass="row-label" text="Movie" />
+            <Region HBox.hgrow="ALWAYS" />
+            <Label fx:id="movieTitleValue" styleClass="row-value" text="-" />
+        </HBox>
+
+        <!-- Showtime -->
+        <HBox styleClass="summary-row" alignment="CENTER_LEFT">
+            <Label styleClass="row-label" text="Showtime" />
+            <Region HBox.hgrow="ALWAYS" />
+            <Label fx:id="showtimeValue" styleClass="row-value" text="-" />
+        </HBox>
+
+        <!-- Selected Seats -->
+        <HBox styleClass="summary-row" alignment="CENTER_LEFT">
+            <Label styleClass="row-label" text="Selected Seats" />
+            <Region HBox.hgrow="ALWAYS" />
+            <Label fx:id="seatsValue" styleClass="row-value" text="-" wrapText="true" maxWidth="240" />
+        </HBox>
+
+        <!-- Number of Seats -->
+        <HBox styleClass="summary-row" alignment="CENTER_LEFT">
+            <Label styleClass="row-label" text="Number of Seats" />
+            <Region HBox.hgrow="ALWAYS" />
+            <Label fx:id="seatCountValue" styleClass="row-value" text="-" />
+        </HBox>
+
+        <!-- Price per Seat -->
+        <HBox styleClass="summary-row" alignment="CENTER_LEFT">
+            <Label styleClass="row-label" text="Price per Seat" />
+            <Region HBox.hgrow="ALWAYS" />
+            <Label fx:id="pricePerSeatValue" styleClass="row-value" text="-" />
+        </HBox>
+
+        <Separator styleClass="summary-separator" style="-fx-padding: 8 0 8 0;" />
+
+        <!-- Total Price -->
+        <HBox styleClass="summary-row-total" alignment="CENTER_LEFT">
+            <Label styleClass="total-label" text="Total Price" />
+            <Region HBox.hgrow="ALWAYS" />
+            <Label fx:id="totalPriceValue" styleClass="total-value" text="-" />
+        </HBox>
+
+        <!-- Message label for errors -->
+        <Label
+                fx:id="messageLabel"
+                styleClass="message-label"
+                text=""
+                wrapText="true"
+                style="-fx-padding: 8 0 0 0;" />
+
+    </VBox>
+
+    <Separator styleClass="footer-separator" />
+
+    <!-- Footer buttons -->
+    <HBox styleClass="modal-footer" alignment="CENTER_RIGHT" spacing="12">
+        <MFXButton
+                fx:id="cancelButton"
+                styleClass="btn-secondary"
+                text="Cancel"
+                onAction="#handleCancel" />
+        <MFXButton
+                fx:id="confirmButton"
+                styleClass="btn-primary"
+                text="Confirm Booking"
+                onAction="#handleConfirm" />
+    </HBox>
+
+</VBox>
