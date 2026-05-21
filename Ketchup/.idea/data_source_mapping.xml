@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="DataSourcePerFileMappings">
+    <file url="file://$PROJECT_DIR$/src/main/java/com/ducksabervn/projects/ketchup/backend/database/Dataset.sql" value="68718540-7ec2-45cf-89d7-80dcffc4aaeb" />
     <file url="file://$PROJECT_DIR$/src/main/java/com/ducksabervn/projects/ketchup/backend/database/KetchupSchema.sql" value="68718540-7ec2-45cf-89d7-80dcffc4aaeb" />
     <file url="file://$PROJECT_DIR$/src/main/java/com/ducksabervn/projects/ketchup/backend/repositories/BookingRepository.java" value="68718540-7ec2-45cf-89d7-80dcffc4aaeb" />
     <file url="file://$PROJECT_DIR$/src/main/java/com/ducksabervn/projects/ketchup/backend/repositories/CredentialRepository.java" value="68718540-7ec2-45cf-89d7-80dcffc4aaeb" />
