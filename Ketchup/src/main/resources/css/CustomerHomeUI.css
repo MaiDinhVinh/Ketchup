@@ -155,7 +155,7 @@
     -fx-background-color: -surface-2;
     -fx-background-radius: 4px;
     -fx-font-size: 13px;
-    -mfx-text-fill: -text-primary;
+    -fx-text-fill: -text-primary;
 }
 
 .toolbar-field:focused {
@@ -176,7 +176,7 @@
     -fx-background-color: -surface-2;
     -fx-background-radius: 4px;
     -fx-font-size: 13px;
-    -mfx-text-fill: -text-primary;
+    -fx-text-fill: -text-primary;
 }
 
 .toolbar-combo:focused {
