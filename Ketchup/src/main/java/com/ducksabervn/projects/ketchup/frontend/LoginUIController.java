@@ -20,7 +20,6 @@
 
 package com.ducksabervn.projects.ketchup.frontend;
 
-import com.ducksabervn.projects.ketchup.backend.io.BookingCsvIO;
 import com.ducksabervn.projects.ketchup.backend.model.Credential;
 import com.ducksabervn.projects.ketchup.backend.repositories.BookingRepository;
 import com.ducksabervn.projects.ketchup.backend.repositories.CredentialRepository;
@@ -49,8 +48,7 @@ import java.util.ResourceBundle;
  *   Validate that email and password fields are non-empty.
  *   Call {@link CredentialRepository#verifyCredential} to authenticate.
  *   Check that the selected role matches the account's admin flag.
- *   On success as "Admin" -> navigate to {@code AdminMovieListUI.fxml}.
- *   On success as "User" -> load bookings via {@link BookingCsvIO}, then
+ *   On success as "Admin" -> navigate to {@code AdminMovieListUI.fxml}, then
  *       navigate to {@code CustomerHomeUI.fxml}.
  *   Register button -> navigate to {@code RegisterUI.fxml}.
  */
