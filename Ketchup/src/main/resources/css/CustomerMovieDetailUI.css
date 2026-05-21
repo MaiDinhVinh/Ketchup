@@ -1,0 +1,157 @@
+/* =============================================================================
+ * CustomerMovieDetailUI.css
+ * Netflix-themed dark stylesheet for the movie detail screen.
+ * ============================================================================= */
+
+.root {
+    -netflix-red:    #e50914;
+    -netflix-green:  #46d369;
+    -netflix-black:  #141414;
+    -surface:        #1f1f1f;
+    -border-subtle:  #2a2a2a;
+    -text-primary:   #ffffff;
+    -text-secondary: #b3b3b3;
+    -text-muted:     #737373;
+}
+
+/* Root */
+.root-pane {
+    -fx-background-color: -netflix-black;
+    -fx-min-width:  520px;
+    -fx-min-height: 420px;
+}
+
+/* Header */
+.header {
+    -fx-background-color: #0a0a0a;
+}
+
+.header-inner {
+    -fx-padding: 16 20 16 0;
+}
+
+.accent-bar {
+    -fx-background-color: -netflix-red;
+    -fx-min-width:  4px;
+    -fx-max-width:  4px;
+    -fx-min-height: 30px;
+}
+
+.screen-title {
+    -fx-text-fill: -text-primary;
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+    -fx-font-family: "Arial", sans-serif;
+}
+
+.header-separator {
+    -fx-background-color: -border-subtle;
+}
+
+/* Detail card */
+.detail-card {
+    -fx-background-color: -surface;
+    -fx-padding: 28 36 28 36;
+    -fx-margin: 24 24 0 24;
+}
+
+/* Prominent movie title */
+.movie-title-value {
+    -fx-text-fill: -text-primary;
+    -fx-font-size: 26px;
+    -fx-font-weight: bold;
+    -fx-font-family: "Arial", sans-serif;
+    -fx-wrap-text: true;
+}
+
+/* Separator under title */
+.title-separator {
+    -fx-background-color: -border-subtle;
+}
+
+/* Section label */
+.section-label {
+    -fx-text-fill: -text-muted;
+    -fx-font-size: 11px;
+    -fx-font-weight: bold;
+    -fx-letter-spacing: 1px;
+    -fx-padding: 14 0 10 0;
+}
+
+/* Info rows */
+.info-row {
+    -fx-padding: 9 0 9 0;
+    -fx-border-color: transparent transparent -border-subtle transparent;
+    -fx-border-width: 0 0 1 0;
+}
+
+.info-label {
+    -fx-text-fill: -text-secondary;
+    -fx-font-size: 13px;
+    -fx-font-weight: bold;
+    -fx-min-width: 120px;
+}
+
+.info-value {
+    -fx-text-fill: -text-primary;
+    -fx-font-size: 13px;
+    -fx-alignment: CENTER_RIGHT;
+}
+
+/* Price separator */
+.price-separator {
+    -fx-background-color: -border-subtle;
+}
+
+/* Price row */
+.price-row {
+    -fx-padding: 12 0 6 0;
+}
+
+.price-label {
+    -fx-text-fill: -text-primary;
+    -fx-font-size: 15px;
+    -fx-font-weight: bold;
+}
+
+/* Seat price in Netflix green */
+.price-value {
+    -fx-text-fill: -netflix-green;
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+}
+
+/* Footer */
+.footer-separator {
+    -fx-background-color: -border-subtle;
+}
+
+.footer-bar {
+    -fx-background-color: #0a0a0a;
+    -fx-padding: 12 20 12 20;
+}
+
+/* Back button */
+.btn-back {
+    -fx-background-color: transparent;
+    -fx-text-fill: -text-secondary;
+    -fx-font-size: 13px;
+    -fx-background-radius: 4px;
+    -fx-border-color: #444444;
+    -fx-border-width: 1px;
+    -fx-border-radius: 4px;
+    -fx-cursor: hand;
+    -fx-pref-height: 36px;
+    -fx-padding: 4 20 4 20;
+    -mfx-ripple-color: rgba(255,255,255,0.1);
+}
+
+.btn-back:hover {
+    -fx-background-color: rgba(255,255,255,0.07);
+    -fx-border-color: -text-secondary;
+    -fx-text-fill: -text-primary;
+}
+
+.btn-back:pressed {
+    -fx-background-color: rgba(255,255,255,0.13);
+}
