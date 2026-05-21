@@ -20,6 +20,7 @@
 
 package com.ducksabervn.projects.ketchup.main;
 
+import com.ducksabervn.projects.ketchup.backend.database.DatabaseService;
 import com.ducksabervn.projects.ketchup.backend.repositories.CredentialRepository;
 import com.ducksabervn.projects.ketchup.backend.repositories.MovieRepository;
 import com.ducksabervn.projects.ketchup.frontend.LoginUIController;
@@ -28,9 +29,11 @@ import io.github.palexdev.materialfx.theming.JavaFXThemes;
 import io.github.palexdev.materialfx.theming.MaterialFXStylesheets;
 import io.github.palexdev.materialfx.theming.UserAgentBuilder;
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.stage.Stage;
 
 import java.sql.SQLException;
+import java.util.concurrent.CountDownLatch;
 
 /**
  * The main entry point of the Ketchup application.
@@ -51,6 +54,29 @@ import java.sql.SQLException;
  * as it is Swing-specific and has no equivalent in JavaFX.
  */
 public class KetchupMain extends Application {
+
+    @Override
+    public void init() throws Exception {
+        if(!DatabaseService.isInitialized()){
+            CountDownLatch latch = new CountDownLatch(1);
+            final boolean[] shouldSeed = {false};
+
+            Platform.runLater(() -> {
+                shouldSeed[0] = DisplayMessage.displayConfirmationDialog(
+                        "Do you want to initialize test dataset?");
+                latch.countDown();
+            });
+            latch.await();
+            DatabaseService.startup(shouldSeed[0]);
+        }else{
+            DatabaseService.startup(false);
+        }
+    }
+
+    @Override
+    public void stop() throws Exception {
+        DatabaseService.shutdown();
+    }
 
     /**
      * JavaFX application entry point. Called on the JavaFX Application Thread
