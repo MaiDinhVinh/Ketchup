@@ -110,7 +110,7 @@ public class CustomerMovieDetailUIController implements Initializable {
 
             Stage stage = new Stage();
             stage.setTitle("Ketchup - Movie Detail");
-            stage.setScene(new Scene(root, 520, 420));
+            stage.setScene(new Scene(root, 600, 500));
             stage.setResizable(false);
             if (owner != null) stage.initOwner(owner);
             stage.show();
