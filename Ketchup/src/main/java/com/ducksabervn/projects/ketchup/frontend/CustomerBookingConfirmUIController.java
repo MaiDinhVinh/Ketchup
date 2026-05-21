@@ -38,6 +38,7 @@ import javafx.stage.Window;
 
 import java.io.IOException;
 import java.net.URL;
+import java.sql.SQLException;
 import java.util.HashSet;
 import java.util.ResourceBundle;
 
@@ -114,12 +115,10 @@ public class CustomerBookingConfirmUIController implements Initializable {
      * @param movieId         the ID of the movie being booked
      * @param selectedSeatIds the seat IDs chosen in CustomerSeatSelectionUI
      * @param email           the email of the currently logged-in customer
-     * @param owner           the owning Window used to center the dialog
      */
     public static void initialize(String movieId,
                                   HashSet<String> selectedSeatIds,
-                                  String email,
-                                  Window owner) {
+                                  String email) {
         try {
             FXMLLoader loader = new FXMLLoader(
                     CustomerBookingConfirmUIController.class.getResource(
@@ -137,8 +136,6 @@ public class CustomerBookingConfirmUIController implements Initializable {
             dialog.setScene(new Scene(root));
             dialog.setResizable(false);
             dialog.initModality(Modality.APPLICATION_MODAL);
-            if (owner != null) dialog.initOwner(owner);
-
             dialog.showAndWait();
         } catch (IOException e) {
             e.printStackTrace();
@@ -163,16 +160,19 @@ public class CustomerBookingConfirmUIController implements Initializable {
         int ticketPrice = m.getSeatPrice();
         int total = BookingRepository.calculateTotalPrice(currentSelectedSeatIds, ticketPrice);
 
-        Booking b = BookingRepository.addBooking(
-                currentEmail,
-                currentMovieId,
-                m.getShowTime().format(Movie.getDatetimeFormat()),
-                currentSelectedSeatIds,
-                total);
-
-        CustomerHomeUIController.removeMovie(currentMovieId);
-        CustomerHomeUIController.addBookingRow(b);
-        getStage().close();
+        try{
+            Booking b = BookingRepository.addBooking(
+                    currentEmail,
+                    currentMovieId,
+                    m.getShowTime().format(Movie.getDatetimeFormat()),
+                    currentSelectedSeatIds,
+                    total);
+            CustomerHomeUIController.removeMovie(currentMovieId);
+            CustomerHomeUIController.addBookingRow(b);
+            getStage().close();
+        }catch(SQLException e){
+            DisplayMessage.displayError(e.getMessage());
+        }
     }
 
     /**
