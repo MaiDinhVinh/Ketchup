@@ -40,6 +40,7 @@ import javafx.stage.Window;
 
 import java.io.IOException;
 import java.net.URL;
+import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
@@ -254,7 +255,7 @@ public class AdminMovieFormUIController implements Initializable {
                 Movie m = MovieRepository.addMovie(
                         title, genre, duration, rating, showtimeStr, "", seatPrice);
                 AdminMovieListUIController.addMovieRow(m);
-            } catch (IOException ex) {
+            } catch (SQLException ex) {
                 DisplayMessage.displayError(ex.getMessage());
                 return;
             }
@@ -267,7 +268,12 @@ public class AdminMovieFormUIController implements Initializable {
             Movie edited = new Movie(
                     currentMovieId, title, genre, duration,
                     rating, showtimeStr, occupiedSeats, seatPrice);
-            MovieRepository.editMovie(currentMovieId, edited);
+            try{
+                MovieRepository.editMovie(currentMovieId, edited);
+            }catch(SQLException e){
+                DisplayMessage.displayError(e.getMessage());
+                return;
+            }
         }
 
         getStage().close();
