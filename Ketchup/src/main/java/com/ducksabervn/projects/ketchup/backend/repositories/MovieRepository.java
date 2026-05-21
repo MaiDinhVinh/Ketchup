@@ -19,7 +19,7 @@
 
 package com.ducksabervn.projects.ketchup.backend.repositories;
 
-import com.ducksabervn.projects.ketchup.backend.database.MySQLService;
+import com.ducksabervn.projects.ketchup.backend.database.DatabaseService;
 import com.ducksabervn.projects.ketchup.backend.model.Movie;
 
 import java.sql.*;
@@ -77,7 +77,7 @@ public class MovieRepository {
                          m.rating, m.showtime, m.seat_price
                 """;
 
-        try (PreparedStatement ps = MySQLService.getConnection().prepareStatement(sql);
+        try (PreparedStatement ps = DatabaseService.getConnection().prepareStatement(sql);
              ResultSet rs = ps.executeQuery()) {
             while (rs.next()) {
                 String occupiedSeats = rs.getString("occupied_seats");
@@ -135,7 +135,7 @@ public class MovieRepository {
                 VALUES (?, ?, ?, ?, ?, STR_TO_DATE(?, '%Y-%m-%d %H:%i'), ?)
                 """;
 
-        try (PreparedStatement ps = MySQLService.getConnection().prepareStatement(sql)) {
+        try (PreparedStatement ps = DatabaseService.getConnection().prepareStatement(sql)) {
             ps.setString(1, movieId);
             ps.setString(2, title);
             ps.setString(3, genre);
@@ -171,7 +171,7 @@ public class MovieRepository {
                 WHERE movie_id = ?
                 """;
 
-        try (PreparedStatement ps = MySQLService.getConnection().prepareStatement(sql)) {
+        try (PreparedStatement ps = DatabaseService.getConnection().prepareStatement(sql)) {
             ps.setString(1, edited.getTitle());
             ps.setString(2, edited.getGenre());
             ps.setInt(3, edited.getDuration());
@@ -198,7 +198,7 @@ public class MovieRepository {
     public static void deleteMovie(String id) throws SQLException {
         String sql = "DELETE FROM movies WHERE movie_id = ?";
 
-        try (PreparedStatement ps = MySQLService.getConnection().prepareStatement(sql)) {
+        try (PreparedStatement ps = DatabaseService.getConnection().prepareStatement(sql)) {
             ps.setString(1, id);
             ps.executeUpdate();
         }
