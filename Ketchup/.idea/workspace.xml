@@ -1,9 +1,208 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="41241b44-38f4-4fbe-99a2-a1ea55f13aa3" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/.idea/cssdialects.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/dataSources.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/encodings.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/ducksabervn/projects/ketchup/frontend/AdminMovieFormUIController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/ducksabervn/projects/ketchup/frontend/CustomerHomeUIController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/css/AdminMovieFormUI.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/css/AdminMovieListUI.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/css/Alerts.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/css/CustomerBookingConfirmUI.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/css/CustomerHomeUI.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/css/CustomerMovieDetailUI.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/css/CustomerSeatSelectionUI.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/css/LoginUI.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/css/RegisterUI.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/fxml/AdminMovieFormUI.fxml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/fxml/AdminMovieListUI.fxml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/fxml/CustomerBookingConfirmUI.fxml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/fxml/CustomerHomeUI.fxml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/fxml/CustomerMovieDetailUI.fxml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/fxml/CustomerSeatSelectionUI.fxml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/fxml/LoginUI.fxml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/fxml/RegisterUI.fxml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/ducksabervn/projects/ketchup/frontend/AdminMovieFormUI.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/ducksabervn/projects/ketchup/frontend/AdminMovieListUI.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/ducksabervn/projects/ketchup/frontend/AdminMovieListUIController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/ducksabervn/projects/ketchup/frontend/CustomerBookingConfirmUI.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/ducksabervn/projects/ketchup/frontend/CustomerBookingConfirmUIController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/ducksabervn/projects/ketchup/frontend/CustomerHomeUI.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/ducksabervn/projects/ketchup/frontend/CustomerMovieDetailUI.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/ducksabervn/projects/ketchup/frontend/CustomerMovieDetailUIController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/ducksabervn/projects/ketchup/frontend/CustomerSeatSelectionUI.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/ducksabervn/projects/ketchup/frontend/CustomerSeatSelectionUIController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/ducksabervn/projects/ketchup/frontend/LoginUI.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/ducksabervn/projects/ketchup/frontend/LoginUIController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/ducksabervn/projects/ketchup/frontend/RegisterUI.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/ducksabervn/projects/ketchup/frontend/RegisterUIController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/ducksabervn/projects/ketchup/frontend/util/DisplayMessage.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/ducksabervn/projects/ketchup/frontend/util/DisplayMessage.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/ducksabervn/projects/ketchup/main/KetchupMain.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/ducksabervn/projects/ketchup/main/KetchupMain.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/testdata/BOOKINGS.csv" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/testdata/BOOKINGS.csv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/testdata/MOVIES.csv" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/testdata/MOVIES.csv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/testdata/USER_CREDENTIALS.csv" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/testdata/USER_CREDENTIALS.csv" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="FxmlFile" />
+        <option value="CSS File" />
+        <option value="Class" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
+  </component>
+  <component name="KubernetesApiPersistence"><![CDATA[{}]]></component>
+  <component name="KubernetesApiProvider"><![CDATA[{
+  "isMigrated": true
+}]]></component>
+  <component name="ProjectColorInfo"><![CDATA[{
+  "associatedIndex": 6,
+  "fromUser": false
+}]]></component>
   <component name="ProjectId" id="3E0iM1n7RbuUDi2KloDOevLgnU4" />
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.lookFeel&quot;
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Maven.ketchup_run.executor": "Run",
+    "ModuleVcsDetector.initialDetectionPerformed": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "RunOnceActivity.typescript.service.memoryLimit.init": "true",
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "codeWithMe.voiceChat.enabledByDefault": "false",
+    "git-widget-placeholder": "main",
+    "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "/Users/ducksabervn/DATA/coding/Ketchup/Ketchup/src/main/resources/css",
+    "list.type.of.created.stylesheet": "CSS",
+    "onboarding.tips.debug.path": "/Users/ducksabervn/DATA/coding/Ketchup/Ketchup/src/main/java/org/example/Main.java",
+    "project.structure.last.edited": "Project",
+    "project.structure.proportion": "0.0",
+    "project.structure.side.proportion": "0.0",
+    "settings.editor.selected.configurable": "preferences.lookFeel",
+    "vue.rearranger.settings.migration": "true"
+  },
+  "keyToStringList": {
+    "DatabaseDriversLRU": [
+      "mysql"
+    ]
   }
-}</component>
+}]]></component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/src/main/resources/css" />
+      <recent name="$PROJECT_DIR$/src/main/resources/fxml" />
+      <recent name="$PROJECT_DIR$/src/main/java" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/src/main/resources/testdata" />
+    </key>
+  </component>
+  <component name="RunManager" selected="Maven.ketchup_run">
+    <configuration name="ketchup_debug" type="MavenRunConfiguration" factoryName="Maven">
+      <MavenSettings>
+        <option name="myGeneralSettings" />
+        <option name="myRunnerSettings" />
+        <option name="myRunnerParameters">
+          <MavenRunnerParameters>
+            <option name="cmdOptions" />
+            <option name="profiles">
+              <set />
+            </option>
+            <option name="goals">
+              <list>
+                <option value="javafx:run" />
+                <option value="-P" />
+                <option value="debug" />
+              </list>
+            </option>
+            <option name="multimoduleDir" />
+            <option name="pomFileName" />
+            <option name="profilesMap">
+              <map />
+            </option>
+            <option name="projectsCmdOptionValues">
+              <list />
+            </option>
+            <option name="resolveToWorkspace" value="false" />
+            <option name="workingDirPath" value="$PROJECT_DIR$" />
+          </MavenRunnerParameters>
+        </option>
+      </MavenSettings>
+      <method v="2" />
+    </configuration>
+    <configuration name="ketchup_run" type="MavenRunConfiguration" factoryName="Maven">
+      <MavenSettings>
+        <option name="myGeneralSettings" />
+        <option name="myRunnerSettings" />
+        <option name="myRunnerParameters">
+          <MavenRunnerParameters>
+            <option name="cmdOptions" />
+            <option name="profiles">
+              <set />
+            </option>
+            <option name="goals">
+              <list>
+                <option value="javafx:run" />
+              </list>
+            </option>
+            <option name="multimoduleDir" />
+            <option name="pomFileName" />
+            <option name="profilesMap">
+              <map />
+            </option>
+            <option name="projectsCmdOptionValues">
+              <list />
+            </option>
+            <option name="resolveToWorkspace" value="false" />
+            <option name="workingDirPath" value="$PROJECT_DIR$" />
+          </MavenRunnerParameters>
+        </option>
+      </MavenSettings>
+      <method v="2" />
+    </configuration>
+    <list>
+      <item itemvalue="Maven.ketchup_run" />
+      <item itemvalue="Maven.ketchup_debug" />
+    </list>
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="41241b44-38f4-4fbe-99a2-a1ea55f13aa3" name="Changes" comment="" />
+      <created>1779321835883</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1779321835883</updated>
+      <workItem from="1779321837003" duration="16034000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/org/example/Main.java</url>
+          <line>13</line>
+          <option name="timeStamp" value="1" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
+  </component>
 </project>
