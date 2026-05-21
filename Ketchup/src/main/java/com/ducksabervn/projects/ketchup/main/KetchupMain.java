@@ -20,20 +20,17 @@
 
 package com.ducksabervn.projects.ketchup.main;
 
-import com.ducksabervn.projects.ketchup.backend.io.CredentialCsvIO;
-import com.ducksabervn.projects.ketchup.backend.io.FileSystemInitializer;
-import com.ducksabervn.projects.ketchup.backend.io.MovieCsvIO;
 import com.ducksabervn.projects.ketchup.backend.repositories.CredentialRepository;
 import com.ducksabervn.projects.ketchup.backend.repositories.MovieRepository;
 import com.ducksabervn.projects.ketchup.frontend.LoginUIController;
+import com.ducksabervn.projects.ketchup.frontend.util.DisplayMessage;
 import io.github.palexdev.materialfx.theming.JavaFXThemes;
 import io.github.palexdev.materialfx.theming.MaterialFXStylesheets;
 import io.github.palexdev.materialfx.theming.UserAgentBuilder;
 import javafx.application.Application;
-import javafx.scene.control.Alert;
 import javafx.stage.Stage;
 
-import java.io.IOException;
+import java.sql.SQLException;
 
 /**
  * The main entry point of the Ketchup application.
@@ -72,12 +69,10 @@ public class KetchupMain extends Application {
     @Override
     public void start(Stage primaryStage) {
         try {
-            FileSystemInitializer.initalize();
-            MovieRepository.setMovies(MovieCsvIO.getIO().readCsvFile());
-            CredentialRepository.setCredentials(CredentialCsvIO.getIO().readCsvFile());
-        } catch (IOException e) {
-            showBootstrapError(e.getMessage());
-            return;
+            MovieRepository.loadMovies();
+            CredentialRepository.loadCredentials();
+        }catch(SQLException e){
+            DisplayMessage.displayError(e.getMessage());
         }
         UserAgentBuilder.builder()
                 .themes(JavaFXThemes.MODENA) // Optional if you don't need JavaFX's default theme, still recommended though
@@ -101,23 +96,5 @@ public class KetchupMain extends Application {
      */
     public static void main(String[] args) {
         launch(args);
-    }
-
-    /**
-     * Displays a blocking error Alert during the bootstrap phase, before any
-     * application window is open. Used in place of DisplayMessage.displayError()
-     * because no owner Window exists at this point.
-     *
-     * After the dialog is dismissed the application does not proceed to
-     * the login screen.
-     *
-     * @param message the error message to display
-     */
-    private void showBootstrapError(String message) {
-        Alert alert = new Alert(Alert.AlertType.ERROR);
-        alert.setTitle("Ketchup - Startup Error");
-        alert.setHeaderText("Failed to initialize the application");
-        alert.setContentText(message);
-        alert.showAndWait();
     }
 }
