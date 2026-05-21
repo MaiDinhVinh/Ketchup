@@ -20,7 +20,7 @@
 
 package com.ducksabervn.projects.ketchup.backend.repositories;
 
-import com.ducksabervn.projects.ketchup.backend.database.MySQLService;
+import com.ducksabervn.projects.ketchup.backend.database.DatabaseService;
 import com.ducksabervn.projects.ketchup.backend.model.Booking;
 import com.ducksabervn.projects.ketchup.backend.model.Movie;
 
@@ -75,7 +75,7 @@ public class BookingRepository {
                 ORDER BY b.booking_id
                 """;
 
-        try (PreparedStatement ps = MySQLService.getConnection().prepareStatement(sql)) {
+        try (PreparedStatement ps = DatabaseService.getConnection().prepareStatement(sql)) {
             ps.setString(1, userEmail);
 
             try (ResultSet rs = ps.executeQuery()) {
@@ -141,7 +141,7 @@ public class BookingRepository {
         LocalDateTime st = LocalDateTime.parse(showtime, Movie.getDatetimeFormat());
         Booking b = new Booking(email, bookingId, movieId, st, selectedSeats, totalPrice, true);
 
-        Connection conn = MySQLService.getConnection();
+        Connection conn = DatabaseService.getConnection();
         conn.setAutoCommit(false);
 
         try {
