@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.Separator?>
+<?import io.github.palexdev.materialfx.controls.MFXTextField?>
+<?import io.github.palexdev.materialfx.controls.MFXComboBox?>
+<?import io.github.palexdev.materialfx.controls.MFXButton?>
+
+<!--
+    AdminMovieListUI.fxml
+    Netflix-themed admin movie management dashboard.
+    Controller: com.ducksabervn.projects.ketchup.frontend.controller.AdminMovieListUIController
+-->
+<BorderPane
+        xmlns="http://javafx.com/javafx/21"
+        xmlns:fx="http://javafx.com/fxml/1"
+        fx:controller="com.ducksabervn.projects.ketchup.frontend.AdminMovieListUIController"
+        styleClass="root-pane"
+        stylesheets="@../css/AdminMovieListUI.css">
+    <top>
+        <VBox styleClass="navbar">
+
+            <!-- Brand + user row -->
+            <HBox styleClass="navbar-inner" alignment="CENTER_LEFT" spacing="0">
+
+                <!-- Left: accent bar + title -->
+                <HBox alignment="CENTER_LEFT" spacing="12">
+                    <Region styleClass="accent-bar" />
+                    <Label styleClass="nav-title" text="Movie Management" />
+                </HBox>
+
+                <!-- Spacer -->
+                <Region HBox.hgrow="ALWAYS" />
+
+                <!-- Right: welcome + logout -->
+                <HBox alignment="CENTER_RIGHT" spacing="14">
+                    <Label fx:id="usernameLabel" styleClass="nav-username" text="" />
+                    <MFXButton
+                            fx:id="logoutButton"
+                            styleClass="btn-logout"
+                            text="Logout"
+                            onAction="#handleLogout" />
+                </HBox>
+            </HBox>
+
+            <Separator styleClass="nav-separator" />
+
+            <!-- Search + Sort toolbar -->
+            <HBox styleClass="toolbar" alignment="CENTER_LEFT" spacing="10">
+
+                <!-- Search group -->
+                <MFXTextField
+                        fx:id="searchField"
+                        styleClass="toolbar-field"
+                        promptText="Search movies…"
+                        floatingText="Search" />
+                <MFXButton
+                        fx:id="searchButton"
+                        styleClass="btn-toolbar"
+                        text="Search"
+                        onAction="#handleSearch" />
+
+                <!-- Divider -->
+                <Separator orientation="VERTICAL" styleClass="toolbar-divider" />
+
+                <!-- Sort group -->
+                <Label styleClass="toolbar-label" text="Sort by:" />
+                <MFXComboBox
+                        fx:id="sortComboBox"
+                        styleClass="toolbar-combo"
+                        promptText="Sort by…" />
+                <MFXButton
+                        fx:id="sortButton"
+                        styleClass="btn-toolbar"
+                        text="Sort"
+                        onAction="#handleSort" />
+
+                <!-- Spacer + Refresh -->
+                <Region HBox.hgrow="ALWAYS" />
+                <MFXButton
+                        fx:id="refreshButton"
+                        styleClass="btn-icon"
+                        text="Refresh"
+                        onAction="#handleRefresh" />
+            </HBox>
+
+            <!-- Hint notes -->
+            <HBox styleClass="hint-bar" spacing="50">
+                <Label styleClass="hint-label"
+                       text="*Showtime search format: 'yyyy-MM-dd HH:mm'" />
+                <Label styleClass="hint-label"
+                       text="*Searching by occupied seats is not supported" />
+            </HBox>
+
+        </VBox>
+    </top>
+
+    <!-- ══════════════════════════════════════════════════════
+         CENTER — Movie table
+         ══════════════════════════════════════════════════════
+    -->
+    <center>
+        <TableView
+                fx:id="movieTable"
+                styleClass="movie-table"
+                style="-fx-padding: 0 16 0 16;">
+            <columns>
+                <TableColumn fx:id="colId"            text="ID"               prefWidth="220" />
+                <TableColumn fx:id="colTitle"         text="Title"            prefWidth="160" />
+                <TableColumn fx:id="colGenre"         text="Genre"            prefWidth="100" />
+                <TableColumn fx:id="colDuration"      text="Duration (min)"   prefWidth="110" />
+                <TableColumn fx:id="colRating"        text="Rating"           prefWidth="70"  />
+                <TableColumn fx:id="colShowtime"      text="Showtime"         prefWidth="140" />
+                <TableColumn fx:id="colSeats"         text="Selected Seats"   prefWidth="120" />
+                <TableColumn fx:id="colSeatPrice"     text="Price/Seat ($)"   prefWidth="110" />
+            </columns>
+        </TableView>
+    </center>
+
+    <!-- ══════════════════════════════════════════════════════
+         BOTTOM — CRUD action buttons
+         ══════════════════════════════════════════════════════ -->
+    <bottom>
+        <VBox>
+            <Separator styleClass="footer-separator" />
+            <HBox styleClass="action-bar" alignment="CENTER_LEFT" spacing="10">
+                <MFXButton
+                        fx:id="addMovieButton"
+                        styleClass="btn-primary"
+                        text="Add Movie"
+                        onAction="#handleAddMovie" />
+                <MFXButton
+                        fx:id="editMovieButton"
+                        styleClass="btn-secondary"
+                        text="Edit Movie"
+                        onAction="#handleEditMovie" />
+                <MFXButton
+                        fx:id="deleteMovieButton"
+                        styleClass="btn-danger"
+                        text="Delete Movie"
+                        onAction="#handleDeleteMovie" />
+            </HBox>
+        </VBox>
+    </bottom>
+
+</BorderPane>
