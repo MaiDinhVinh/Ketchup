@@ -1,0 +1,161 @@
+/* =============================================================================
+ * CustomerBookingConfirmUI.css
+ * Netflix-themed dark stylesheet for the booking confirmation modal dialog.
+ * ============================================================================= */
+
+.root {
+    -netflix-red:       #e50914;
+    -netflix-red-hover: #f40612;
+    -netflix-red-press: #b20710;
+    -netflix-green:     #46d369;
+    -modal-bg:          #1a1a1a;
+    -header-bg:         #111111;
+    -surface:           #242424;
+    -border-subtle:     #2a2a2a;
+    -text-primary:      #ffffff;
+    -text-secondary:    #b3b3b3;
+    -text-muted:        #737373;
+}
+
+/* Modal root */
+.modal-root {
+    -fx-background-color: -modal-bg;
+    -fx-min-width:  480px;
+    -fx-max-width:  480px;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.9), 32, 0, 0, 8);
+}
+
+/* Header */
+.modal-header {
+    -fx-background-color: -header-bg;
+    -fx-padding: 18 24 18 0;
+}
+
+.accent-bar {
+    -fx-background-color: -netflix-red;
+    -fx-min-width:  4px;
+    -fx-max-width:  4px;
+    -fx-min-height: 36px;
+}
+
+.modal-title {
+    -fx-text-fill: -text-primary;
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+    -fx-font-family: "Arial", sans-serif;
+}
+
+/* Separators */
+.header-separator,
+.footer-separator {
+    -fx-background-color: -border-subtle;
+}
+
+.summary-separator {
+    -fx-background-color: -border-subtle;
+}
+
+/* Summary body */
+.summary-body {
+    -fx-background-color: -modal-bg;
+    -fx-padding: 20 28 16 28;
+}
+
+/* Section label */
+.section-label {
+    -fx-text-fill: -text-muted;
+    -fx-font-size: 11px;
+    -fx-font-weight: bold;
+    -fx-letter-spacing: 1px;
+    -fx-padding: 0 0 12 0;
+}
+
+/* Standard summary rows */
+.summary-row {
+    -fx-padding: 7 0 7 0;
+    -fx-border-color: transparent transparent -border-subtle transparent;
+    -fx-border-width: 0 0 1 0;
+}
+
+.row-label {
+    -fx-text-fill: -text-secondary;
+    -fx-font-size: 13px;
+    -fx-font-weight: bold;
+    -fx-min-width: 130px;
+}
+
+.row-value {
+    -fx-text-fill: -text-primary;
+    -fx-font-size: 13px;
+    -fx-alignment: CENTER_RIGHT;
+}
+
+/* Total price row */
+.summary-row-total {
+    -fx-padding: 10 0 6 0;
+}
+
+.total-label {
+    -fx-text-fill: -text-primary;
+    -fx-font-size: 15px;
+    -fx-font-weight: bold;
+}
+
+.total-value {
+    -fx-text-fill: -netflix-green;
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+}
+
+/* Message label */
+.message-label {
+    -fx-text-fill: #ff4d4d;
+    -fx-font-size: 12px;
+    -fx-min-height: 14px;
+}
+
+/* Footer */
+.modal-footer {
+    -fx-background-color: -header-bg;
+    -fx-padding: 14 24 14 24;
+}
+
+/* Primary button — Confirm Booking */
+.btn-primary {
+    -fx-background-color: -netflix-red;
+    -fx-text-fill: -text-primary;
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-background-radius: 4px;
+    -fx-cursor: hand;
+    -fx-pref-height: 38px;
+    -fx-padding: 6 20 6 20;
+    -fx-effect: null;
+    -mfx-ripple-color: rgba(255,255,255,0.2);
+}
+
+.btn-primary:hover  { -fx-background-color: -netflix-red-hover; }
+.btn-primary:pressed { -fx-background-color: -netflix-red-press; }
+
+/* Secondary button — Cancel */
+.btn-secondary {
+    -fx-background-color: transparent;
+    -fx-text-fill: -text-secondary;
+    -fx-font-size: 14px;
+    -fx-background-radius: 4px;
+    -fx-border-color: #444444;
+    -fx-border-width: 1px;
+    -fx-border-radius: 4px;
+    -fx-cursor: hand;
+    -fx-pref-height: 38px;
+    -fx-padding: 6 20 6 20;
+    -mfx-ripple-color: rgba(255,255,255,0.1);
+}
+
+.btn-secondary:hover {
+    -fx-background-color: rgba(255,255,255,0.07);
+    -fx-border-color: -text-secondary;
+    -fx-text-fill: -text-primary;
+}
+
+.btn-secondary:pressed { -fx-background-color: rgba(255,255,255,0.13); }
