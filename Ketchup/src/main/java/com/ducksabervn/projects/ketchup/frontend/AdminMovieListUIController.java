@@ -47,6 +47,7 @@ import javafx.stage.WindowEvent;
 
 import java.io.IOException;
 import java.net.URL;
+import java.sql.SQLException;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -334,7 +335,11 @@ public class AdminMovieListUIController implements Initializable {
             return;
         }
         if (DisplayMessage.displayConfirmationDialog("Are you sure you want to delete this movie?")) {
-            MovieRepository.deleteMovie(selected.getMovieId());
+            try{
+                MovieRepository.deleteMovie(selected.getMovieId());
+            }catch(SQLException e){
+                DisplayMessage.displayError(e.getMessage());
+            }
             tableData.remove(selected);
         }
     }
