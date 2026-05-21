@@ -39,6 +39,7 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.net.URL;
+import java.sql.SQLException;
 import java.util.ResourceBundle;
 
 /**
@@ -155,9 +156,13 @@ public class RegisterUIController implements Initializable {
         }
 
         boolean isAdmin = "Admin".equals(role);
-        if (!CredentialRepository.register(username, email, password, isAdmin)) {
-            DisplayMessage.displayError("Failed to create account");
-            return;
+        try{
+            if (!CredentialRepository.register(username, email, password, isAdmin)) {
+                DisplayMessage.displayError("Failed to create account");
+                return;
+            }
+        }catch(SQLException e){
+            DisplayMessage.displayError(e.getMessage());
         }
 
         DisplayMessage.displayInformation("Account created successfully");
