@@ -55,7 +55,7 @@ public class KetchupMain {
      * Any {@link IOException} thrown during file system initialization or CSV
      * reading is caught and displayed via
      * {@link DisplayMessage#displayError(java.awt.Component, String)}.
-     * Any {@link javax.swing.UnsupportedLookAndFeelException} or related
+     * Any {@link UnsupportedLookAndFeelException} or related
      * reflective exceptions thrown during look and feel setup are printed to
      * the standard error stream and the application continues with the default
      * look and feel.
