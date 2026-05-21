@@ -4,7 +4,7 @@
 -- File     : ketchup_schema.sql
 -- =============================================================================
 
-CREATE DATABASE IF NOT EXISTS ketchup
+CREATE DATABASE IF NOT EXISTS ketchup;
 USE ketchup;
 CREATE TABLE IF NOT EXISTS users (
                                      email       VARCHAR(320)    NOT NULL,
