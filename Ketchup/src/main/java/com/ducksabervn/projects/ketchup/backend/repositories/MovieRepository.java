@@ -1,86 +1,124 @@
-/******************************************************************************
+/*******************************************************************************
  * Project Name:    Ketchup - A movie management system
  * Course:          COMP1020 - OOP and Data Structure
  * Semester:        Spring 2026
- * <p>
  * Members: Tran Phan Anh <25anh.tp@vinuni.edu.vn>,
  *          Nguyen Trong Khoi Nguyen <25nguyen.ntk@vinuni.edu.vn>,
  *          Nguyen Dinh Quy <25quy.nd@vinuni.edu.vn>,
  *          Hoang Duc Phat <25phat.hd@vinuni.edu.vn>,
  *          Mai Dinh Vinh <25vinh.md@vinuni.edu.vn>
  * <p>
- * File Name:       MovieRepository.java
- * Developer:       Tran Phan Anh*, Nguyen The Khoi Nguyen*, Nguyen Dinh Quy*,
+ * Developer:       Tran Phan Anh*, Nguyen Trong Khoi Nguyen*, Nguyen Dinh Quy*,
  *                  Mai Dinh Vinh* (* equal contributions)
+ * File Name:       MovieRepository.java
  * Description:     In-memory repository for all movie screening records,
- *                  providing methods to add, edit, delete, and search movies
- *                  during a session, with changes persisted to disk on logout
- *                  or exit.
- ******************************************************************************/
+ *                  backed by the MySQL `movies` and `booking_seats` tables.
+ *                  Replaces the previous CSV-based implementation; all reads
+ *                  and writes now go directly to the database via JDBC.
+ *******************************************************************************/
 
 package com.ducksabervn.projects.ketchup.backend.repositories;
 
-import com.ducksabervn.projects.ketchup.backend.io.MovieCsvIO;
+import com.ducksabervn.projects.ketchup.backend.database.MySQLService;
 import com.ducksabervn.projects.ketchup.backend.model.Movie;
 
-import java.io.IOException;
+import java.sql.*;
 import java.util.*;
 
 /**
- * Static in-memory repository that holds all {@link Movie} screening records
- * loaded from {@code MOVIES.csv} at application startup. Uses a
- * {@link LinkedHashMap} keyed by movie ID to preserve insertion order and
- * support constant-time lookups. Any additions, edits, or deletions made
- * during the session are persisted to disk on logout or exit via
- * {@link MovieCsvIO}.
+ * Static in-memory repository that holds all {@link Movie} screening records.
+ * The in-memory map is loaded once at startup via {@link #loadMovies()} and
+ * kept in sync with the {@code movies} table for every write operation.
+ *
+ * <p>Occupied seats per movie are derived from the {@code booking_seats} and
+ * {@code bookings} tables — replacing the denormalised {@code SEAT} column
+ * that was previously written back to {@code MOVIES.csv} on save/logout.
  */
 public class MovieRepository {
 
     /**
-     * The in-memory store of all movie screening records, keyed by movie ID.
-     * A {@link LinkedHashMap} is used to maintain the order in which
-     * movies were inserted.
+     * In-memory movie store, keyed by movie ID.
+     * Loaded once at startup; kept in sync for every mutating operation.
      */
-    private static LinkedHashMap<String, Movie> movies;
+    private static LinkedHashMap<String, Movie> movies = new LinkedHashMap<>();
+
+    /**
+     * Loads all rows from the {@code movies} table into the in-memory map,
+     * including the current occupied seats per movie derived from
+     * {@code bookings} and {@code booking_seats}.
+     *
+     * Must be called once at application startup, replacing the previous
+     * {@code MovieCsvIO.getIO().readCsvFile()} call in {@code KetchupMain}.
+     *
+     * @throws SQLException if the database cannot be queried
+     */
+    public static void loadMovies() throws SQLException {
+        LinkedHashMap<String, Movie> result = new LinkedHashMap<>();
+
+        /*
+         * Single query: join movies with booking_seats (via bookings) and
+         * aggregate occupied seat IDs into a comma-separated string so the
+         * existing Movie(String, ..., String occupiedSeat, ...) constructor
+         * can be reused without modification.
+         */
+        String sql = """
+                SELECT m.movie_id,
+                       m.title,
+                       m.genre,
+                       m.duration,
+                       m.rating,
+                       DATE_FORMAT(m.showtime, '%Y-%m-%d %H:%i') AS showtime,
+                       m.seat_price,
+                       GROUP_CONCAT(bs.seat_id ORDER BY bs.seat_id SEPARATOR ',') AS occupied_seats
+                FROM movies m
+                LEFT JOIN bookings     b  ON b.movie_id    = m.movie_id
+                LEFT JOIN booking_seats bs ON bs.booking_id = b.booking_id
+                GROUP BY m.movie_id, m.title, m.genre, m.duration,
+                         m.rating, m.showtime, m.seat_price
+                """;
+
+        try (PreparedStatement ps = MySQLService.getConnection().prepareStatement(sql);
+             ResultSet rs = ps.executeQuery()) {
+            while (rs.next()) {
+                String occupiedSeats = rs.getString("occupied_seats");
+                Movie m = new Movie(
+                        rs.getString("movie_id"),
+                        rs.getString("title"),
+                        rs.getString("genre"),
+                        rs.getInt("duration"),
+                        rs.getString("rating"),
+                        rs.getString("showtime"),
+                        occupiedSeats == null ? "" : occupiedSeats,
+                        rs.getInt("seat_price")
+                );
+                result.put(m.getMovieId(), m);
+            }
+        }
+        movies = result;
+    }
 
     /**
      * Returns the entire in-memory movie map.
      *
      * @return a {@link LinkedHashMap} mapping movie ID → {@link Movie}
-     *         for all current screening records
      */
     public static LinkedHashMap<String, Movie> getMovies() {
         return movies;
     }
 
     /**
-     * Replaces the current in-memory movie store with the given map.
-     * Called on application startup after reading all records from
-     * {@code MOVIES.csv}.
-     *
-     * @param movies the {@link LinkedHashMap} of movie ID → {@link Movie}
-     *               to set as the active movie store
-     */
-    public static void setMovies(LinkedHashMap<String, Movie> movies) {
-        MovieRepository.movies = movies;
-    }
-
-    /**
-     * Creates a new {@link Movie} from the supplied parameters, stores it
-     * in the in-memory repository, immediately appends it to {@code MOVIES.csv}
-     * via {@link MovieCsvIO#writeMovieData(String)}, and returns the created
-     * instance. The movie ID is automatically generated as a UUID.
+     * Creates a new {@link Movie}, inserts it into the {@code movies} table,
+     * and adds it to the in-memory map. The movie ID is generated as a UUID.
      *
      * @param title        the title of the movie
      * @param genre        the genre of the movie
-     * @param duration     the runtime of the movie in minutes
-     * @param rating       the age rating of the movie (e.g. {@code "PG-13"})
+     * @param duration     the runtime in minutes
+     * @param rating       the age rating (e.g. {@code "PG-13"})
      * @param showTime     the showtime string in {@code yyyy-MM-dd HH:mm} format
-     * @param occupiedSeat a comma-separated string of already-booked seat IDs,
-     *                     or an empty string if no seats are booked
-     * @param seatPrice    the price in dollars per seat for this screening
-     * @return the newly created and stored {@link Movie} instance
-     * @throws IOException if the new movie record cannot be appended to the CSV file
+     * @param occupiedSeat comma-separated already-booked seat IDs, or {@code ""}
+     * @param seatPrice    the price per seat in USD
+     * @return the newly created {@link Movie} instance
+     * @throws SQLException if the INSERT fails
      */
     public static Movie addMovie(String title,
                                  String genre,
@@ -88,70 +126,114 @@ public class MovieRepository {
                                  String rating,
                                  String showTime,
                                  String occupiedSeat,
-                                 int seatPrice) throws IOException {
+                                 int seatPrice) throws SQLException {
         String movieId = UUID.randomUUID().toString();
         Movie m = new Movie(movieId, title, genre, duration, rating, showTime, occupiedSeat, seatPrice);
-        MovieRepository.movies.put(movieId, m);
-        try {
-            MovieCsvIO.getIO().writeMovieData(MovieCsvIO.generateMovieDataAsString(m));
-        } catch (IOException e) {
-            throw e;
+
+        String sql = """
+                INSERT INTO movies (movie_id, title, genre, duration, rating, showtime, seat_price)
+                VALUES (?, ?, ?, ?, ?, STR_TO_DATE(?, '%Y-%m-%d %H:%i'), ?)
+                """;
+
+        try (PreparedStatement ps = MySQLService.getConnection().prepareStatement(sql)) {
+            ps.setString(1, movieId);
+            ps.setString(2, title);
+            ps.setString(3, genre);
+            ps.setInt(4, duration);
+            ps.setString(5, rating);
+            ps.setString(6, showTime);
+            ps.setInt(7, seatPrice);
+            ps.executeUpdate();
         }
+
+        movies.put(movieId, m);
         return m;
     }
 
     /**
-     * Replaces the movie record associated with the given ID with the supplied
-     * edited {@link Movie} object. The existing entry in the map is overwritten
-     * in place, preserving the movie's position in insertion order.
+     * Replaces the movie record in both the {@code movies} table and the
+     * in-memory map with the supplied edited {@link Movie}. Occupied seats
+     * (stored in {@code booking_seats}) are not affected by this operation.
      *
      * @param id     the movie ID of the record to update
      * @param edited the updated {@link Movie} object to store
+     * @throws SQLException if the UPDATE fails
      */
-    public static void editMovie(String id, Movie edited) {
-        MovieRepository.movies.put(id, edited);
+    public static void editMovie(String id, Movie edited) throws SQLException {
+        String sql = """
+                UPDATE movies
+                SET title    = ?,
+                    genre    = ?,
+                    duration = ?,
+                    rating   = ?,
+                    showtime = STR_TO_DATE(?, '%Y-%m-%d %H:%i'),
+                    seat_price = ?
+                WHERE movie_id = ?
+                """;
+
+        try (PreparedStatement ps = MySQLService.getConnection().prepareStatement(sql)) {
+            ps.setString(1, edited.getTitle());
+            ps.setString(2, edited.getGenre());
+            ps.setInt(3, edited.getDuration());
+            ps.setString(4, edited.getRating());
+            ps.setString(5, edited.getShowTime().format(Movie.getDatetimeFormat()));
+            ps.setInt(6, edited.getSeatPrice());
+            ps.setString(7, id);
+            ps.executeUpdate();
+        }
+
+        movies.put(id, edited);
     }
 
     /**
-     * Removes the movie record associated with the given ID from the
-     * in-memory repository. The deletion is reflected in {@code MOVIES.csv}
-     * on the next full save triggered by logout or exit.
+     * Removes the movie with the given ID from both the {@code movies} table
+     * and the in-memory map. Because {@code bookings} has a foreign key
+     * referencing {@code movies}, any associated booking records (and their
+     * {@code booking_seats} rows) must be deleted first — or the schema must
+     * define {@code ON DELETE CASCADE} on those foreign keys.
      *
      * @param id the movie ID of the record to delete
+     * @throws SQLException if the DELETE fails
      */
-    public static void deleteMovie(String id) {
-        MovieRepository.movies.remove(id);
+    public static void deleteMovie(String id) throws SQLException {
+        String sql = "DELETE FROM movies WHERE movie_id = ?";
+
+        try (PreparedStatement ps = MySQLService.getConnection().prepareStatement(sql)) {
+            ps.setString(1, id);
+            ps.executeUpdate();
+        }
+
+        movies.remove(id);
     }
 
     /**
-     * Searches the in-memory movie store for records matching the given
-     * information string. If the string exactly matches a movie ID, that
-     * single movie is returned. Otherwise, all movies whose title, genre,
-     * duration, rating, showtime string, or seat price match the query
-     * are returned.
+     * Searches the in-memory movie store for records matching the given query.
+     * If the query exactly matches a movie ID, that single movie is returned.
+     * Otherwise, all movies whose title, genre, duration, rating, showtime, or
+     * seat price contain the query are returned.
      *
-     * @param information the search query; may be a movie ID, title, genre,
-     *                    duration in minutes, age rating, showtime in
-     *                    {@code yyyy-MM-dd HH:mm} format, or seat price value
-     * @return an {@link ArrayList} of {@link Movie} objects matching the
-     *         search query; empty if no matches are found
+     * @param information the search query string
+     * @return an {@link ArrayList} of matching {@link Movie} objects; empty if
+     *         no matches are found
      */
     public static ArrayList<Movie> searchMovie(String information) {
-        ArrayList<Movie> arr = new ArrayList<>();
-        if (MovieRepository.movies.containsKey(information)) {
-            arr.add(MovieRepository.movies.get(information));
-        } else {
-            for (Movie m : MovieRepository.movies.values()) {
-                if (m.getTitle().equals(information) ||
-                        m.getGenre().equals(information) ||
-                        Integer.toString(m.getDuration()).equals(information) ||
-                        m.getRating().equals(information) ||
-                        m.getShowTime().format(Movie.getDatetimeFormat()).equals(information) ||
-                        Integer.toString(m.getSeatPrice()).equals(information)) {
-                    arr.add(m);
-                }
+        ArrayList<Movie> result = new ArrayList<>();
+
+        if (movies.containsKey(information)) {
+            result.add(movies.get(information));
+            return result;
+        }
+
+        for (Movie m : movies.values()) {
+            if (m.getTitle().equals(information) ||
+                    m.getGenre().equals(information) ||
+                    Integer.toString(m.getDuration()).equals(information) ||
+                    m.getRating().equals(information) ||
+                    m.getShowTime().format(Movie.getDatetimeFormat()).equals(information) ||
+                    Integer.toString(m.getSeatPrice()).equals(information)) {
+                result.add(m);
             }
         }
-        return arr;
+        return result;
     }
 }
