@@ -5,45 +5,29 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="41241b44-38f4-4fbe-99a2-a1ea55f13aa3" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/cssdialects.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/dataSources.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/encodings.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/ducksabervn/projects/ketchup/frontend/AdminMovieFormUIController.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/ducksabervn/projects/ketchup/frontend/CustomerHomeUIController.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/css/AdminMovieFormUI.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/css/AdminMovieListUI.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/css/Alerts.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/css/CustomerBookingConfirmUI.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/css/CustomerHomeUI.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/css/CustomerMovieDetailUI.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/css/CustomerSeatSelectionUI.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/css/LoginUI.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/css/RegisterUI.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/fxml/AdminMovieFormUI.fxml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/fxml/AdminMovieListUI.fxml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/fxml/CustomerBookingConfirmUI.fxml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/fxml/CustomerHomeUI.fxml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/fxml/CustomerMovieDetailUI.fxml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/fxml/CustomerSeatSelectionUI.fxml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/fxml/LoginUI.fxml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/fxml/RegisterUI.fxml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/data_source_mapping.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/sqldialects.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/ducksabervn/projects/ketchup/backend/database/Dataset.sql" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/ducksabervn/projects/ketchup/backend/database/KetchupSchema.sql" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/ducksabervn/projects/ketchup/backend/database/MySQLService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources/68718540-7ec2-45cf-89d7-80dcffc4aaeb.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/68718540-7ec2-45cf-89d7-80dcffc4aaeb.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/ducksabervn/projects/ketchup/frontend/AdminMovieFormUI.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/ducksabervn/projects/ketchup/frontend/AdminMovieListUI.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/ducksabervn/projects/ketchup/frontend/AdminMovieListUIController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/ducksabervn/projects/ketchup/frontend/CustomerBookingConfirmUI.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/ducksabervn/projects/ketchup/frontend/CustomerBookingConfirmUIController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/ducksabervn/projects/ketchup/frontend/CustomerHomeUI.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/ducksabervn/projects/ketchup/frontend/CustomerMovieDetailUI.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/ducksabervn/projects/ketchup/frontend/CustomerMovieDetailUIController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/ducksabervn/projects/ketchup/frontend/CustomerSeatSelectionUI.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/ducksabervn/projects/ketchup/frontend/CustomerSeatSelectionUIController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/ducksabervn/projects/ketchup/frontend/LoginUI.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/ducksabervn/projects/ketchup/frontend/LoginUIController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/ducksabervn/projects/ketchup/frontend/RegisterUI.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/ducksabervn/projects/ketchup/frontend/RegisterUIController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/ducksabervn/projects/ketchup/frontend/util/DisplayMessage.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/ducksabervn/projects/ketchup/frontend/util/DisplayMessage.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/ducksabervn/projects/ketchup/backend/repositories/BookingRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/ducksabervn/projects/ketchup/backend/repositories/BookingRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/ducksabervn/projects/ketchup/backend/repositories/CredentialRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/ducksabervn/projects/ketchup/backend/repositories/CredentialRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/ducksabervn/projects/ketchup/backend/repositories/MovieRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/ducksabervn/projects/ketchup/backend/repositories/MovieRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/ducksabervn/projects/ketchup/frontend/AdminMovieFormUIController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/ducksabervn/projects/ketchup/frontend/AdminMovieFormUIController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/ducksabervn/projects/ketchup/frontend/AdminMovieListUIController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/ducksabervn/projects/ketchup/frontend/AdminMovieListUIController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/ducksabervn/projects/ketchup/frontend/CustomerBookingConfirmUIController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/ducksabervn/projects/ketchup/frontend/CustomerBookingConfirmUIController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/ducksabervn/projects/ketchup/frontend/CustomerMovieDetailUIController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/ducksabervn/projects/ketchup/frontend/CustomerMovieDetailUIController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/ducksabervn/projects/ketchup/frontend/CustomerSeatSelectionUIController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/ducksabervn/projects/ketchup/frontend/CustomerSeatSelectionUIController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/ducksabervn/projects/ketchup/frontend/LoginUIController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/ducksabervn/projects/ketchup/frontend/LoginUIController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/ducksabervn/projects/ketchup/frontend/RegisterUIController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/ducksabervn/projects/ketchup/frontend/RegisterUIController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/ducksabervn/projects/ketchup/main/KetchupMain.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/ducksabervn/projects/ketchup/main/KetchupMain.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/testdata/BOOKINGS.csv" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/testdata/BOOKINGS.csv" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/testdata/MOVIES.csv" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/testdata/MOVIES.csv" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/testdata/USER_CREDENTIALS.csv" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/testdata/USER_CREDENTIALS.csv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/css/CustomerHomeUI.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/css/CustomerHomeUI.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/testdata/BOOKINGS.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/testdata/MOVIES.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/testdata/USER_CREDENTIALS.csv" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -187,7 +171,7 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1779321835883</updated>
-      <workItem from="1779321837003" duration="16034000" />
+      <workItem from="1779321837003" duration="24257000" />
     </task>
     <servers />
   </component>
