@@ -92,6 +92,11 @@
 
                 <HBox alignment="CENTER_RIGHT" spacing="10">
                     <MFXButton
+                            fx:id="exportPdfButton"
+                            styleClass="btn-primary"
+                            text="Export PDF"
+                            onAction="#handleExportPdf" />
+                    <MFXButton
                             fx:id="closeButton"
                             styleClass="btn-secondary"
                             text="Close"
