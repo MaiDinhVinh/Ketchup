@@ -10,8 +10,7 @@
  *          Mai Dinh Vinh <25vinh.md@vinuni.edu.vn>
  *
  * File Name:       CustomerMovieDetailUIController.java
- * Developer:       Tran Phan Anh*, Nguyen Trong Khoi Nguyen*, Nguyen Dinh Quy*,
- *                  Mai Dinh Vinh* (* equal contributions)
+ * Developers:       Hoang Duc Phat*, Mai Dinh Vinh* (* equal contributions)
  * Description:     JavaFX controller for CustomerMovieDetailUI.fxml.
  *                  Presents a read-only view of a movie's full details,
  *                  populated from MovieRepository using the provided movie ID.
