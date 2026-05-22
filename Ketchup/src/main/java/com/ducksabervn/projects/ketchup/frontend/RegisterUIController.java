@@ -10,8 +10,7 @@
  *          Mai Dinh Vinh <25vinh.md@vinuni.edu.vn>
  * <p>
  * File Name:       RegisterUIController.java
- * Developer:       Tran Phan Anh*, Nguyen Trong Khoi Nguyen*, Nguyen Dinh Quy*,
- *                  Mai Dinh Vinh* (* equal contributions)
+ * Developers:       Hoang Duc Phat*, Mai Dinh Vinh* (* equal contributions)
  * Description:     JavaFX controller for RegisterUI.fxml. Preserves all original
  *                  input-validation and account-creation logic from the Swing
  *                  RegisterUI class, now wired to MaterialFX components via FXML
