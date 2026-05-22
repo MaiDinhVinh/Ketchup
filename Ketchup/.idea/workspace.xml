@@ -5,13 +5,12 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="41241b44-38f4-4fbe-99a2-a1ea55f13aa3" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/ducksabervn/projects/ketchup/frontend/CustomerBookingDetailUIController.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/css/CustomerBookingDetailUI.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/fxml/CustomerBookingDetailUI.fxml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/ducksabervn/projects/ketchup/backend/services/TicketPdfExportService.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/ducksabervn/projects/ketchup/backend/repositories/BookingRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/ducksabervn/projects/ketchup/backend/repositories/BookingRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/ducksabervn/projects/ketchup/frontend/CustomerBookingDetailUIController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/ducksabervn/projects/ketchup/frontend/CustomerBookingDetailUIController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/ducksabervn/projects/ketchup/frontend/CustomerHomeUIController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/ducksabervn/projects/ketchup/frontend/CustomerHomeUIController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/css/CustomerSeatSelectionUI.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/css/CustomerSeatSelectionUI.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/fxml/CustomerBookingDetailUI.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/fxml/CustomerBookingDetailUI.fxml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/resources/fxml/CustomerHomeUI.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/fxml/CustomerHomeUI.fxml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -167,7 +166,7 @@
       <workItem from="1779409023021" duration="293000" />
       <workItem from="1779409330132" duration="156000" />
       <workItem from="1779409574283" duration="4371000" />
-      <workItem from="1779417000518" duration="1293000" />
+      <workItem from="1779417000518" duration="4238000" />
     </task>
     <servers />
   </component>
