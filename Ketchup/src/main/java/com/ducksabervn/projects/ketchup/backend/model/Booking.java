@@ -10,8 +10,8 @@
  *          Mai Dinh Vinh <25vinh.md@vinuni.edu.vn>
  * <p>
  * File Name:       Booking.java
- * Developer:       Tran Phan Anh*, Nguyen The Khoi Nguyen*, Nguyen Dinh Quy*,
- *                  Mai Dinh Vinh* (* equal contributions)
+ * Developers:       Tran Phan Anh*, Nguyen Trong Khoi Nguyen*, Nguyen Dinh Quy*,
+ *                  Hoang Duc Phat*, Mai Dinh Vinh** (* equal contributions, ** SQL Developer)
  * Description:     Model class representing a single ticket booking made by
  *                  a user, storing all relevant booking details including the
  *                  associated movie, chosen seats, total price, and processing
