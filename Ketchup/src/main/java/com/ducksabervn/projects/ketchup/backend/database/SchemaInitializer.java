@@ -10,8 +10,8 @@
  *          Mai Dinh Vinh <25vinh.md@vinuni.edu.vn>
  *
  * File Name:       SchemaInitializer.java
- * Developer:       Tran Phan Anh*, Nguyen Trong Khoi Nguyen*, Nguyen Dinh Quy*,
- *                  Mai Dinh Vinh* (* equal contributions)
+ * Developers:       Tran Phan Anh*, Nguyen Trong Khoi Nguyen*, Nguyen Dinh Quy*,
+ *                  Hoang Duc Phat*, Mai Dinh Vinh** (* equal contributions, ** SQL Developer)
  * Description:     Executes all DDL statements required to set up the Ketchup
  *                  database schema (tables: users, movies, bookings,
  *                  booking_seats). Converted from KetchupSchema.sql to Java so
