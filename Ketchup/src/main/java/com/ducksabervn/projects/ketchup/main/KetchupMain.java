@@ -63,7 +63,7 @@ public class KetchupMain extends Application {
 
             Platform.runLater(() -> {
                 shouldSeed[0] = DisplayMessage.displayConfirmationDialog(
-                        "Do you want to initialize test dataset?");
+                        "Do you want to initialize test dataset?\nThis action will load into the database dummy data for demonstration purposes");
                 latch.countDown();
             });
             latch.await();
