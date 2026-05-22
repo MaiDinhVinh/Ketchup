@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Separator?>
+<?import io.github.palexdev.materialfx.controls.MFXButton?>
+
+<!--
+    CustomerBookingDetailUI.fxml
+    Netflix-themed read-only seat map for viewing a confirmed booking.
+    The seat GridPane is built programmatically in the controller.
+    Seat colours:
+        seat-mine      (gold)  — customer's own booked seats
+        seat-booked    (red)   — occupied by other customers
+        seat-available (green) — free seats
+    All seat buttons are disabled; no interaction is possible.
+    Shown as APPLICATION_MODAL.
+    Controller: com.ducksabervn.projects.ketchup.frontend.CustomerBookingDetailUIController
+-->
+<BorderPane
+        xmlns="http://javafx.com/javafx/21"
+        xmlns:fx="http://javafx.com/fxml/1"
+        fx:controller="com.ducksabervn.projects.ketchup.frontend.CustomerBookingDetailUIController"
+        styleClass="root-pane"
+        stylesheets="@../css/CustomerBookingDetailUI.css">
+
+    <!-- Header: movie title + showtime -->
+    <top>
+        <VBox styleClass="header">
+            <HBox styleClass="header-inner" alignment="CENTER_LEFT" spacing="12">
+                <Region styleClass="accent-bar" />
+                <Label fx:id="movieTitleLabel" styleClass="movie-heading" text="" wrapText="true" />
+            </HBox>
+            <Separator styleClass="header-separator" />
+        </VBox>
+    </top>
+
+    <!-- Center: screen banner + seat grid + legend -->
+    <center>
+        <VBox styleClass="seat-section" alignment="CENTER" spacing="10">
+
+            <!-- Screen banner -->
+            <Label styleClass="screen-banner" text="     SCREEN" maxWidth="Infinity"/>
+
+            <!-- Seat grid built programmatically in controller -->
+            <GridPane
+                    fx:id="seatGridPane"
+                    styleClass="seat-grid"
+                    hgap="5"
+                    vgap="6"
+                    alignment="CENTER" />
+
+            <!-- Legend (3 states: available / booked-by-others / your seats) -->
+            <HBox styleClass="legend-bar" alignment="CENTER" spacing="24">
+                <Label styleClass="legend-title" text="Legend:" />
+
+                <HBox alignment="CENTER_LEFT" spacing="6">
+                    <Region styleClass="swatch-available" />
+                    <Label styleClass="legend-text" text="Available" />
+                </HBox>
+
+                <HBox alignment="CENTER_LEFT" spacing="6">
+                    <Region styleClass="swatch-booked" />
+                    <Label styleClass="legend-text" text="Booked by Others" />
+                </HBox>
+
+                <HBox alignment="CENTER_LEFT" spacing="6">
+                    <Region styleClass="swatch-mine" />
+                    <Label styleClass="legend-text" text="Your Seats" />
+                </HBox>
+
+            </HBox>
+
+        </VBox>
+    </center>
+
+    <!-- Bottom: booking summary + close button -->
+    <bottom>
+        <VBox>
+            <Separator styleClass="footer-separator" />
+            <HBox styleClass="summary-bar" alignment="CENTER_LEFT" spacing="0">
+
+                <VBox styleClass="summary-labels" spacing="4" HBox.hgrow="ALWAYS">
+                    <Label fx:id="bookingIdLabel"     styleClass="summary-id"    text="Booking ID: -"   wrapText="true" />
+                    <Label fx:id="selectedSeatsLabel" styleClass="summary-seats" text="Your Seats: -"   wrapText="true" />
+                    <Label fx:id="totalPriceLabel"    styleClass="summary-price" text="Total Price: $0" />
+                </VBox>
+
+                <HBox alignment="CENTER_RIGHT" spacing="10">
+                    <MFXButton
+                            fx:id="closeButton"
+                            styleClass="btn-secondary"
+                            text="Close"
+                            onAction="#handleClose" />
+                </HBox>
+
+            </HBox>
+        </VBox>
+    </bottom>
+
+</BorderPane>
