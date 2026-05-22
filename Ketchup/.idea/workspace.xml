@@ -6,29 +6,6 @@
   <component name="ChangeListManager">
     <list default="true" id="41241b44-38f4-4fbe-99a2-a1ea55f13aa3" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dependency-reduced-pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/dependency-reduced-pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/ducksabervn/projects/ketchup/backend/database/DatabaseService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/ducksabervn/projects/ketchup/backend/database/DatabaseService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/ducksabervn/projects/ketchup/backend/database/DatasetSeeder.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/ducksabervn/projects/ketchup/backend/database/DatasetSeeder.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/ducksabervn/projects/ketchup/backend/database/SchemaInitializer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/ducksabervn/projects/ketchup/backend/database/SchemaInitializer.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/ducksabervn/projects/ketchup/backend/model/Booking.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/ducksabervn/projects/ketchup/backend/model/Booking.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/ducksabervn/projects/ketchup/backend/model/Credential.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/ducksabervn/projects/ketchup/backend/model/Credential.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/ducksabervn/projects/ketchup/backend/model/Movie.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/ducksabervn/projects/ketchup/backend/model/Movie.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/ducksabervn/projects/ketchup/backend/repositories/BookingRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/ducksabervn/projects/ketchup/backend/repositories/BookingRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/ducksabervn/projects/ketchup/backend/repositories/CredentialRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/ducksabervn/projects/ketchup/backend/repositories/CredentialRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/ducksabervn/projects/ketchup/backend/repositories/MovieRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/ducksabervn/projects/ketchup/backend/repositories/MovieRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/ducksabervn/projects/ketchup/backend/services/TicketPdfExportService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/ducksabervn/projects/ketchup/backend/services/TicketPdfExportService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/ducksabervn/projects/ketchup/frontend/AdminMovieFormUIController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/ducksabervn/projects/ketchup/frontend/AdminMovieFormUIController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/ducksabervn/projects/ketchup/frontend/AdminMovieListUIController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/ducksabervn/projects/ketchup/frontend/AdminMovieListUIController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/ducksabervn/projects/ketchup/frontend/CustomerBookingConfirmUIController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/ducksabervn/projects/ketchup/frontend/CustomerBookingConfirmUIController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/ducksabervn/projects/ketchup/frontend/CustomerBookingDetailUIController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/ducksabervn/projects/ketchup/frontend/CustomerBookingDetailUIController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/ducksabervn/projects/ketchup/frontend/CustomerHomeUIController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/ducksabervn/projects/ketchup/frontend/CustomerHomeUIController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/ducksabervn/projects/ketchup/frontend/CustomerMovieDetailUIController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/ducksabervn/projects/ketchup/frontend/CustomerMovieDetailUIController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/ducksabervn/projects/ketchup/frontend/CustomerSeatSelectionUIController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/ducksabervn/projects/ketchup/frontend/CustomerSeatSelectionUIController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/ducksabervn/projects/ketchup/frontend/LoginUIController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/ducksabervn/projects/ketchup/frontend/LoginUIController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/ducksabervn/projects/ketchup/frontend/RegisterUIController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/ducksabervn/projects/ketchup/frontend/RegisterUIController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/ducksabervn/projects/ketchup/main/KetchupMain.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/ducksabervn/projects/ketchup/main/KetchupMain.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/css/Alerts.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/css/Alerts.css" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -62,8 +39,10 @@
   </component>
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
+    "Attach to process.localhost:57559.executor": "ProcessAttachDebug",
     "Maven.Ketchup [clean].executor": "Run",
     "Maven.Ketchup [compile].executor": "Run",
+    "Maven.ketchup_debug.executor": "Run",
     "Maven.ketchup_run.executor": "Run",
     "ModuleVcsDetector.initialDetectionPerformed": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
@@ -104,68 +83,6 @@
     </key>
   </component>
   <component name="RunManager" selected="Maven.ketchup_run">
-    <configuration name="ketchup_debug" type="MavenRunConfiguration" factoryName="Maven">
-      <MavenSettings>
-        <option name="myGeneralSettings" />
-        <option name="myRunnerSettings" />
-        <option name="myRunnerParameters">
-          <MavenRunnerParameters>
-            <option name="cmdOptions" />
-            <option name="profiles">
-              <set />
-            </option>
-            <option name="goals">
-              <list>
-                <option value="javafx:run" />
-                <option value="-P" />
-                <option value="debug" />
-              </list>
-            </option>
-            <option name="multimoduleDir" />
-            <option name="pomFileName" />
-            <option name="profilesMap">
-              <map />
-            </option>
-            <option name="projectsCmdOptionValues">
-              <list />
-            </option>
-            <option name="resolveToWorkspace" value="false" />
-            <option name="workingDirPath" value="$PROJECT_DIR$" />
-          </MavenRunnerParameters>
-        </option>
-      </MavenSettings>
-      <method v="2" />
-    </configuration>
-    <configuration name="ketchup_run" type="MavenRunConfiguration" factoryName="Maven">
-      <MavenSettings>
-        <option name="myGeneralSettings" />
-        <option name="myRunnerSettings" />
-        <option name="myRunnerParameters">
-          <MavenRunnerParameters>
-            <option name="cmdOptions" />
-            <option name="profiles">
-              <set />
-            </option>
-            <option name="goals">
-              <list>
-                <option value="javafx:run" />
-              </list>
-            </option>
-            <option name="multimoduleDir" />
-            <option name="pomFileName" />
-            <option name="profilesMap">
-              <map />
-            </option>
-            <option name="projectsCmdOptionValues">
-              <list />
-            </option>
-            <option name="resolveToWorkspace" value="false" />
-            <option name="workingDirPath" value="$PROJECT_DIR$" />
-          </MavenRunnerParameters>
-        </option>
-      </MavenSettings>
-      <method v="2" />
-    </configuration>
     <list>
       <item itemvalue="Maven.ketchup_run" />
       <item itemvalue="Maven.ketchup_debug" />
@@ -183,7 +100,7 @@
       <workItem from="1779409023021" duration="293000" />
       <workItem from="1779409330132" duration="156000" />
       <workItem from="1779409574283" duration="4371000" />
-      <workItem from="1779417000518" duration="5250000" />
+      <workItem from="1779417000518" duration="6976000" />
     </task>
     <servers />
   </component>
