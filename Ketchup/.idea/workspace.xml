@@ -5,35 +5,13 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="41241b44-38f4-4fbe-99a2-a1ea55f13aa3" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/ducksabervn/projects/ketchup/backend/database/DatabaseService.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/ducksabervn/projects/ketchup/backend/database/DatasetSeeder.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/ducksabervn/projects/ketchup/backend/database/SchemaInitializer.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/ducksabervn/projects/ketchup/main/Main.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/dataSources.local.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources.local.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources/68718540-7ec2-45cf-89d7-80dcffc4aaeb.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/68718540-7ec2-45cf-89d7-80dcffc4aaeb.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources/68718540-7ec2-45cf-89d7-80dcffc4aaeb/storage_v2/_src_/schema/information_schema.FNRwLQ.zip" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/68718540-7ec2-45cf-89d7-80dcffc4aaeb/storage_v2/_src_/schema/information_schema.FNRwLQ.zip" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/dataSources/data_sources_history.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/data_sources_history.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/data_source_mapping.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/data_source_mapping.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/sqldialects.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/sqldialects.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/data_source_mapping.xml" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/ducksabervn/projects/ketchup/backend/database/KetchupSchema.sql" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/ducksabervn/projects/ketchup/backend/database/KetchupSchema.sql" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/ducksabervn/projects/ketchup/backend/database/MySQLService.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/ducksabervn/projects/ketchup/backend/io/AppPath.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/ducksabervn/projects/ketchup/backend/io/BookingCsvIO.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/ducksabervn/projects/ketchup/backend/io/CredentialCsvIO.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/ducksabervn/projects/ketchup/backend/io/CsvIO.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/ducksabervn/projects/ketchup/backend/io/CsvPersistable.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/ducksabervn/projects/ketchup/backend/io/FileSystemInitializer.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/ducksabervn/projects/ketchup/backend/io/FilteredCsvIO.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/ducksabervn/projects/ketchup/backend/io/MovieCsvIO.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/ducksabervn/projects/ketchup/backend/repositories/BookingRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/ducksabervn/projects/ketchup/backend/repositories/BookingRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/ducksabervn/projects/ketchup/backend/repositories/CredentialRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/ducksabervn/projects/ketchup/backend/repositories/CredentialRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/ducksabervn/projects/ketchup/backend/repositories/MovieRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/ducksabervn/projects/ketchup/backend/repositories/MovieRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/ducksabervn/projects/ketchup/frontend/AdminMovieListUIController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/ducksabervn/projects/ketchup/frontend/AdminMovieListUIController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/ducksabervn/projects/ketchup/frontend/CustomerHomeUIController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/ducksabervn/projects/ketchup/frontend/CustomerHomeUIController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/ducksabervn/projects/ketchup/frontend/LoginUIController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/ducksabervn/projects/ketchup/frontend/LoginUIController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/ducksabervn/projects/ketchup/main/KetchupMain.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/ducksabervn/projects/ketchup/main/KetchupMain.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/css/AdminMovieFormUI.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/css/AdminMovieFormUI.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/ducksabervn/projects/ketchup/backend/database/DatabaseService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/ducksabervn/projects/ketchup/backend/database/DatabaseService.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -67,6 +45,8 @@
   </component>
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
+    "Maven.Ketchup [clean].executor": "Run",
+    "Maven.Ketchup [compile].executor": "Run",
     "Maven.ketchup_run.executor": "Run",
     "ModuleVcsDetector.initialDetectionPerformed": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
@@ -79,10 +59,11 @@
     "kotlin-language-version-configured": "true",
     "last_opened_file_path": "E:/DucksaberVN/duan/coding/Ketchup/Ketchup/src/main/java/com/ducksabervn/projects/ketchup/backend/database",
     "list.type.of.created.stylesheet": "CSS",
+    "nodejs_package_manager_path": "npm",
     "onboarding.tips.debug.path": "/Users/ducksabervn/DATA/coding/Ketchup/Ketchup/src/main/java/org/example/Main.java",
-    "project.structure.last.edited": "Modules",
+    "project.structure.last.edited": "Libraries",
     "project.structure.proportion": "0.0",
-    "project.structure.side.proportion": "0.0",
+    "project.structure.side.proportion": "0.2",
     "settings.editor.selected.configurable": "SQL Dialects",
     "vue.rearranger.settings.migration": "true"
   },
@@ -181,6 +162,9 @@
       <updated>1779321835883</updated>
       <workItem from="1779321837003" duration="24257000" />
       <workItem from="1779369667412" duration="7474000" />
+      <workItem from="1779409023021" duration="293000" />
+      <workItem from="1779409330132" duration="156000" />
+      <workItem from="1779409574283" duration="4371000" />
     </task>
     <servers />
   </component>
