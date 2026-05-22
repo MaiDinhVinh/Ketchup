@@ -223,6 +223,62 @@ public class BookingRepository {
         return result;
     }
 
+    /**
+     * Cancels the booking with the given ID:
+     * <ol>
+     *   <li>Deletes all {@code booking_seats} rows for this booking.</li>
+     *   <li>Deletes the {@code bookings} header row.</li>
+     *   <li>Removes the cancelled seats from the in-memory
+     *       {@link Movie#getOccupiedSeat()} set so the seat map reflects
+     *       availability immediately without a full reload.</li>
+     *   <li>Removes the {@link Booking} from the in-memory map.</li>
+     * </ol>
+     *
+     * Both DELETE statements run inside a single transaction so the database
+     * stays consistent if either fails.
+     *
+     * @param bookingId the UUID string of the booking to cancel
+     * @throws SQLException if the database DELETEs fail
+     */
+    public static void cancelBooking(String bookingId) throws SQLException {
+        Booking b = bookings.get(bookingId);
+        if (b == null) return;
+
+        Connection conn = DatabaseService.getConnection();
+        conn.setAutoCommit(false);
+        try {
+            // 1 — Delete child rows first (guards against missing ON DELETE CASCADE)
+            try (PreparedStatement ps = conn.prepareStatement(
+                    "DELETE FROM booking_seats WHERE booking_id = ?")) {
+                ps.setString(1, bookingId);
+                ps.executeUpdate();
+            }
+
+            // 2 — Delete booking header
+            try (PreparedStatement ps = conn.prepareStatement(
+                    "DELETE FROM bookings WHERE booking_id = ?")) {
+                ps.setString(1, bookingId);
+                ps.executeUpdate();
+            }
+
+            conn.commit();
+        } catch (SQLException e) {
+            conn.rollback();
+            throw e;
+        } finally {
+            conn.setAutoCommit(true);
+        }
+
+        // 3 — Restore occupied seats on the in-memory Movie record
+        Movie m = MovieRepository.getMovies().get(b.getMovieId());
+        if (m != null) {
+            m.getOccupiedSeat().removeAll(b.getChosenSeats());
+        }
+
+        // 4 — Remove from the in-memory booking map
+        bookings.remove(bookingId);
+    }
+
     public static int calculateTotalPrice(HashSet<String> selectedSeatId, int ticketPrice){
         return selectedSeatId.size() * ticketPrice;
     }
