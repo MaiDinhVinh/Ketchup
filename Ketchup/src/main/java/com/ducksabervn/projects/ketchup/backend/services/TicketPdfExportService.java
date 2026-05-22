@@ -8,8 +8,7 @@
  *          Hoang Duc Phat <25phat.hd@vinuni.edu.vn>,
  *          Mai Dinh Vinh <25vinh.md@vinuni.edu.vn>
  * <p>
- * Developer:       Tran Phan Anh*, Nguyen Trong Khoi Nguyen*, Nguyen Dinh Quy*,
- *                  Mai Dinh Vinh* (* equal contributions)
+ * Developers:      Mai Dinh Vinh
  * File Name:       TicketPdfExportService.java
  * Description:     Service that generates a styled PDF ticket for a given
  *                  Booking. Uses Apache PDFBox 3.x; no external fonts required.
