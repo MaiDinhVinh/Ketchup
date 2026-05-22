@@ -6,7 +6,7 @@
 
     <groupId>com.ducksabervn</groupId>
     <artifactId>Ketchup</artifactId>
-    <version>1.0-Beta</version>
+    <version>1.0</version>
     <packaging>jar</packaging>
 
     <properties>
