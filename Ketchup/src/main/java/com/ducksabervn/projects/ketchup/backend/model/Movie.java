@@ -10,8 +10,8 @@
  *          Mai Dinh Vinh <25vinh.md@vinuni.edu.vn>
  * <p>
  * File Name:       Movie.java
- * Developer:       Tran Phan Anh*, Nguyen The Khoi Nguyen*, Nguyen Dinh Quy*,
- *                  Mai Dinh Vinh* (* equal contributions)
+ * Developers:       Tran Phan Anh*, Nguyen Trong Khoi Nguyen*, Nguyen Dinh Quy*,
+ *                  Hoang Duc Phat*, Mai Dinh Vinh** (* equal contributions, ** SQL Developer)
  * Description:     Model class representing a movie screening entry, storing
  *                  all relevant details including title, genre, duration,
  *                  rating, showtime, occupied seats, and seat pricing.
