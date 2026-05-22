@@ -10,8 +10,7 @@
  *          Mai Dinh Vinh <25vinh.md@vinuni.edu.vn>
  *
  * File Name:       CustomerSeatSelectionUIController.java
- * Developer:       Tran Phan Anh*, Nguyen Trong Khoi Nguyen*, Nguyen Dinh Quy*,
- *                  Mai Dinh Vinh* (* equal contributions)
+ * Developers:       Hoang Duc Phat*, Mai Dinh Vinh* (* equal contributions)
  * Description:     JavaFX controller for CustomerSeatSelectionUI.fxml.
  *                  Reproduces the original 8x12 cinema seat grid with aisle gap,
  *                  seat toggle logic, booked-seat marking, and live summary update.
