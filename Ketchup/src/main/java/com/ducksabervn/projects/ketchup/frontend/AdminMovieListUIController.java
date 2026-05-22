@@ -10,8 +10,7 @@
  *          Mai Dinh Vinh <25vinh.md@vinuni.edu.vn>
  * <p>
  * File Name:       AdminMovieListUIController.java
- * Developer:       Tran Phan Anh*, Nguyen Trong Khoi Nguyen*, Nguyen Dinh Quy*,
- *                  Mai Dinh Vinh* (* equal contributions)
+ * Developers:       Hoang Duc Phat*, Mai Dinh Vinh* (* equal contributions)
  * Description:     JavaFX controller for AdminMovieListUI.fxml. Preserves all
  *                  original search, sort, CRUD, logout, and window-close logic
  *                  from the Swing AdminMovieListUI class. Migrated from Swing
