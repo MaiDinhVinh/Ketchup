@@ -10,8 +10,8 @@
  *          Mai Dinh Vinh <25vinh.md@vinuni.edu.vn>
  *
  * File Name:       DatasetSeeder.java
- * Developer:       Tran Phan Anh*, Nguyen Trong Khoi Nguyen*, Nguyen Dinh Quy*,
- *                  Mai Dinh Vinh* (* equal contributions)
+ * Developers:       Tran Phan Anh*, Nguyen Trong Khoi Nguyen*, Nguyen Dinh Quy*,
+ *                  Hoang Duc Phat*, Mai Dinh Vinh** (* equal contributions, ** SQL Developer)
  * Description:     Inserts all test data (users, movies, bookings, booking seats)
  *                  into the Ketchup database on the first launch. Converted from
  *                  Dataset.sql to Java PreparedStatements to eliminate SQL
