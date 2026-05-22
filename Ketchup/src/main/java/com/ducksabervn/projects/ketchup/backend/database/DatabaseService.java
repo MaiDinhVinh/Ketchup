@@ -24,7 +24,6 @@ package com.ducksabervn.projects.ketchup.backend.database;
 
 import ch.vorburger.mariadb4j.DB;
 import ch.vorburger.mariadb4j.DBConfigurationBuilder;
-import com.ducksabervn.projects.ketchup.frontend.util.DisplayMessage;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -44,7 +43,7 @@ import java.sql.SQLException;
  *       without knowing where credentials or the URL are defined.</li>
  * </ol>
  *
- * <p>Call {@link #startup()} once inside {@code KetchupMain.init()}, and
+ * <p>Call {@link #startup(boolean isSeeding)} once inside {@code KetchupMain.init()}, and
  * {@link #shutdown()} once inside {@code KetchupMain.stop()}. Every other
  * class only ever calls {@link #getConnection()}.</p>
  *
@@ -57,13 +56,11 @@ import java.sql.SQLException;
 public final class DatabaseService {
 
     private static final String DB_NAME = "ketchup";
-    private static final int    DB_PORT = 3306;
     private static final String DB_USER = "root";
     private static final String DB_PASS = "";
 
     /** JDBC URL pointing at the embedded MariaDB instance. */
-    private static final String JDBC_URL =
-            "jdbc:mariadb://localhost:" + DB_PORT + "/" + DB_NAME;
+    private static String JDBC_URL;
 
     /**
      * Folder where MariaDB4j stores its data files between sessions.
@@ -101,12 +98,14 @@ public final class DatabaseService {
         Files.createDirectories(DATA_DIR);
 
         DBConfigurationBuilder config = DBConfigurationBuilder.newBuilder();
-        config.setPort(DB_PORT);
+        config.setPort(0); //choose any available port on user's computer/server
         config.setDataDir(DATA_DIR.toFile());
         config.setDeletingTemporaryBaseAndDataDirsOnShutdown(false);
 
         db = DB.newEmbeddedDB(config.build());
         db.start();
+
+        JDBC_URL = "jdbc:mariadb://localhost:" + config.getPort() + "/" + DB_NAME;
 
         // createDB is a no-op if the schema already exists
         db.createDB(DB_NAME);
@@ -136,10 +135,6 @@ public final class DatabaseService {
             db.stop();
         }
     }
-
-    // -------------------------------------------------------------------------
-    // Connectivity
-    // -------------------------------------------------------------------------
 
     /**
      * Opens and returns a new JDBC {@link Connection} to the embedded
