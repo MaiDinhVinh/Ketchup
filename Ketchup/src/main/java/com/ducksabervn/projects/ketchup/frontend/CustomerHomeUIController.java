@@ -27,6 +27,7 @@ import com.ducksabervn.projects.ketchup.backend.model.Movie;
 import com.ducksabervn.projects.ketchup.backend.repositories.BookingRepository;
 import com.ducksabervn.projects.ketchup.backend.repositories.MovieRepository;
 import com.ducksabervn.projects.ketchup.frontend.util.DisplayMessage;
+import com.ducksabervn.projects.ketchup.backend.services.TicketPdfExportService;
 import io.github.palexdev.materialfx.controls.MFXButton;
 import io.github.palexdev.materialfx.controls.MFXComboBox;
 import io.github.palexdev.materialfx.controls.MFXTextField;
@@ -46,8 +47,9 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.stage.Stage;
-import javafx.stage.WindowEvent;
+import javafx.stage.FileChooser;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.time.format.DateTimeFormatter;
@@ -133,6 +135,7 @@ public class CustomerHomeUIController implements Initializable {
     @FXML private TableColumn<Booking, Integer> bookingColPrice;
     @FXML private MFXButton                     viewBookingButton;
     @FXML private MFXButton                     cancelBookingButton;
+    @FXML private MFXButton exportPdfButton;
 
     // Initializable
 
@@ -495,6 +498,36 @@ public class CustomerHomeUIController implements Initializable {
         return BookingRepository.getBookings().values().stream()
                 .map(Booking::getMovieId)
                 .collect(Collectors.toCollection(HashSet::new));
+    }
+
+    /**
+     * Exports the selected booking as a PDF ticket via a Save dialog.
+     */
+    @FXML
+    private void handleExportPdf() {
+        Booking selected = bookingTable.getSelectionModel().getSelectedItem();
+        if (selected == null) {
+            DisplayMessage.displayWarning("Please select a booking to export.");
+            return;
+        }
+
+        FileChooser chooser = new FileChooser();
+        chooser.setTitle("Save Ticket as PDF");
+        chooser.setInitialFileName(
+                "ticket_" + selected.getBookingId().substring(0, 8) + ".pdf");
+        chooser.getExtensionFilters().add(
+                new FileChooser.ExtensionFilter("PDF Files", "*.pdf"));
+
+        File dest = chooser.showSaveDialog(getStage());
+        if (dest == null) return;
+
+        try {
+            TicketPdfExportService.export(selected.getBookingId(), dest);
+            DisplayMessage.displayInformation(
+                    "Ticket exported successfully!\n" + dest.getAbsolutePath());
+        } catch (Exception e) {
+            DisplayMessage.displayError("Failed to export PDF: " + e.getMessage());
+        }
     }
 
     /** Returns the Stage that owns this controller's scene. */
