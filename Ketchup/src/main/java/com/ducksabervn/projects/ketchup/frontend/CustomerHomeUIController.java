@@ -125,12 +125,14 @@ public class CustomerHomeUIController implements Initializable {
     @FXML private MFXButton           bookingSortButton;
     @FXML private MFXButton           bookingRefreshButton;
 
-    @FXML private TableView<Booking>        bookingTable;
+    @FXML private TableView<Booking>            bookingTable;
     @FXML private TableColumn<Booking, String>  bookingColId;
     @FXML private TableColumn<Booking, String>  bookingColMovie;
     @FXML private TableColumn<Booking, String>  bookingColShowtime;
     @FXML private TableColumn<Booking, String>  bookingColSeats;
     @FXML private TableColumn<Booking, Integer> bookingColPrice;
+    @FXML private MFXButton                     viewBookingButton;
+    @FXML private MFXButton                     cancelBookingButton;
 
     // Initializable
 
@@ -146,7 +148,77 @@ public class CustomerHomeUIController implements Initializable {
         bookingSearchField.setFloatMode(FloatMode.DISABLED);
     }
 
-    // Entry point
+    /**
+     * Adds a Movie back to the movie table after a booking is cancelled.
+     * Called by handleCancelBooking() on the JavaFX Application Thread.
+     *
+     * @param m the Movie whose booking was just cancelled
+     */
+    public static void addMovieRow(Movie m) {
+        if (instance != null) {
+            Platform.runLater(() -> instance.movieData.add(m));
+        }
+    }
+
+    /**
+     * Opens CustomerBookingDetailUIController for the selected booking.
+     * Shows a read-only seat map with the customer's seats highlighted in gold.
+     */
+    @FXML
+    private void handleViewBooking() {
+        Booking selected = bookingTable.getSelectionModel().getSelectedItem();
+        if (selected == null) {
+            DisplayMessage.displayWarning("Please select a booking to view.");
+            return;
+        }
+        CustomerBookingDetailUIController.initialize(selected.getBookingId(), getStage());
+    }
+
+    /**
+     * Cancels the selected booking after user confirmation.
+     *
+     * Steps:
+     *   1. Confirm with the user.
+     *   2. Call BookingRepository.cancelBooking() on a background thread.
+     *   3. On success: remove row from bookingData and add the movie back to
+     *      movieData so it reappears in the Movies tab.
+     */
+    @FXML
+    private void handleCancelBooking() {
+        Booking selected = bookingTable.getSelectionModel().getSelectedItem();
+        if (selected == null) {
+            DisplayMessage.displayWarning("Please select a booking to cancel.");
+            return;
+        }
+
+        boolean confirmed = DisplayMessage.displayConfirmationDialog(
+                "Are you sure you want to cancel this booking?\nThis action cannot be undone.");
+        if (!confirmed) return;
+
+        Task<Void> task = new Task<>() {
+            @Override
+            protected Void call() throws Exception {
+                BookingRepository.cancelBooking(selected.getBookingId());
+                return null;
+            }
+        };
+
+        task.setOnSucceeded(e -> {
+            // Remove from booking list
+            bookingData.remove(selected);
+            // Restore the movie in the Movies tab
+            Movie m = MovieRepository.getMovies().get(selected.getMovieId());
+            if (m != null) {
+                movieData.add(m);
+            }
+        });
+
+        task.setOnFailed(e ->
+                DisplayMessage.displayError(
+                        "Failed to cancel booking: " + task.getException().getMessage()));
+
+        new Thread(task, "cancel-booking-thread").start();
+    }
 
     /**
      * Static factory — loads CustomerHomeUI.fxml, wires the username and email,
