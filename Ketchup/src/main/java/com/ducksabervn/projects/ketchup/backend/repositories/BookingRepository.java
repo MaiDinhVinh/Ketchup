@@ -9,7 +9,7 @@
  *          Mai Dinh Vinh <25vinh.md@vinuni.edu.vn>
  * <p>
  * Developer:       Tran Phan Anh*, Nguyen Trong Khoi Nguyen*, Nguyen Dinh Quy*,
- *                  Mai Dinh Vinh* (* equal contributions)
+ *                  Hoang Duc Phat*, Mai Dinh Vinh* (* equal contributions)
  * File Name:       BookingRepository.java
  * Description:     In-memory repository for the currently logged-in user's
  *                  booking records, backed by the MySQL `bookings` and
