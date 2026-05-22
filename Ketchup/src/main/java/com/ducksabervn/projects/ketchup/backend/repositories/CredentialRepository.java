@@ -9,7 +9,7 @@
  *          Mai Dinh Vinh <25vinh.md@vinuni.edu.vn>
  * <p>
  * Developer:       Tran Phan Anh*, Nguyen Trong Khoi Nguyen*, Nguyen Dinh Quy*,
- *                  Mai Dinh Vinh* (* equal contributions)
+ *                  Hoang Duc Phat*, Mai Dinh Vinh* (* equal contributions)
  * File Name:       CredentialRepository.java
  * Description:     In-memory repository for registered user credentials,
  *                  backed by the MySQL `users` table. Replaces the previous
