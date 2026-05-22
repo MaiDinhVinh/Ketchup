@@ -9,7 +9,7 @@
  *          Mai Dinh Vinh <25vinh.md@vinuni.edu.vn>
  * <p>
  * Developer:       Tran Phan Anh*, Nguyen Trong Khoi Nguyen*, Nguyen Dinh Quy*,
- *                  Mai Dinh Vinh* (* equal contributions)
+ *                  Hoang Duc Phat*, Mai Dinh Vinh* (* equal contributions)
  * File Name:       MovieRepository.java
  * Description:     In-memory repository for all movie screening records,
  *                  backed by the MySQL `movies` and `booking_seats` tables.
