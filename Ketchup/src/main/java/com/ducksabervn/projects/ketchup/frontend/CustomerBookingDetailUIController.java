@@ -10,8 +10,7 @@
  *          Mai Dinh Vinh <25vinh.md@vinuni.edu.vn>
  *
  * File Name:       CustomerBookingDetailUIController.java
- * Developer:       Tran Phan Anh*, Nguyen Trong Khoi Nguyen*, Nguyen Dinh Quy*,
- *                  Mai Dinh Vinh* (* equal contributions)
+ * Developers:       Hoang Duc Phat*, Mai Dinh Vinh* (* equal contributions)
  * Description:     JavaFX controller for CustomerBookingDetailUI.fxml.
  *                  Re-uses the 8x12 cinema seat grid from CustomerSeatSelectionUI
  *                  in a fully read-only mode. The customer's own seats are
