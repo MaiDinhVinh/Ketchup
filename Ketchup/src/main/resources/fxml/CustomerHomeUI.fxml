@@ -189,6 +189,25 @@
                         </TableView>
                     </center>
 
+                    <!-- Booking actions -->
+                    <bottom>
+                        <VBox>
+                            <Separator styleClass="footer-separator" />
+                            <HBox styleClass="action-bar" alignment="CENTER_LEFT" spacing="10">
+                                <MFXButton
+                                        fx:id="viewBookingButton"
+                                        styleClass="btn-secondary"
+                                        text="View Seats"
+                                        onAction="#handleViewBooking" />
+                                <MFXButton
+                                        fx:id="cancelBookingButton"
+                                        styleClass="btn-danger"
+                                        text="Cancel Booking"
+                                        onAction="#handleCancelBooking" />
+                            </HBox>
+                        </VBox>
+                    </bottom>
+
                 </BorderPane>
             </Tab>
 
