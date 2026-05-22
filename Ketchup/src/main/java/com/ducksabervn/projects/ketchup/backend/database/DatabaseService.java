@@ -10,8 +10,8 @@
  *          Mai Dinh Vinh <25vinh.md@vinuni.edu.vn>
  *
  * File Name:       DatabaseService.java
- * Developer:       Tran Phan Anh*, Nguyen Trong Khoi Nguyen*, Nguyen Dinh Quy*,
- *                  Mai Dinh Vinh* (* equal contributions)
+ * Developers:       Tran Phan Anh*, Nguyen Trong Khoi Nguyen*, Nguyen Dinh Quy*,
+ *                  Hoang Duc Phat*, Mai Dinh Vinh** (* equal contributions, ** SQL Developer)
  * Description:     Singleton service that manages the full lifecycle of the
  *                  embedded MariaDB database — starting and stopping the server
  *                  process, running initialization on first launch, and
