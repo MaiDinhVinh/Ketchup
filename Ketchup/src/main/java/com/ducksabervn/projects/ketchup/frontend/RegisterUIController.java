@@ -45,12 +45,11 @@ import java.util.ResourceBundle;
  * Controller for the Register screen (RegisterUI.fxml).
  * Validation order mirrors the original {@code RegisterUI.initializeAllElements()} logic:
  *   Username, email, or password field is blank → inline error.
- *   <li>Password and confirm-password do not match → inline error.</li>
- *   <li>Email fails {@link Credential#isValidEmail} regex → inline error.</li>
- *   <li>{@link CredentialRepository#register} returns {@code false}
- *       (email already taken) → error dialog.</li>
- *   <li>Success → success dialog → close this window → open {@code LoginUI.fxml}.</li>
- * </ol>
+ *   Password and confirm-password do not match → inline error.
+ *   Email fails {@link Credential#isValidEmail} regex → inline error.
+ *   {@link CredentialRepository#register} returns {@code false}
+ *       (email already taken) → error dialog.
+ *   Success → success dialog → close this window → open {@code LoginUI.fxml}.
  * The Back button closes this window and re-opens {@code LoginUI.fxml}.
  */
 public class RegisterUIController implements Initializable {
