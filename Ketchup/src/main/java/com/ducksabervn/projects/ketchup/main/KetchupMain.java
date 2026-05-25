@@ -55,6 +55,10 @@ import java.util.concurrent.CountDownLatch;
  */
 public class KetchupMain extends Application {
 
+    /**
+     * Initialize the database when users open this app for the first time
+     * @throws Exception
+     */
     @Override
     public void init() throws Exception {
         if(!DatabaseService.isInitialized()){
