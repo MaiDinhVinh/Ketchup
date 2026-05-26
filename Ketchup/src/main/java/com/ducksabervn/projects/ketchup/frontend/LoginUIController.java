@@ -28,6 +28,7 @@ import io.github.palexdev.materialfx.controls.MFXComboBox;
 import io.github.palexdev.materialfx.controls.MFXPasswordField;
 import io.github.palexdev.materialfx.controls.MFXTextField;
 import io.github.palexdev.materialfx.enums.FloatMode;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -150,9 +151,10 @@ public class LoginUIController implements Initializable {
                 DisplayMessage.displayError(ex.getMessage());
                 return;
             }
-            CustomerHomeUIController.initialize(c.getUsername(), c.getEmail());
+            Platform.runLater(() -> {
+                CustomerHomeUIController.initialize(c.getUsername(), c.getEmail());
+            });
         }
-
         getStage().close();
     }
 
@@ -163,7 +165,7 @@ public class LoginUIController implements Initializable {
      */
     @FXML
     private void handleRegister() {
-        RegisterUIController.initialize();
+        Platform.runLater(RegisterUIController::initialize);
         getStage().close();
     }
 
