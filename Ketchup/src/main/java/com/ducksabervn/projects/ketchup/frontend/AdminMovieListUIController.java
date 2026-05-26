@@ -40,6 +40,7 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
+import org.apache.commons.logging.Log;
 
 import java.io.IOException;
 import java.net.URL;
@@ -348,7 +349,7 @@ public class AdminMovieListUIController implements Initializable {
             return;
         }
         getStage().close();
-        LoginUIController.initialize();
+        Platform.runLater(LoginUIController::initialize);
     }
 
     /**
