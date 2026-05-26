@@ -25,6 +25,7 @@ import com.ducksabervn.projects.ketchup.backend.repositories.BookingRepository;
 import com.ducksabervn.projects.ketchup.backend.repositories.MovieRepository;
 import com.ducksabervn.projects.ketchup.frontend.util.DisplayMessage;
 import io.github.palexdev.materialfx.controls.MFXButton;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -186,7 +187,9 @@ public class CustomerBookingConfirmUIController implements Initializable {
         boolean confirmed = DisplayMessage.displayConfirmationDialog("Are you sure you want to cancel this booking?");
         if (confirmed) {
             getStage().close();
-            CustomerSeatSelectionUIController.initialize(currentMovieId, currentEmail, null);
+            Platform.runLater(() -> {
+                CustomerSeatSelectionUIController.initialize(currentMovieId, currentEmail, null);
+            });
         }
     }
 
