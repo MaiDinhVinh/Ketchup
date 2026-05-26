@@ -28,6 +28,7 @@ import io.github.palexdev.materialfx.controls.MFXComboBox;
 import io.github.palexdev.materialfx.controls.MFXPasswordField;
 import io.github.palexdev.materialfx.controls.MFXTextField;
 import io.github.palexdev.materialfx.enums.FloatMode;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -183,7 +184,7 @@ public class RegisterUIController implements Initializable {
      */
     private void navigateToLogin() {
         getStage().close();
-        LoginUIController.initialize();
+        Platform.runLater(LoginUIController::initialize);
     }
 
     /**
