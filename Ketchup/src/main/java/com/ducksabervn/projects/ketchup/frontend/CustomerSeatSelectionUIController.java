@@ -25,6 +25,7 @@ import com.ducksabervn.projects.ketchup.backend.repositories.BookingRepository;
 import com.ducksabervn.projects.ketchup.backend.repositories.MovieRepository;
 import com.ducksabervn.projects.ketchup.frontend.util.DisplayMessage;
 import io.github.palexdev.materialfx.controls.MFXButton;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -139,10 +140,12 @@ public class CustomerSeatSelectionUIController implements Initializable {
             return;
         }
         getStage().close();
-        CustomerBookingConfirmUIController.initialize(
-                currentMovieId,
-                new HashSet<>(selectedSeatIds),
-                currentEmail);
+        Platform.runLater(() -> {
+            CustomerBookingConfirmUIController.initialize(
+                    currentMovieId,
+                    new HashSet<>(selectedSeatIds),
+                    currentEmail);
+        });
     }
 
     /**
