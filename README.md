@@ -59,8 +59,56 @@ MariaDB is a "copy-cat" version developed by the same developers from MySQL that
 ---
 
 ## Features
+ 
+### Authentication and Account Management
+ 
+- **User Registration** — New users can self-register by providing an email address, username, and a password. Email addresses are validated against a standardized regex pattern
+- **Role-Based Login** — The login screen allows user to pick registed role through a role selector (Admin / User). The system enforces that administrator access is restricted to authorized accounts, preventing external access
+- **Input Validation** — All required fields are validated before any authentication attempt is made.
+---
+ 
+### Administrator Features
+ 
+#### Movie Catalog Management
+ 
+- **Add Movie** — Administrators can create a new movie record through a dedicated form dialog, providing all required informations. New entries are added to a centralized MariaDB embedded database
+- **Edit Movie** — Any existing movie record can be selected from the table and modified. All changes are updated accordingly inside the database
+- **Delete Movie** — A selected movie can be permanently removed from the system after the explicit confirmation from the user
+#### Search, Sort, and Navigation
+ 
+- **Movie Search** — The catalog can be searched by keyword across supported fields, including title, genre, rating, and showtime. Search operations are executed in a multithreaded manner to keep the interface responsive.
+- **Multi-Criterion Sort** — The movie table can be sorted by any of eight criteria: ID, Title, Genre, Duration (minutes), Rating, Showtime, Number of Selected Seats, and Price per Seat.
+- **Refresh** — The movie catalog can be reloaded from the database at any time
+- **Logout** — Administrators can end their session and return to the Login screen
+---
+ 
+### Customer Features
+ 
+#### Movie Browsing
+ 
+- **Filtered Movie List** — The customer home screen displays only movies that the logged-in user has not yet booked, preventing duplicate entries
+- **Movie Detail View** — A dedicated detail panel presents the full screening information for a selected movie, including genre, duration, age rating, showtime, and price per seat.
+- **Movie Search** — Customers can search the available catalog by keyword. Previously booked movies are excluded from all search results.
+- **Movie Sort** — The available movie list can be sorted by Title, Genre, Duration (minutes), or Showtime.
+#### Seat Selection and Booking
+ 
+- **Interactive Seat Map** — A fixed cinema grid of 8 rows (A–H) by 12 columns is rendered for each movie, with a visual aisle gap between columns 6 and 7 to reflect a realistic cinema layout.
+- **Real-Time Seat Status** — Each seat is color-coded: green for available, red for occupied by another customer, and a highlighted style for seats the current customer has selected.
+- **Seat Toggle with Live Pricing** — Clicking an available seat toggles its selection state. The total prices of the booking is updated in real-time in a decicated label
+- **Booking Confirmation** — Before a booking is finalized, a confirmation dialog presents a full summary including movie title, showtime, selected seat identifiers, seat count, per-seat price, and total amount due. The customer may confirm the booking or return to the seat map to revise their selection.
+#### Booking History
+ 
+- **Booking History Table** — All confirmed bookings are displayed in a centralized view with columns for Booking ID, Movie Title, Showtime, Seats, and Total Price.
+- **Booking History Search** — Customers can search across their booking history records.
+- **Booking History Sort** — Booking records can be sorted by Booking ID, Movie Title, Showtime, or Total Price.
+- **View Booked Seat Map** — A read-only seat map can be opened for any confirmed booking. The customer's reserved seats are highlighted in gold, and the occupancy status of all remaining seats is shown for reference.
+- **Cancel Booking** — A confirmed booking can be cancelled after an explicit confirmation prompt. Upon cancellation, the affected movie is restored to the available movie list and becomes bookable again.
+#### PDF Ticket Export
+ 
+- **Export from Booking History** — A booking selected from the history table can be exported as a formatted PDF ticket through a native Save dialog.
+- **Export from Booking Detail** — The PDF export action is also accessible directly from within the read-only seat map detail view.
+- **Ticket Content** — The generated PDF ticket (A5 format) includes the application branding, a shortened ticket ID, movie title, showtime, booked seat list, seat count, per-seat price, and total price, presented in a styled layout with a dark-red branded header.
 
-<!-- TODO: Fill in the feature list -->
 
 ---
 
@@ -70,7 +118,7 @@ MariaDB is a "copy-cat" version developed by the same developers from MySQL that
 - Then, go to the Github release page in this repository and download the Jar file corresponding to your current Operating System
 - Then double click on the Jar file and enjoy !
 > [!CAUTION]
-> When running this app for the first time, Windows or any other OS might ask for permission for connection, please press "ALLOW" to proceed, otherwise, the behavior of the app might be unexpected
+> When running this app for the first time, Windows or any other OS might ask for permission, please press "ALLOW" to proceed, otherwise, the behavior of the app might be unexpected
 
 > [!NOTE]
 > You will encounter an prompting window asking you if you want to load in the test dataset, this is for demonstration purposes, so press "No" if you want to use this app normally. This will run when you first run this application
