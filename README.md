@@ -71,6 +71,7 @@ MariaDB is a "copy-cat" version developed by the same developers from MySQL that
 - Then double click on the Jar file and enjoy !
 > [!CAUTION]
 > When running this app for the first time, Windows or any other OS might ask for permission for connection, please press "ALLOW" to proceed, otherwise, the behavior of the app might be unexpected
+
 > [!NOTE]
 > You will encounter an prompting window asking you if you want to load in the test dataset, this is for demonstration purposes, so press "No" if you want to use this app normally. This will run when you first run this application
 ---
