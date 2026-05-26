@@ -410,7 +410,7 @@ public class CustomerHomeUIController implements Initializable {
             return;
         }
         getStage().close();
-        LoginUIController.initialize();
+        Platform.runLater(LoginUIController::initialize);
     }
 
     // Private helpers
