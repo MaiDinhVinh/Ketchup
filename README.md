@@ -122,6 +122,8 @@ MariaDB is a "copy-cat" version developed by the same developers from MySQL that
 
 > [!NOTE]
 > You will encounter an prompting window asking you if you want to load in the test dataset, this is for demonstration purposes, so press "No" if you want to use this app normally. This will run when you first run this application
+> The Admin credential for the test database is _Email: a@a.com_ and _password: a_
+> To factory reset the database, simply delete the folder `~/Ketchup/` 
 ---
 
 ## Developer Guide
