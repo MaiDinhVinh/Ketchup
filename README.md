@@ -118,13 +118,13 @@ MariaDB is a "copy-cat" version developed by the same developers from MySQL that
 - Then, go to the Github release page in this repository and download the Jar file corresponding to your current Operating System
 - Then double click on the Jar file and enjoy !
 > [!CAUTION]
-> When running this app for the first time, Windows or any other OS might ask for permission, please press "ALLOW" to proceed, otherwise, the behavior of the app might be unexpected  
-> You might encounter a situation where the application window is just a blank window, please _"jiggle"_ it a little bit or close the window and open it again, it should be fixed. This is a JavaFX bug related to the Stage changing, and we haven't find a solution for that bug yet
+> - When running this app for the first time, Windows or any other OS might ask for permission, please press "ALLOW" to proceed, otherwise, the behavior of the app might be unexpected  
+> - You might encounter a situation where the application window is just a blank window, please _"jiggle"_ it a little bit or close the window and open it again, it should be fixed. This is a JavaFX bug related to the Stage changing, and we haven't find a solution for that bug yet
 
 > [!NOTE]
-> You will encounter an prompting window asking you if you want to load in the test dataset, this is for demonstration purposes, so press "No" if you want to use this app normally. This will run when you first run this application  
-> The Admin credential for the test database is _**Email: a@a.com**_ and _**Password: a**_  
-> To factory reset the database, simply delete the folder `~/Ketchup/` 
+> - You will encounter an prompting window asking you if you want to load in the test dataset, this is for demonstration purposes, so press "No" if you want to use this app normally. This will run when you first run this application  
+> - The Admin credential for the test database is _**Email: a@a.com**_ and _**Password: a**_  
+> - To factory reset the database, simply delete the folder `~/Ketchup/` 
 ---
 
 ## Developer Guide
