@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Separator?>
+<?import io.github.palexdev.materialfx.controls.MFXButton?>
+
+<!--
+    CustomerMovieDetailUI.fxml
+    Netflix-themed read-only movie detail screen.
+    Opened as a non-modal Stage from CustomerHomeUI.
+    Controller: com.ducksabervn.projects.ketchup.frontend.controller.CustomerMovieDetailUIController
+-->
+<BorderPane
+        xmlns="http://javafx.com/javafx/21"
+        xmlns:fx="http://javafx.com/fxml/1"
+        fx:controller="com.ducksabervn.projects.ketchup.frontend.CustomerMovieDetailUIController"
+        styleClass="root-pane"
+        stylesheets="@../css/CustomerMovieDetailUI.css">
+
+    <!-- Header -->
+    <top>
+        <VBox styleClass="header">
+            <HBox styleClass="header-inner" alignment="CENTER_LEFT" spacing="12">
+                <Region styleClass="accent-bar" />
+                <Label styleClass="screen-title" text="Movie Detail" />
+            </HBox>
+            <Separator styleClass="header-separator" />
+        </VBox>
+    </top>
+
+    <!-- Detail card -->
+    <center>
+        <VBox styleClass="detail-card" spacing="0">
+
+            <!-- Movie title (prominent) -->
+            <Label fx:id="movieTitleValue" styleClass="movie-title-value" text="-" wrapText="true" />
+
+            <Separator styleClass="title-separator" style="-fx-padding: 10 0 10 0;" />
+
+            <!-- Info rows -->
+            <Label styleClass="section-label" text="SCREENING INFORMATION" />
+
+            <HBox styleClass="info-row" alignment="CENTER_LEFT">
+                <Label styleClass="info-label" text="Genre" />
+                <Region HBox.hgrow="ALWAYS" />
+                <Label fx:id="genreValue" styleClass="info-value" text="-" />
+            </HBox>
+
+            <HBox styleClass="info-row" alignment="CENTER_LEFT">
+                <Label styleClass="info-label" text="Duration" />
+                <Region HBox.hgrow="ALWAYS" />
+                <Label fx:id="durationValue" styleClass="info-value" text="-" />
+            </HBox>
+
+            <HBox styleClass="info-row" alignment="CENTER_LEFT">
+                <Label styleClass="info-label" text="Age Rating" />
+                <Region HBox.hgrow="ALWAYS" />
+                <Label fx:id="ratingValue" styleClass="info-value" text="-" />
+            </HBox>
+
+            <HBox styleClass="info-row" alignment="CENTER_LEFT">
+                <Label styleClass="info-label" text="Showtime" />
+                <Region HBox.hgrow="ALWAYS" />
+                <Label fx:id="showtimeValue" styleClass="info-value" text="-" />
+            </HBox>
+
+            <Separator styleClass="price-separator" style="-fx-padding: 10 0 10 0;" />
+
+            <!-- Seat price (highlighted) -->
+            <HBox styleClass="price-row" alignment="CENTER_LEFT">
+                <Label styleClass="price-label" text="Seat Price" />
+                <Region HBox.hgrow="ALWAYS" />
+                <Label fx:id="seatPriceValue" styleClass="price-value" text="-" />
+            </HBox>
+
+        </VBox>
+    </center>
+
+    <!-- Footer -->
+    <bottom>
+        <VBox>
+            <Separator styleClass="footer-separator" />
+            <HBox styleClass="footer-bar" alignment="CENTER_RIGHT">
+                <MFXButton
+                        fx:id="backButton"
+                        styleClass="btn-back"
+                        text="Back"
+                        onAction="#handleBack" />
+            </HBox>
+        </VBox>
+    </bottom>
+
+</BorderPane>

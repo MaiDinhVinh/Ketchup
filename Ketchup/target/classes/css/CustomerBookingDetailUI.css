@@ -1,0 +1,219 @@
+.root {
+    -netflix-red:    #e50914;
+    -netflix-black:  #141414;
+    -surface:        #1f1f1f;
+    -border-subtle:  #2a2a2a;
+    -text-primary:   #ffffff;
+    -text-secondary: #b3b3b3;
+    -text-muted:     #737373;
+}
+
+/* Root */
+.root-pane {
+    -fx-background-color: -netflix-black;
+}
+.header {
+    -fx-background-color: #0a0a0a;
+}
+
+.header-inner {
+    -fx-padding: 14 20 14 0;
+}
+
+.accent-bar {
+    -fx-background-color: -netflix-red;
+    -fx-min-width:  4px;
+    -fx-max-width:  4px;
+    -fx-min-height: 32px;
+}
+
+.movie-heading {
+    -fx-text-fill: -text-primary;
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-font-family: "Arial", sans-serif;
+}
+
+.header-separator {
+    -fx-background-color: -border-subtle;
+}
+.seat-section {
+    -fx-padding: 16 24 12 24;
+    -fx-background-color: -netflix-black;
+}
+
+/* Screen banner */
+.screen-banner {
+    -fx-background-color: #333333;
+    -fx-text-fill: -text-secondary;
+    -fx-font-size: 12px;
+    -fx-font-weight: bold;
+    -fx-letter-spacing: 3px;
+    -fx-alignment: CENTER;
+    -fx-padding: 6 0 6 0;
+    -fx-background-radius: 4px 4px 0 0;
+    -fx-border-color: #555555;
+    -fx-border-width: 1px;
+    -fx-border-radius: 4px 4px 0 0;
+}
+
+/* Seat grid */
+.seat-grid {
+    -fx-background-color: transparent;
+    -fx-padding: 12 24 12 24;
+}
+
+/* Row label */
+.row-label {
+    -fx-text-fill: -text-muted;
+    -fx-font-size: 11px;
+    -fx-font-weight: bold;
+    -fx-alignment: CENTER;
+    -fx-min-width: 20px;
+}
+.seat-btn {
+    -fx-font-size: 9px;
+    -fx-font-weight: bold;
+    -fx-background-radius: 4px;
+    -fx-cursor: default;
+    -fx-min-width:  42px;
+    -fx-max-width:  42px;
+    -fx-min-height: 32px;
+    -fx-max-height: 32px;
+    -fx-border-radius: 4px;
+    -fx-effect: null;
+    -fx-focus-traversable: false;
+}
+
+/* Available (free seat) — green, disabled */
+.seat-btn.seat-available {
+    -fx-background-color: #2d6a2d;
+    -fx-text-fill: #90ee90;
+    -fx-border-color: #3a8a3a;
+    -fx-border-width: 1px;
+}
+
+.seat-btn.seat-available:disabled {
+    -fx-opacity: 0.55;
+}
+
+/* Booked by others — red, disabled */
+.seat-btn.seat-booked {
+    -fx-background-color: #6b1a1a;
+    -fx-text-fill: #ff9999;
+    -fx-border-color: #8a2a2a;
+    -fx-border-width: 1px;
+    -fx-cursor: default;
+}
+
+.seat-btn.seat-booked:disabled {
+    -fx-opacity: 0.65;
+}
+.seat-btn.seat-mine {
+    -fx-background-color: #6b4c00;
+    -fx-text-fill: #ffd700;
+    -fx-border-color: #aa7a00;
+    -fx-border-width: 1px;
+    -fx-cursor: default;
+}
+.seat-btn.seat-mine:disabled {
+    -fx-opacity: 1.0;
+}
+.legend-bar {
+    -fx-padding: 10 0 4 0;
+}
+
+.legend-title {
+    -fx-text-fill: -text-secondary;
+    -fx-font-size: 12px;
+    -fx-font-weight: bold;
+}
+
+/* Shared swatch base — sized via individual subclasses */
+.swatch-available,
+.swatch-booked,
+.swatch-mine {
+    -fx-min-width:  16px;
+    -fx-max-width:  16px;
+    -fx-min-height: 16px;
+    -fx-max-height: 16px;
+    -fx-background-radius: 3px;
+}
+
+.swatch-available {
+    -fx-background-color: #2d6a2d;
+    -fx-border-color: #3a8a3a;
+    -fx-border-width: 1px;
+    -fx-border-radius: 3px;
+}
+
+.swatch-booked {
+    -fx-background-color: #6b1a1a;
+    -fx-border-color: #8a2a2a;
+    -fx-border-width: 1px;
+    -fx-border-radius: 3px;
+}
+
+/* Gold swatch matching seat-mine */
+.swatch-mine {
+    -fx-background-color: #6b4c00;
+    -fx-border-color: #aa7a00;
+    -fx-border-width: 1px;
+    -fx-border-radius: 3px;
+}
+
+.legend-text {
+    -fx-text-fill: -text-secondary;
+    -fx-font-size: 12px;
+}
+.footer-separator {
+    -fx-background-color: -border-subtle;
+}
+
+.summary-bar {
+    -fx-background-color: #0a0a0a;
+    -fx-padding: 12 20 12 20;
+}
+
+.summary-labels {
+    -fx-padding: 0 16 0 0;
+}
+
+.summary-id {
+    -fx-text-fill: -text-muted;
+    -fx-font-size: 11px;
+}
+
+.summary-seats {
+    -fx-text-fill: -text-secondary;
+    -fx-font-size: 13px;
+}
+
+.summary-price {
+    -fx-text-fill: #ffd700;
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+}
+.btn-secondary {
+    -fx-background-color: transparent;
+    -fx-text-fill: -text-secondary;
+    -fx-font-size: 13px;
+    -fx-background-radius: 4px;
+    -fx-border-color: #444444;
+    -fx-border-width: 1px;
+    -fx-border-radius: 4px;
+    -fx-cursor: hand;
+    -fx-pref-height: 38px;
+    -fx-padding: 6 20 6 20;
+    -mfx-ripple-color: rgba(255,255,255,0.1);
+}
+
+.btn-secondary:hover {
+    -fx-background-color: rgba(255,255,255,0.07);
+    -fx-border-color: -text-secondary;
+    -fx-text-fill: -text-primary;
+}
+
+.btn-secondary:pressed {
+    -fx-background-color: rgba(255,255,255,0.13);
+}

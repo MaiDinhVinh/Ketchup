@@ -1,0 +1,222 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TableColumn?>
+<?import io.github.palexdev.materialfx.controls.MFXTextField?>
+<?import io.github.palexdev.materialfx.controls.MFXComboBox?>
+<?import io.github.palexdev.materialfx.controls.MFXButton?>
+
+<!--
+    CustomerHomeUI.fxml
+    Netflix-themed customer home screen with Movies and My Bookings tabs.
+    Controller: com.ducksabervn.projects.ketchup.frontend.controller.CustomerHomeUIController
+-->
+<BorderPane
+        xmlns="http://javafx.com/javafx/21"
+        xmlns:fx="http://javafx.com/fxml/1"
+        fx:controller="com.ducksabervn.projects.ketchup.frontend.CustomerHomeUIController"
+        styleClass="root-pane"
+        stylesheets="@../css/CustomerHomeUI.css">
+
+    <!-- Navbar -->
+    <top>
+        <VBox styleClass="navbar">
+            <HBox styleClass="navbar-inner" alignment="CENTER_LEFT">
+                <HBox alignment="CENTER_LEFT" spacing="12">
+                    <Region styleClass="accent-bar" />
+                    <Label styleClass="nav-brand" text="KETCHUP" />
+                </HBox>
+                <Region HBox.hgrow="ALWAYS" />
+                <HBox alignment="CENTER_RIGHT" spacing="14">
+                    <Label fx:id="welcomeLabel" styleClass="nav-welcome" text="" />
+                    <MFXButton
+                            fx:id="logoutButton"
+                            styleClass="btn-logout"
+                            text="Logout"
+                            onAction="#handleLogout" />
+                </HBox>
+            </HBox>
+            <Separator styleClass="nav-separator" />
+        </VBox>
+    </top>
+
+    <!-- Tab pane -->
+    <center>
+        <TabPane fx:id="tabPane" styleClass="main-tabs" tabClosingPolicy="UNAVAILABLE">
+
+            <!-- TAB 1: Movies -->
+            <Tab text="Movies">
+                <BorderPane styleClass="tab-content">
+
+                    <!-- Movie toolbar -->
+                    <top>
+                        <VBox styleClass="toolbar-wrapper">
+                            <HBox styleClass="toolbar" alignment="CENTER_LEFT" spacing="10">
+                                <MFXTextField
+                                        fx:id="movieSearchField"
+                                        styleClass="toolbar-field"
+                                        promptText="Search movies..."
+                                        floatingText="Search" />
+                                <MFXButton
+                                        fx:id="movieSearchButton"
+                                        styleClass="btn-toolbar"
+                                        text="Search"
+                                        onAction="#handleMovieSearch" />
+                                <Separator orientation="VERTICAL" styleClass="toolbar-divider" />
+                                <Label styleClass="toolbar-label" text="Sort by:" />
+                                <MFXComboBox
+                                        fx:id="movieSortComboBox"
+                                        styleClass="toolbar-combo"
+                                        promptText="Sort by..." />
+                                <MFXButton
+                                        fx:id="movieSortButton"
+                                        styleClass="btn-toolbar"
+                                        text="Sort"
+                                        onAction="#handleMovieSort" />
+                                <Region HBox.hgrow="ALWAYS" />
+                                <MFXButton
+                                        fx:id="movieRefreshButton"
+                                        styleClass="btn-icon"
+                                        text="Refresh"
+                                        onAction="#handleMovieRefresh" />
+                            </HBox>
+                            <HBox styleClass="hint-bar" spacing="24">
+                                <Label styleClass="hint-label"
+                                       text="* Showtime search format: yyyy-MM-dd HH:mm" />
+                                <Label styleClass="hint-label"
+                                       text="* Searching by occupied seats is not supported" />
+                            </HBox>
+                        </VBox>
+                    </top>
+
+                    <!-- Movie table -->
+                    <center>
+                        <TableView fx:id="movieTable" styleClass="data-table">
+                            <columns>
+                                <TableColumn fx:id="movieColTitle"    text="Title"         prefWidth="240" />
+                                <TableColumn fx:id="movieColGenre"    text="Genre"         prefWidth="130" />
+                                <TableColumn fx:id="movieColDuration" text="Duration (min)" prefWidth="120" />
+                                <TableColumn fx:id="movieColShowtime" text="Showtime"      prefWidth="160" />
+                            </columns>
+                        </TableView>
+                    </center>
+
+                    <!-- Movie actions -->
+                    <bottom>
+                        <VBox>
+                            <Separator styleClass="footer-separator" />
+                            <HBox styleClass="action-bar" alignment="CENTER_LEFT" spacing="10">
+                                <MFXButton
+                                        fx:id="viewDetailsButton"
+                                        styleClass="btn-secondary"
+                                        text="View Details"
+                                        onAction="#handleViewDetails" />
+                                <MFXButton
+                                        fx:id="bookNowButton"
+                                        styleClass="btn-primary"
+                                        text="Book Now"
+                                        onAction="#handleBookNow" />
+                            </HBox>
+                        </VBox>
+                    </bottom>
+
+                </BorderPane>
+            </Tab>
+
+            <!-- TAB 2: My Bookings -->
+            <Tab text="My Bookings">
+                <BorderPane styleClass="tab-content">
+
+                    <!-- Booking toolbar -->
+                    <top>
+                        <VBox styleClass="toolbar-wrapper">
+                            <HBox styleClass="toolbar" alignment="CENTER_LEFT" spacing="10">
+                                <MFXTextField
+                                        fx:id="bookingSearchField"
+                                        styleClass="toolbar-field"
+                                        promptText="Search bookings..."
+                                        floatingText="Search" />
+                                <MFXButton
+                                        fx:id="bookingSearchButton"
+                                        styleClass="btn-toolbar"
+                                        text="Search"
+                                        onAction="#handleBookingSearch" />
+                                <Separator orientation="VERTICAL" styleClass="toolbar-divider" />
+                                <Label styleClass="toolbar-label" text="Sort by:" />
+                                <MFXComboBox
+                                        fx:id="bookingSortComboBox"
+                                        styleClass="toolbar-combo"
+                                        promptText="Sort by..." />
+                                <MFXButton
+                                        fx:id="bookingSortButton"
+                                        styleClass="btn-toolbar"
+                                        text="Sort"
+                                        onAction="#handleBookingSort" />
+                                <Region HBox.hgrow="ALWAYS" />
+                                <MFXButton
+                                        fx:id="bookingRefreshButton"
+                                        styleClass="btn-icon"
+                                        text="Refresh"
+                                        onAction="#handleBookingRefresh" />
+                            </HBox>
+                            <HBox styleClass="hint-bar" spacing="24">
+                                <Label styleClass="hint-label"
+                                       text="* Showtime search format: yyyy-MM-dd HH:mm" />
+                                <Label styleClass="hint-label"
+                                       text="* Searching by occupied seats or other movie info is not supported here" />
+                            </HBox>
+                        </VBox>
+                    </top>
+
+                    <!-- Booking table -->
+                    <center>
+                        <TableView fx:id="bookingTable" styleClass="data-table">
+                            <columns>
+                                <TableColumn fx:id="bookingColId"       text="Booking ID"   prefWidth="220" />
+                                <TableColumn fx:id="bookingColMovie"    text="Movie"        prefWidth="180" />
+                                <TableColumn fx:id="bookingColShowtime" text="Showtime"     prefWidth="150" />
+                                <TableColumn fx:id="bookingColSeats"    text="Seats"        prefWidth="160" />
+                                <TableColumn fx:id="bookingColPrice"    text="Total Price"  prefWidth="110" />
+                            </columns>
+                        </TableView>
+                    </center>
+
+                    <!-- Booking actions -->
+                    <bottom>
+                        <VBox>
+                            <Separator styleClass="footer-separator" />
+                            <HBox styleClass="action-bar" alignment="CENTER_LEFT" spacing="10">
+                                <MFXButton
+                                        fx:id="viewBookingButton"
+                                        styleClass="btn-secondary"
+                                        text="View Seats"
+                                        onAction="#handleViewBooking" />
+                                <MFXButton
+                                        fx:id="exportPdfButton"
+                                        styleClass="btn-primary"
+                                        text="Export PDF"
+                                        onAction="#handleExportPdf" />
+                                <MFXButton
+                                        fx:id="cancelBookingButton"
+                                        styleClass="btn-danger"
+                                        text="Cancel Booking"
+                                        onAction="#handleCancelBooking" />
+                            </HBox>
+                        </VBox>
+                    </bottom>
+
+                </BorderPane>
+            </Tab>
+
+        </TabPane>
+    </center>
+
+</BorderPane>

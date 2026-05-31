@@ -1,0 +1,199 @@
+/* =============================================================================
+ * RegisterUI.css - Netflix-themed dark stylesheet for Ketchup Register Screen
+ * ============================================================================= */
+
+.root {
+    -netflix-red:        #e50914;
+    -netflix-red-hover:  #f40612;
+    -netflix-red-press:  #b20710;
+    -netflix-black:      #141414;
+    -text-primary:       #ffffff;
+    -text-secondary:     #b3b3b3;
+    -text-muted:         #737373;
+    -border-subtle:      #333333;
+    -field-bg:           #333333;
+    -field-bg-focus:     #454545;
+}
+
+.root-pane {
+    -fx-background-color: -netflix-black;
+    -fx-min-width:  900px;
+    -fx-min-height: 700px;
+}
+
+.bg-overlay {
+    -fx-background-color: linear-gradient(
+        to bottom,
+        rgba(0,0,0,0.7) 0%,
+        rgba(0,0,0,0.4) 50%,
+        rgba(0,0,0,0.7) 100%
+    );
+    -fx-min-width:  900px;
+    -fx-min-height: 700px;
+}
+
+/* Register Card */
+.register-card {
+    -fx-background-color: rgba(0, 0, 0, 0.80);
+    -fx-background-radius: 6px;
+    -fx-padding: 48 68 48 68;
+    -fx-min-width: 460px;
+    -fx-max-width: 460px;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.8), 24, 0, 0, 4);
+}
+
+/* Brand */
+.brand-logo {
+    -fx-text-fill: -netflix-red;
+    -fx-font-family: "Arial Black", "Impact", sans-serif;
+    -fx-font-size: 36px;
+    -fx-font-weight: 900;
+}
+
+.brand-tagline {
+    -fx-text-fill: -text-primary;
+    -fx-font-size: 26px;
+    -fx-font-weight: bold;
+    -fx-padding: 16 0 0 0;
+}
+
+/* Field labels */
+.field-label {
+    -fx-text-fill: -text-secondary;
+    -fx-font-size: 12px;
+    -fx-font-weight: bold;
+    -fx-padding: 0 0 6 0;
+}
+
+/* MaterialFX TextField */
+.mfx-field {
+    -fx-pref-height: 48px;
+    -fx-max-width: Infinity;
+    -fx-background-color: -field-bg;
+    -fx-background-radius: 4px;
+    -fx-font-size: 14px;
+    -mfx-border-color: transparent;
+    -mfx-unfocused-border-color: transparent;
+    -mfx-focused-border-color: transparent;
+    -mfx-line-color: transparent;
+    -mfx-unfocused-line-color: transparent;
+}
+
+.mfx-field:focused {
+    -fx-background-color: -field-bg-focus;
+}
+
+.mfx-field .text-field {
+    -fx-background-color: transparent;
+    -fx-text-fill: -text-primary;
+    -fx-prompt-text-fill: -text-muted;
+    -fx-padding: 12 12 12 12;
+    -fx-font-size: 14px;
+    -fx-highlight-fill: rgba(229,9,20,0.3);
+    -fx-highlight-text-fill: -text-primary;
+}
+
+.mfx-field.mfx-password-field .text-field {
+    -fx-background-color: transparent;
+    -fx-text-fill: -text-primary;
+    -fx-prompt-text-fill: -text-muted;
+}
+
+/* MaterialFX ComboBox */
+.mfx-combo {
+    -fx-pref-height: 48px;
+    -fx-text-fill: -text-primary;
+    -fx-max-width: Infinity;
+    -fx-background-color: -field-bg;
+    -fx-background-radius: 4px;
+    -fx-font-size: 14px;
+    -mfx-border-color: transparent;
+    -mfx-unfocused-border-color: transparent;
+    -mfx-line-color: transparent;
+    -mfx-unfocused-line-color: transparent;
+}
+
+.mfx-combo:focused {
+    -fx-background-color: -field-bg-focus;
+}
+
+.mfx-combo .mfx-list-cell {
+    -fx-background-color: #2a2a2a;
+    -fx-text-fill: -text-primary;
+    -fx-font-size: 13px;
+}
+
+.mfx-combo .mfx-list-cell:hover {
+    -fx-background-color: #3a3a3a;
+}
+
+/* Primary button */
+.btn-primary {
+    -fx-background-color: -netflix-red;
+    -fx-text-fill: -text-primary;
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-background-radius: 4px;
+    -fx-cursor: hand;
+    -fx-pref-height: 50px;
+    -fx-max-width: Infinity;
+    -fx-effect: null;
+    -mfx-ripple-color: rgba(255,255,255,0.2);
+}
+
+.btn-primary:hover  { -fx-background-color: -netflix-red-hover; }
+.btn-primary:pressed { -fx-background-color: -netflix-red-press; }
+
+/* Secondary button */
+.btn-secondary {
+    -fx-background-color: transparent;
+    -fx-text-fill: -text-primary;
+    -fx-font-size: 15px;
+    -fx-font-weight: bold;
+    -fx-background-radius: 4px;
+    -fx-border-color: -text-secondary;
+    -fx-border-width: 1px;
+    -fx-border-radius: 4px;
+    -fx-cursor: hand;
+    -fx-pref-height: 50px;
+    -fx-max-width: Infinity;
+    -mfx-ripple-color: rgba(255,255,255,0.1);
+}
+
+.btn-secondary:hover {
+    -fx-background-color: rgba(255,255,255,0.08);
+    -fx-border-color: -text-primary;
+}
+
+.btn-secondary:pressed { -fx-background-color: rgba(255,255,255,0.15); }
+
+/* Divider */
+.divider-line {
+    -fx-background-color: -border-subtle;
+    -fx-min-height: 1px;
+    -fx-max-height: 1px;
+}
+
+.divider-text {
+    -fx-text-fill: -text-muted;
+    -fx-font-size: 11px;
+    -fx-font-weight: bold;
+}
+
+/* Error/success label */
+.error-label {
+    -fx-text-fill: #ff4d4d;
+    -fx-font-size: 13px;
+    -fx-min-height: 16px;
+}
+
+.error-label.success {
+    -fx-text-fill: #46d369;
+}
+
+/* Footer */
+.footer-text {
+    -fx-text-fill: -text-muted;
+    -fx-font-size: 11px;
+    -fx-padding: 16 0 0 0;
+}

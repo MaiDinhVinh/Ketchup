@@ -1,0 +1,363 @@
+/* =============================================================================
+ * CustomerHomeUI.css
+ * Netflix-themed dark stylesheet for the customer home screen.
+ * ============================================================================= */
+
+.root {
+    -netflix-red:       #e50914;
+    -netflix-red-hover: #f40612;
+    -netflix-red-press: #b20710;
+    -netflix-black:     #141414;
+    -surface:           #1f1f1f;
+    -surface-2:         #2a2a2a;
+    -surface-3:         #333333;
+    -text-primary:      #ffffff;
+    -text-secondary:    #b3b3b3;
+    -text-muted:        #737373;
+    -border-subtle:     #2a2a2a;
+    -row-hover:         #2a2a2a;
+    -row-selected:      #1a1a3a;
+}
+
+/* Root pane */
+.root-pane {
+    -fx-background-color: -netflix-black;
+}
+
+/* Navbar */
+.navbar {
+    -fx-background-color: #0a0a0a;
+}
+
+.navbar-inner {
+    -fx-padding: 14 20 14 0;
+    -fx-spacing: 0;
+}
+
+.accent-bar {
+    -fx-background-color: -netflix-red;
+    -fx-min-width:  4px;
+    -fx-max-width:  4px;
+    -fx-min-height: 32px;
+}
+
+.nav-brand {
+    -fx-text-fill: -netflix-red;
+    -fx-font-family: "Arial Black", "Impact", sans-serif;
+    -fx-font-size: 22px;
+    -fx-font-weight: 900;
+}
+
+.nav-welcome {
+    -fx-text-fill: -text-secondary;
+    -fx-font-size: 13px;
+    -fx-font-style: italic;
+}
+
+.nav-separator {
+    -fx-background-color: -border-subtle;
+}
+
+/* Logout button */
+.btn-logout {
+    -fx-background-color: transparent;
+    -fx-text-fill: -text-secondary;
+    -fx-font-size: 13px;
+    -fx-background-radius: 4px;
+    -fx-border-color: #444444;
+    -fx-border-width: 1px;
+    -fx-border-radius: 4px;
+    -fx-cursor: hand;
+    -fx-pref-height: 32px;
+    -fx-padding: 4 14 4 14;
+    -mfx-ripple-color: rgba(255,255,255,0.1);
+}
+
+.btn-logout:hover {
+    -fx-background-color: rgba(229,9,20,0.15);
+    -fx-border-color: -netflix-red;
+    -fx-text-fill: -netflix-red;
+}
+
+/* Tab pane */
+.main-tabs {
+    -fx-background-color: -netflix-black;
+    -fx-tab-min-height: 42px;
+    -fx-tab-max-height: 42px;
+}
+
+.main-tabs .tab-header-area {
+    -fx-background-color: #0a0a0a;
+    -fx-padding: 0 0 0 20;
+}
+
+.main-tabs .tab-header-background {
+    -fx-background-color: #0a0a0a;
+}
+
+.main-tabs .tab {
+    -fx-background-color: transparent;
+    -fx-background-radius: 0;
+    -fx-padding: 10 20 10 20;
+    -fx-border-color: transparent transparent transparent transparent;
+}
+
+.main-tabs .tab .tab-label {
+    -fx-text-fill: -text-muted;
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+}
+
+.main-tabs .tab:selected {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent transparent -netflix-red transparent;
+    -fx-border-width: 0 0 3 0;
+}
+
+.main-tabs .tab:selected .tab-label {
+    -fx-text-fill: -text-primary;
+}
+
+.main-tabs .tab:hover .tab-label {
+    -fx-text-fill: -text-secondary;
+}
+
+/* Tab content */
+.tab-content {
+    -fx-background-color: -netflix-black;
+}
+
+/* Toolbar */
+.toolbar-wrapper {
+    -fx-background-color: -surface;
+}
+
+.toolbar {
+    -fx-padding: 12 16 12 16;
+    -fx-border-color: transparent transparent -border-subtle transparent;
+    -fx-border-width: 0 0 1 0;
+}
+
+.toolbar-label {
+    -fx-text-fill: -text-secondary;
+    -fx-font-size: 13px;
+}
+
+.toolbar-divider {
+    -fx-background-color: -border-subtle;
+    -fx-padding: 0 4 0 4;
+}
+
+.toolbar-field {
+    -fx-pref-width: 220px;
+    -fx-pref-height: 36px;
+    -mfx-border-color: -border-subtle;
+    -fx-background-color: -surface-2;
+    -fx-background-radius: 4px;
+    -fx-font-size: 13px;
+    -fx-text-fill: -text-primary;
+}
+
+.toolbar-field:focused {
+    -fx-background-color: -surface-3;
+    -mfx-border-color: -netflix-red;
+}
+
+.toolbar-field .text-field {
+    -fx-text-fill: -text-primary;
+    -fx-prompt-text-fill: -text-muted;
+    -fx-padding: 6 10 6 10;
+}
+
+.toolbar-combo {
+    -fx-pref-width: 180px;
+    -fx-pref-height: 36px;
+    -mfx-border-color: -border-subtle;
+    -fx-background-color: -surface-2;
+    -fx-background-radius: 4px;
+    -fx-font-size: 13px;
+    -fx-text-fill: -text-primary;
+}
+
+.toolbar-combo:focused {
+    -fx-background-color: -surface-3;
+}
+
+.toolbar-combo .mfx-list-cell {
+    -fx-background-color: #242424;
+    -fx-text-fill: -text-primary;
+    -fx-font-size: 13px;
+}
+
+.toolbar-combo .mfx-list-cell:hover {
+    -fx-background-color: -surface-3;
+}
+
+.btn-toolbar {
+    -fx-background-color: -surface-3;
+    -fx-text-fill: -text-primary;
+    -fx-font-size: 13px;
+    -fx-background-radius: 4px;
+    -fx-cursor: hand;
+    -fx-pref-height: 36px;
+    -fx-padding: 6 16 6 16;
+    -fx-effect: null;
+    -mfx-ripple-color: rgba(255,255,255,0.15);
+}
+
+.btn-toolbar:hover  { -fx-background-color: #444444; }
+.btn-toolbar:pressed { -fx-background-color: #555555; }
+
+.btn-icon {
+    -fx-background-color: transparent;
+    -fx-text-fill: -text-secondary;
+    -fx-font-size: 13px;
+    -fx-cursor: hand;
+    -fx-pref-height: 36px;
+    -fx-background-radius: 4px;
+    -fx-border-color: #444444;
+    -fx-border-width: 1px;
+    -fx-border-radius: 4px;
+    -fx-padding: 4 12 4 12;
+    -mfx-ripple-color: rgba(255,255,255,0.1);
+}
+
+.btn-icon:hover {
+    -fx-text-fill: -text-primary;
+    -fx-border-color: -text-secondary;
+}
+
+/* Hint bar */
+.hint-bar {
+    -fx-background-color: rgba(229,9,20,0.05);
+    -fx-padding: 6 16 6 16;
+    -fx-border-color: rgba(229,9,20,0.15) transparent transparent transparent;
+    -fx-border-width: 1 0 0 0;
+}
+
+.hint-label {
+    -fx-text-fill: #b88a00;
+    -fx-font-size: 11px;
+    -fx-font-style: italic;
+}
+
+/* Tables */
+.data-table {
+    -fx-background-color: -netflix-black;
+    -fx-table-cell-border-color: transparent;
+    -fx-border-color: transparent;
+}
+
+.data-table .column-header-background {
+    -fx-background-color: -surface;
+}
+
+.data-table .column-header,
+.data-table .filler {
+    -fx-background-color: -surface;
+    -fx-border-color: transparent -border-subtle transparent transparent;
+    -fx-border-width: 0 1 0 0;
+    -fx-size: 38px;
+}
+
+.data-table .column-header .label {
+    -fx-text-fill: -text-secondary;
+    -fx-font-size: 12px;
+    -fx-font-weight: bold;
+    -fx-alignment: CENTER_LEFT;
+    -fx-padding: 0 0 0 8;
+}
+
+.data-table .table-row-cell {
+    -fx-background-color: -netflix-black;
+    -fx-border-color: transparent transparent -border-subtle transparent;
+    -fx-border-width: 0 0 1 0;
+    -fx-cell-size: 40px;
+}
+
+.data-table .table-row-cell:odd {
+    -fx-background-color: #171717;
+}
+
+.data-table .table-row-cell:hover {
+    -fx-background-color: -row-hover;
+}
+
+.data-table .table-row-cell:selected {
+    -fx-background-color: -row-selected;
+}
+
+.data-table .table-cell {
+    -fx-text-fill: -text-primary;
+    -fx-font-size: 13px;
+    -fx-padding: 0 8 0 8;
+    -fx-alignment: CENTER_LEFT;
+}
+
+.data-table .table-row-cell:selected .table-cell {
+    -fx-text-fill: -text-primary;
+}
+
+.data-table .placeholder .label {
+    -fx-text-fill: -text-muted;
+    -fx-font-size: 14px;
+}
+
+.data-table .scroll-bar:vertical {
+    -fx-background-color: -surface;
+    -fx-pref-width: 8px;
+}
+
+.data-table .scroll-bar:vertical .thumb {
+    -fx-background-color: -surface-3;
+    -fx-background-radius: 4px;
+}
+
+/* Footer action bar */
+.footer-separator {
+    -fx-background-color: -border-subtle;
+}
+
+.action-bar {
+    -fx-background-color: #0a0a0a;
+    -fx-padding: 12 16 12 16;
+}
+
+/* Primary button - Book Now */
+.btn-primary {
+    -fx-background-color: -netflix-red;
+    -fx-text-fill: -text-primary;
+    -fx-font-size: 13px;
+    -fx-font-weight: bold;
+    -fx-background-radius: 4px;
+    -fx-cursor: hand;
+    -fx-pref-height: 38px;
+    -fx-padding: 6 20 6 20;
+    -fx-effect: null;
+    -mfx-ripple-color: rgba(255,255,255,0.2);
+}
+
+.btn-primary:hover  { -fx-background-color: -netflix-red-hover; }
+.btn-primary:pressed { -fx-background-color: -netflix-red-press; }
+
+/* Secondary button - View Details */
+.btn-secondary {
+    -fx-background-color: transparent;
+    -fx-text-fill: -text-primary;
+    -fx-font-size: 13px;
+    -fx-background-radius: 4px;
+    -fx-border-color: #555555;
+    -fx-border-width: 1px;
+    -fx-border-radius: 4px;
+    -fx-cursor: hand;
+    -fx-pref-height: 38px;
+    -fx-padding: 6 20 6 20;
+    -mfx-ripple-color: rgba(255,255,255,0.1);
+}
+
+.btn-secondary:hover {
+    -fx-background-color: -surface-2;
+    -fx-border-color: -text-secondary;
+}
+
+.btn-secondary:pressed { -fx-background-color: -surface-3; }

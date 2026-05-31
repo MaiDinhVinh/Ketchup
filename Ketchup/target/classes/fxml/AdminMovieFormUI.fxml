@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Separator?>
+<?import io.github.palexdev.materialfx.controls.MFXTextField?>
+<?import io.github.palexdev.materialfx.controls.MFXComboBox?>
+<?import io.github.palexdev.materialfx.controls.MFXButton?>
+
+<!--
+    AdminMovieFormUI.fxml
+    Netflix-themed modal dialog for adding or editing a movie screening.
+    Opened as APPLICATION_MODAL — no parent FXML needed.
+    Controller: com.ducksabervn.projects.ketchup.frontend.controller.AdminMovieFormUIController
+-->
+<VBox
+        xmlns="http://javafx.com/javafx/21"
+        xmlns:fx="http://javafx.com/fxml/1"
+        fx:controller="com.ducksabervn.projects.ketchup.frontend.AdminMovieFormUIController"
+        styleClass="modal-root"
+        stylesheets="@../css/AdminMovieFormUI.css"
+        spacing="0">
+
+    <!-- ── Header bar ── -->
+    <HBox styleClass="modal-header" alignment="CENTER_LEFT" spacing="10">
+        <!-- Red accent bar -->
+        <Region styleClass="accent-bar" />
+        <Label fx:id="titleLabel" styleClass="modal-title" text="Add New Movie" />
+    </HBox>
+
+    <Separator styleClass="header-separator" />
+
+    <!-- ── Form body ── -->
+    <VBox styleClass="modal-body" spacing="0">
+
+        <!-- Title -->
+        <Label styleClass="field-label" text="Title" />
+        <MFXTextField
+                fx:id="movieTitleField"
+                styleClass="mfx-field"
+                promptText="Enter movie title"
+                floatingText="Title" />
+
+        <!-- Genre -->
+        <Label styleClass="field-label" text="Genre"
+               style="-fx-padding: 14 0 0 0;" />
+        <MFXTextField
+                fx:id="genreField"
+                styleClass="mfx-field"
+                promptText="e.g. Action, Drama, Comedy"
+                floatingText="Genre" />
+
+        <!-- Duration + Seat Price (side by side) -->
+        <HBox spacing="16" style="-fx-padding: 14 0 0 0;">
+            <VBox HBox.hgrow="ALWAYS" spacing="0">
+                <Label styleClass="field-label" text="Duration (min)" />
+                <MFXTextField
+                        fx:id="durationField"
+                        styleClass="mfx-field"
+                        promptText="e.g. 120"
+                        floatingText="Duration" />
+            </VBox>
+            <VBox HBox.hgrow="ALWAYS" spacing="0">
+                <Label styleClass="field-label" text="Seat Price ($)" />
+                <MFXTextField
+                        fx:id="seatPriceField"
+                        styleClass="mfx-field"
+                        promptText="e.g. 15"
+                        floatingText="Seat Price" />
+            </VBox>
+        </HBox>
+
+        <!-- Rating -->
+        <Label styleClass="field-label" text="Rating"
+               style="-fx-padding: 14 0 0 0;" />
+        <MFXComboBox
+                fx:id="ratingComboBox"
+                styleClass="mfx-combo"
+                promptText="Select rating"
+                floatingText="Age Rating" />
+
+        <!-- Showtime -->
+        <Label styleClass="field-label" text="Showtime"
+               style="-fx-padding: 14 0 0 0;" />
+        <MFXTextField
+                fx:id="showtimeField"
+                styleClass="mfx-field"
+                promptText="yyyy-MM-dd HH:mm"
+                floatingText="Showtime" />
+        <Label
+                styleClass="hint-label"
+                text="⚠  Format: yyyy-MM-dd HH:mm  (e.g. 2026-07-04 19:30)"
+                style="-fx-padding: 4 0 0 0;" />
+
+        <!-- Error label -->
+        <Label
+                fx:id="errorLabel"
+                styleClass="error-label"
+                text=""
+                wrapText="true"
+                style="-fx-padding: 10 0 0 0;" />
+
+    </VBox>
+
+    <Separator styleClass="footer-separator" />
+
+    <!-- ── Action buttons ── -->
+    <HBox styleClass="modal-footer" alignment="CENTER_RIGHT" spacing="12">
+        <MFXButton
+                fx:id="cancelButton"
+                styleClass="btn-secondary"
+                text="Cancel"
+                onAction="#handleCancel" />
+        <MFXButton
+                fx:id="saveButton"
+                styleClass="btn-primary"
+                text="Save"
+                onAction="#handleSave" />
+    </HBox>
+
+</VBox>
